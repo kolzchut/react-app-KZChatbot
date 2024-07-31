@@ -9,14 +9,17 @@
         --input-placeholder: #005aab;
         --cta-background: #005aab;
         --cta-foreground: #ffffff;
-        --popver-trigger-background: #005aab;
+        --popover: #2d5b85;
+        --popover-foreground: 222.2 84% 4.9%;
+        --disclaimer-foreground: #f0f7fe;
+        --links-foreground: #ffffff;
+        --message-bot-background: #ffffff;
+        --message-bot-foreground: #192832;
 
         --background: #005aab;
         --foreground: 222.2 84% 4.9%;
         --card: 0 0% 100%;
         --card-foreground: 222.2 84% 4.9%;
-        --popover: #2d5b85;
-        --popover-foreground: 222.2 84% 4.9%;
         --primary: 222.2 47.4% 11.2%;
         --primary-foreground: 210 40% 98%;
         --secondary: 210 40% 96.1%;

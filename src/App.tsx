@@ -5,38 +5,112 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
-import { Minimize2 } from "lucide-react";
 import { useState } from "react";
 import HelpIcon from "@/assets/help.svg";
 import CloseIcon from "@/assets/close.svg";
+import MinimizeIcon from "@/assets/minimize.svg";
+import PaperPlaneIcon from "@/assets/paper-plane.svg";
+
+interface Message {
+  content: string;
+  isBot: boolean;
+}
+
+const messsages: Message[] = [
+  {
+    content:
+      "שלום! הצ'אט החכם של 'כל זכות' פועל בעזרת בינה מלאכותית ויכול למצוא לך תשובות מתוך 'כל זכות' מהר ובקלות.",
+    isBot: true,
+  },
+  {
+    content:
+      "אפשר לשאול כל שאלה על זכויות, בשפה חופשית. כדאי לציין מאפיינים כלליים רלוונטיים כמו מגדר, גיל, משך ההעסקה וכדומה, כדי לקבל תשובות מתאימות. חשוב: הצ'אט לא חסוי. אין למסור בו מידע מזהה כמו שם, כתובת או מידע רפואי רגיש. המידע נאסף לצורך שיפור השירות.",
+    isBot: true,
+  },
+  {
+    content:
+      "אנחנו בתקופת הרצה. הצ'אט יכול לטעות, ו'כל זכות' לא אחראית לתשובות שלו. כדאי לבדוק את המידע גם בעמוד המתאים ב'כל זכות'. הקישור יופיע בסוף התשובה.",
+    isBot: true,
+  },
+];
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.target as HTMLFormElement;
+    const input = form.elements.namedItem("question") as HTMLInputElement;
+    const value = input.value;
+    if (value) {
+      console.log("Submitted value:", value);
+      input.value = "";
+    }
+  };
+
   return (
     <Popover open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
-      <PopoverTrigger className="rounded-full bg-cta-background h-16 w-16 relative block">
-        <div className={`flex flex-col items-center ${isOpen ? "hidden" : ""}`}>
-          <img src={HelpIcon} alt="TODO: change-me" />
-          <span className="text-xs font-bold leading-normal text-cta-foreground">
-            כל שאלה
+      <PopoverTrigger className="rounded-full bg-cta h-16 w-16 relative block">
+        <div className="flex flex-col items-center">
+          <img src={isOpen ? CloseIcon : HelpIcon} alt="TODO: change-me" />
+          <span
+            className={`text-xs font-bold ${isOpen ? "leading-4" : "leading-normal"} text-cta-foreground`}
+          >
+            {isOpen ? "סגירה" : "כל שאלה"}
           </span>
         </div>
-        <img
-          src={CloseIcon}
-          alt="TODO: change-me"
-          className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-6 w-6 ${!isOpen ? "hidden" : ""}`}
-        />
       </PopoverTrigger>
-      <PopoverContent style={{ direction: "rtl" }}>
-        <div className="bg-blue-200 flex justify-between px-4">
-          <h2>כותרת</h2>
-          <button>
-            <Minimize2 onClick={() => setIsOpen(false)} />
+      <PopoverContent
+        style={{
+          direction: "rtl",
+          marginLeft: "0.75rem",
+        }}
+      >
+        <div className="flex justify-end px-1 pt-1 mb-[3px]">
+          <button onClick={() => setIsOpen(false)}>
+            <img src={MinimizeIcon} alt="TODO: add alt" />
           </button>
         </div>
-        <div className="h-40"></div>
-        <Input placeholder="מה רצית לשאול?" />
+
+        <div className="px-3">
+          <div>
+            {messsages.map((message, index) => (
+              <div
+                key={index}
+                className={`text-sm px-3 py-2 mb-2 ${
+                  message.isBot
+                    ? "bg-message-bot-background text-message-bot-foreground rounded-[10px_10px_10px_0] mr-6"
+                    : "bg-cta text-cta-foreground"
+                }`}
+              >
+                {message.content}
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-end items-center text-links-foreground text-sm mb-2">
+            <a href="TODO: add link" target="_blank">
+              תנאי שימוש
+            </a>
+            <span className="px-2 "> | </span>
+            <a href="TODO: add link" target="_blank">
+              איך לדבר עם הבוט?
+            </a>
+          </div>
+          <form
+            onSubmit={handleSubmit}
+            className="flex items-center flex-col pb-2"
+          >
+            <Input
+              type="text"
+              name="question"
+              placeholder="מה רצית לשאול?"
+              submitElement={<img src={PaperPlaneIcon} alt="TODO: change-me" />}
+            />
+            <span className="text-xs text-disclaimer">
+              אין לשתף פרטים מזהים או מידע רגיש
+            </span>
+          </form>
+        </div>
       </PopoverContent>
     </Popover>
   );

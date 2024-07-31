@@ -22,16 +22,26 @@ module.exports = {
     extend: {
       colors: {
         border: "var(--border)",
+        disclaimer: "var(--disclaimer-foreground)",
         input: {
-          background: "var(--input-background)",
+          DEFAULT: "var(--input-background)",
           placholder: "var(--input-placeholder)",
         },
         popover: {
           background: "var(--popover-background)",
         },
         cta: {
-          background: "var(--cta-background)",
+          DEFAULT: "var(--cta-background)",
           foreground: "var(--cta-foreground)",
+        },
+        message: {
+          bot: {
+            background: "var(--message-bot-background)",
+            foreground: "var(--message-bot-foreground)",
+          },
+        },
+        links: {
+          foreground: "var(--links-foreground)",
         },
         ring: "var(--ring)",
         background: "var(--background)",
