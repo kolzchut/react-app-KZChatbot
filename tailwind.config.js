@@ -39,6 +39,10 @@ module.exports = {
             background: "var(--message-bot-background)",
             foreground: "var(--message-bot-foreground)",
           },
+          user: {
+            background: "var(--message-user-background)",
+            foreground: "var(--message-user-foreground)",
+          },
         },
         links: {
           foreground: "var(--links-foreground)",

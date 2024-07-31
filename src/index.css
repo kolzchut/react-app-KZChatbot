@@ -15,6 +15,8 @@
         --links-foreground: #ffffff;
         --message-bot-background: #ffffff;
         --message-bot-foreground: #192832;
+        --message-user-background: #d4dde6;
+        --message-user-foreground: #192832;
 
         --background: #005aab;
         --foreground: 222.2 84% 4.9%;

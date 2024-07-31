@@ -32,6 +32,10 @@ const messsages: Message[] = [
       "אנחנו בתקופת הרצה. הצ'אט יכול לטעות, ו'כל זכות' לא אחראית לתשובות שלו. כדאי לבדוק את המידע גם בעמוד המתאים ב'כל זכות'. הקישור יופיע בסוף התשובה.",
     isBot: true,
   },
+  {
+    content: "מה השכר השעתי לנוער בחופש הגדול?",
+    isBot: false,
+  },
 ];
 
 function App() {
@@ -71,22 +75,21 @@ function App() {
             <img src={MinimizeIcon} alt="TODO: add alt" />
           </button>
         </div>
-
+        <div className="px-3 flex-1 overflow-auto">
+          {messsages.map((message, index) => (
+            <div
+              key={index}
+              className={`text-sm p-3 mb-2 ${
+                message.isBot
+                  ? "bg-message-bot-background text-message-bot-foreground rounded-[10px_10px_10px_0] mr-6"
+                  : "bg-message-user-background text-message-user-foreground rounded-[10px_10px_0_10px] ml-[3.8rem]"
+              }`}
+            >
+              {message.content}
+            </div>
+          ))}
+        </div>
         <div className="px-3">
-          <div>
-            {messsages.map((message, index) => (
-              <div
-                key={index}
-                className={`text-sm px-3 py-2 mb-2 ${
-                  message.isBot
-                    ? "bg-message-bot-background text-message-bot-foreground rounded-[10px_10px_10px_0] mr-6"
-                    : "bg-cta text-cta-foreground"
-                }`}
-              >
-                {message.content}
-              </div>
-            ))}
-          </div>
           <div className="flex justify-end items-center text-links-foreground text-sm mb-2">
             <a href="TODO: add link" target="_blank">
               תנאי שימוש
