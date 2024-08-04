@@ -11,36 +11,66 @@ import CloseIcon from "@/assets/close.svg";
 import MinimizeIcon from "@/assets/minimize.svg";
 import PaperPlaneIcon from "@/assets/paper-plane.svg";
 import TypingIndicator from "./components/TypingIndicator";
+import Rating from "./components/Rating";
+
+enum MessageType {
+  StartBot = "startBot",
+  Bot = "bot",
+  User = "user",
+}
 
 interface Message {
   content: string;
-  isBot: boolean;
+  type: MessageType;
+  links?: { title: string; url: string }[];
 }
 
 const messsages: Message[] = [
   {
     content:
       "שלום! הצ'אט החכם של 'כל זכות' פועל בעזרת בינה מלאכותית ויכול למצוא לך תשובות מתוך 'כל זכות' מהר ובקלות.",
-    isBot: true,
+    type: MessageType.StartBot,
   },
   {
     content:
       "אפשר לשאול כל שאלה על זכויות, בשפה חופשית. כדאי לציין מאפיינים כלליים רלוונטיים כמו מגדר, גיל, משך ההעסקה וכדומה, כדי לקבל תשובות מתאימות. חשוב: הצ'אט לא חסוי. אין למסור בו מידע מזהה כמו שם, כתובת או מידע רפואי רגיש. המידע נאסף לצורך שיפור השירות.",
-    isBot: true,
+    type: MessageType.StartBot,
   },
   {
     content:
       "אנחנו בתקופת הרצה. הצ'אט יכול לטעות, ו'כל זכות' לא אחראית לתשובות שלו. כדאי לבדוק את המידע גם בעמוד המתאים ב'כל זכות'. הקישור יופיע בסוף התשובה.",
-    isBot: true,
+    type: MessageType.StartBot,
   },
   {
     content: "מה השכר השעתי לנוער בחופש הגדול?",
-    isBot: false,
+    type: MessageType.User,
+  },
+  {
+    content: "מתחת לגיל 16: שכר המינימום השעתי הוא 23.7",
+    type: MessageType.Bot,
+    links: [
+      {
+        title: "תשלום שכר לבני נוער (זכות)",
+        url: "",
+      },
+      {
+        title: "שכר מינימום לנוער",
+        url: "",
+      },
+    ],
   },
 ];
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
+  const [pressedRatingButton, setPressedRatingButton] =
+    useState<RatingButtonType>(null);
+
+  const handleRatingButtonClick = (buttonType: RatingButtonType) => {
+    setPressedRatingButton(
+      pressedRatingButton === buttonType ? null : buttonType,
+    );
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -78,16 +108,50 @@ function App() {
         </div>
         <div className="px-3 flex-1 overflow-auto">
           {messsages.map((message, index) => (
-            <div
-              key={index}
-              className={`text-sm p-3 mb-2 ${
-                message.isBot
-                  ? "bg-message-bot-background text-message-bot-foreground rounded-[10px_10px_10px_0] mr-6"
-                  : "bg-message-user-background text-message-user-foreground rounded-[10px_10px_0_10px] ml-[3.8rem]"
-              }`}
-            >
-              {message.content}
-            </div>
+            <>
+              <div
+                key={index}
+                className={`text-sm p-3 mb-2 ${
+                  [MessageType.StartBot, MessageType.Bot].includes(message.type)
+                    ? "bg-message-bot-background text-message-bot-foreground rounded-[10px_10px_10px_0] mr-6"
+                    : "bg-message-user-background text-message-user-foreground rounded-[10px_10px_0_10px] ml-[3.8rem]"
+                }`}
+              >
+                {message.content}
+              </div>
+
+              {message.type === MessageType.Bot && (
+                <>
+                  {message.links && (
+                    <div className="bg-message-bot-background text-message-bot-foreground border-r-4 border-message-user-background pr-[5px] py-2 mb-[6px]">
+                      <span className="text-sm font-bold text-input-placholder mb-1 inline-block">
+                        כדאי לבקר בעמודים האלה:
+                      </span>
+                      <ul className="list-inside">
+                        {message.links.map((link, index) => (
+                          <li
+                            key={index}
+                            className="text-sm mb-1 list-image-[url(assets/arrow-left.svg)]"
+                          >
+                            <a
+                              href={link.url}
+                              target="_blank"
+                              className="text-sm mr-[2px] text-input-placholder"
+                            >
+                              {link.title}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  <Rating
+                    pressedRatingButton={pressedRatingButton}
+                    handleRatingButtonClick={handleRatingButtonClick}
+                  />
+                </>
+              )}
+            </>
           ))}
           <TypingIndicator />
         </div>
