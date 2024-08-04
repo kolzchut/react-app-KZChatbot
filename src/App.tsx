@@ -10,6 +10,7 @@ import HelpIcon from "@/assets/help.svg";
 import CloseIcon from "@/assets/close.svg";
 import MinimizeIcon from "@/assets/minimize.svg";
 import PaperPlaneIcon from "@/assets/paper-plane.svg";
+import TypingIndicator from "./components/TypingIndicator";
 
 interface Message {
   content: string;
@@ -88,6 +89,7 @@ function App() {
               {message.content}
             </div>
           ))}
+          <TypingIndicator />
         </div>
         <div className="px-3">
           <div className="flex justify-end items-center text-links-foreground text-sm mb-2">
