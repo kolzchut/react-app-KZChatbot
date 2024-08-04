@@ -47,6 +47,7 @@ module.exports = {
         links: {
           foreground: "var(--links-foreground)",
         },
+        line: "var(--breaking-line)",
         ring: "var(--ring)",
         background: "var(--background)",
         foreground: "var(--foreground)",

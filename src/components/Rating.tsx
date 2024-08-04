@@ -3,10 +3,36 @@ enum ButtonType {
   ThumbsDown = "thumbsDown",
 }
 
+enum ReasonType {
+  NotRelevant = "notRelevant",
+  NotTrue = "notTrue",
+  NotSecure = "notSecure",
+}
+
+interface Reason {
+  title: string;
+  value: ReasonType;
+}
+
 interface RatingProps {
   pressedRatingButton: ButtonType;
   handleRatingButtonClick: (value: ButtonType) => void;
 }
+
+const reasons: Reason[] = [
+  {
+    title: "לא רלוונטי",
+    value: ReasonType.NotRelevant,
+  },
+  {
+    title: "לא נכון",
+    value: ReasonType.NotTrue,
+  },
+  {
+    title: "לא מאובטח",
+    value: ReasonType.NotSecure,
+  },
+];
 
 const Rating = ({
   pressedRatingButton,
@@ -90,6 +116,40 @@ const Rating = ({
           </svg>
         </button>
       </div>
+      {pressedRatingButton === ButtonType.ThumbsDown && (
+        <form className="mt-2 p-2 border border-line">
+          <span className="text-sm font-bold text-input ">
+            תודה רבה על המשוב, נשמח לדעת למה
+          </span>
+          <div className="flex mt-2 -mx-1">
+            {reasons &&
+              reasons.map((reason, index) => (
+                <label key={index} className="px-1">
+                  <input
+                    type="radio"
+                    name="reason"
+                    value={reason.value}
+                    className="sr-only peer"
+                  />
+                  <div className="px-4 h-[30px] flex items-center text-xs text-input rounded-full border border-message-user-background cursor-pointer peer-checked:bg-input peer-checked:text-input-placholder">
+                    {reason.title}
+                  </div>
+                </label>
+              ))}
+            {/* <label>
+              <input
+                type="radio"
+                name="reason"
+                value="not-relevant"
+                className="sr-only peer"
+              />
+              <div className="px-4 h-[30px] flex items-center text-xs text-input rounded-full border border-message-user-background cursor-pointer peer-checked:bg-input peer-checked:text-input-placholder">
+                לא רלוונטי
+              </div>
+            </label> */}
+          </div>
+        </form>
+      )}
     </>
   );
 };
