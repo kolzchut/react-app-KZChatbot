@@ -27,8 +27,13 @@ module.exports = {
           DEFAULT: "var(--input-background)",
           placholder: "var(--input-placeholder)",
         },
-        popover: {
-          background: "var(--popover-background)",
+        button: {
+          DEFAULT: "var(--button-background)",
+          foreground: "var(--button-foreground)",
+        },
+        textArea: {
+          placholder: "var(--textarea-placeholder)",
+          border: "var(--textarea-border)",
         },
         cta: {
           DEFAULT: "var(--cta-background)",

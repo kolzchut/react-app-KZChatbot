@@ -7,6 +7,8 @@
     :root {
         --input-background: #ffffff;
         --input-placeholder: #005aab;
+        --textarea-placeholder: #ffffff;
+        --textarea-border: #748da7;
         --cta-background: #005aab;
         --cta-foreground: #ffffff;
         --popover: #2d5b85;
@@ -18,6 +20,8 @@
         --message-user-background: #d4dde6;
         --message-user-foreground: #192832;
         --breaking-line: rgba(212, 221, 230, 0.2);
+        --button-background: #ffffff;
+        --button-foreground: #005aab;
 
         --background: #005aab;
         --foreground: 222.2 84% 4.9%;

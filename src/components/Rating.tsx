@@ -1,4 +1,8 @@
-enum ButtonType {
+import { Textarea } from "@/components/ui/Textarea";
+import XButton from "@/assets/x.svg";
+import { useEffect, useState } from "react";
+
+export enum ButtonType {
   ThumbsUp = "thumbsUp",
   ThumbsDown = "thumbsDown",
 }
@@ -15,7 +19,7 @@ interface Reason {
 }
 
 interface RatingProps {
-  pressedRatingButton: ButtonType;
+  pressedRatingButton: ButtonType | null;
   handleRatingButtonClick: (value: ButtonType) => void;
 }
 
@@ -38,6 +42,20 @@ const Rating = ({
   pressedRatingButton,
   handleRatingButtonClick,
 }: RatingProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleCloseRating = () => {
+    setIsOpen(false);
+  };
+
+  useEffect(() => {
+    if (!pressedRatingButton) {
+      setIsOpen(false);
+      return;
+    }
+    setIsOpen(true);
+  }, [pressedRatingButton]);
+
   return (
     <>
       <style>
@@ -116,12 +134,17 @@ const Rating = ({
           </svg>
         </button>
       </div>
-      {pressedRatingButton === ButtonType.ThumbsDown && (
-        <form className="mt-2 p-2 border border-line">
-          <span className="text-sm font-bold text-input ">
-            תודה רבה על המשוב, נשמח לדעת למה
-          </span>
-          <div className="flex mt-2 -mx-1">
+      {isOpen && (
+        <form className="mt-2 p-2 border border-line mb-4">
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-bold text-input ">
+              תודה רבה על המשוב, נשמח לדעת למה
+            </span>
+            <button onClick={handleCloseRating}>
+              <img src={XButton} alt="x icon" />
+            </button>
+          </div>
+          <div className="flex mt-2 -mx-1 mb-3">
             {reasons &&
               reasons.map((reason, index) => (
                 <label key={index} className="px-1">
@@ -131,22 +154,24 @@ const Rating = ({
                     value={reason.value}
                     className="sr-only peer"
                   />
-                  <div className="px-4 h-[30px] flex items-center text-xs text-input rounded-full border border-message-user-background cursor-pointer peer-checked:bg-input peer-checked:text-input-placholder">
+                  <div className="px-4 h-[30px] flex items-center text-xs text-input rounded-full border border-message-user-background peer-checked:bg-input peer-checked:text-input-placholder peer-focus-visible:outline-1 peer-focus-visible:outline">
                     {reason.title}
                   </div>
                 </label>
               ))}
-            {/* <label>
-              <input
-                type="radio"
-                name="reason"
-                value="not-relevant"
-                className="sr-only peer"
-              />
-              <div className="px-4 h-[30px] flex items-center text-xs text-input rounded-full border border-message-user-background cursor-pointer peer-checked:bg-input peer-checked:text-input-placholder">
-                לא רלוונטי
-              </div>
-            </label> */}
+          </div>
+          <div className="mb-1">
+            <Textarea />
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-xs text-disclaimer">
+              אין לשתף פרטים מזהים או מידע רגיש
+            </span>
+            <input
+              type="submit"
+              value="שליחה"
+              className="rounded-full h-[29px] text-xs font-bold px-3 cursor-pointer bg-button text-button-foreground"
+            />
           </div>
         </form>
       )}

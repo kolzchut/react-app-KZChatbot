@@ -5,13 +5,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import HelpIcon from "@/assets/help.svg";
 import CloseIcon from "@/assets/close.svg";
 import MinimizeIcon from "@/assets/minimize.svg";
 import PaperPlaneIcon from "@/assets/paper-plane.svg";
 import TypingIndicator from "./components/TypingIndicator";
-import Rating from "./components/Rating";
+import Rating, { ButtonType } from "./components/Rating";
 
 enum MessageType {
   StartBot = "startBot",
@@ -20,6 +20,7 @@ enum MessageType {
 }
 
 interface Message {
+  id: number;
   content: string;
   type: MessageType;
   links?: { title: string; url: string }[];
@@ -27,25 +28,30 @@ interface Message {
 
 const messsages: Message[] = [
   {
+    id: 1,
     content:
       "שלום! הצ'אט החכם של 'כל זכות' פועל בעזרת בינה מלאכותית ויכול למצוא לך תשובות מתוך 'כל זכות' מהר ובקלות.",
     type: MessageType.StartBot,
   },
   {
+    id: 2,
     content:
       "אפשר לשאול כל שאלה על זכויות, בשפה חופשית. כדאי לציין מאפיינים כלליים רלוונטיים כמו מגדר, גיל, משך ההעסקה וכדומה, כדי לקבל תשובות מתאימות. חשוב: הצ'אט לא חסוי. אין למסור בו מידע מזהה כמו שם, כתובת או מידע רפואי רגיש. המידע נאסף לצורך שיפור השירות.",
     type: MessageType.StartBot,
   },
   {
+    id: 3,
     content:
       "אנחנו בתקופת הרצה. הצ'אט יכול לטעות, ו'כל זכות' לא אחראית לתשובות שלו. כדאי לבדוק את המידע גם בעמוד המתאים ב'כל זכות'. הקישור יופיע בסוף התשובה.",
     type: MessageType.StartBot,
   },
   {
+    id: 4,
     content: "מה השכר השעתי לנוער בחופש הגדול?",
     type: MessageType.User,
   },
   {
+    id: 5,
     content: "מתחת לגיל 16: שכר המינימום השעתי הוא 23.7",
     type: MessageType.Bot,
     links: [
@@ -64,9 +70,9 @@ const messsages: Message[] = [
 function App() {
   const [isOpen, setIsOpen] = useState(false);
   const [pressedRatingButton, setPressedRatingButton] =
-    useState<RatingButtonType>(null);
+    useState<ButtonType | null>(null);
 
-  const handleRatingButtonClick = (buttonType: RatingButtonType) => {
+  const handleRatingButtonClick = (buttonType: ButtonType) => {
     setPressedRatingButton(
       pressedRatingButton === buttonType ? null : buttonType,
     );
@@ -107,10 +113,9 @@ function App() {
           </button>
         </div>
         <div className="px-3 flex-1 overflow-auto">
-          {messsages.map((message, index) => (
-            <>
+          {messsages.map((message) => (
+            <Fragment key={message.id}>
               <div
-                key={index}
                 className={`text-sm p-3 mb-2 ${
                   [MessageType.StartBot, MessageType.Bot].includes(message.type)
                     ? "bg-message-bot-background text-message-bot-foreground rounded-[10px_10px_10px_0] mr-6"
@@ -151,7 +156,7 @@ function App() {
                   />
                 </>
               )}
-            </>
+            </Fragment>
           ))}
           <TypingIndicator />
         </div>
