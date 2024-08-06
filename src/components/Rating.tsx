@@ -1,6 +1,11 @@
-import { Textarea } from "@/components/ui/Textarea";
 import XButton from "@/assets/x.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, ChangeEvent } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+
+type Inputs = {
+  reason: ReasonType;
+  description: string;
+};
 
 export enum ButtonType {
   ThumbsUp = "thumbsUp",
@@ -43,18 +48,41 @@ const Rating = ({
   handleRatingButtonClick,
 }: RatingProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const { register, handleSubmit, watch, setValue } = useForm<Inputs>();
+  const description = register("description");
+  const descriptionValue = watch("description");
+  const reasonValue = watch("reason");
+  const isSendButtonDisabled = !reasonValue && !descriptionValue;
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data);
+    setIsFormSubmitted(true);
+    setIsOpen(false);
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    if (!textareaRef.current) return;
+    textareaRef.current.style.height = "auto";
+    textareaRef.current.style.height =
+      Math.max(textareaRef.current.scrollHeight, 23) + "px";
+    setValue("description", e.target.value);
+  };
 
   const handleCloseRating = () => {
     setIsOpen(false);
   };
 
   useEffect(() => {
+    if (isFormSubmitted) return;
+
     if (!pressedRatingButton) {
       setIsOpen(false);
       return;
     }
     setIsOpen(true);
-  }, [pressedRatingButton]);
+  }, [pressedRatingButton, isFormSubmitted]);
 
   return (
     <>
@@ -84,6 +112,7 @@ const Rating = ({
           האם התשובה עזרה לך?
         </span>
         <button
+          disabled={isFormSubmitted}
           aria-label="סמנ/י שהתשובה עזרה לי"
           aria-pressed={pressedRatingButton === ButtonType.ThumbsUp}
           className="px-[6px] relative"
@@ -108,6 +137,7 @@ const Rating = ({
           </svg>
         </button>
         <button
+          disabled={isFormSubmitted}
           aria-label="סמנ/י שהתשובה לא עזרה לי"
           aria-pressed={pressedRatingButton === ButtonType.ThumbsDown}
           className="px-[6px] relative"
@@ -135,7 +165,10 @@ const Rating = ({
         </button>
       </div>
       {isOpen && (
-        <form className="mt-2 p-2 border border-line mb-4">
+        <form
+          className="mt-2 p-2 border border-line mb-4"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <div className="flex justify-between items-center">
             <span className="text-sm font-bold text-input ">
               תודה רבה על המשוב, נשמח לדעת למה
@@ -144,33 +177,47 @@ const Rating = ({
               <img src={XButton} alt="x icon" />
             </button>
           </div>
-          <div className="flex mt-2 -mx-1 mb-3">
-            {reasons &&
-              reasons.map((reason, index) => (
-                <label key={index} className="px-1">
-                  <input
-                    type="radio"
-                    name="reason"
-                    value={reason.value}
-                    className="sr-only peer"
-                  />
-                  <div className="px-4 h-[30px] flex items-center text-xs text-input rounded-full border border-message-user-background peer-checked:bg-input peer-checked:text-input-placholder peer-focus-visible:outline-1 peer-focus-visible:outline">
-                    {reason.title}
-                  </div>
-                </label>
-              ))}
-          </div>
-          <div className="mb-1">
-            <Textarea />
+          {pressedRatingButton === ButtonType.ThumbsDown && (
+            <div className="flex mt-2 -mx-1">
+              {reasons &&
+                reasons.map((reason, index) => (
+                  <label key={index} className="px-1">
+                    <input
+                      type="radio"
+                      value={reason.value}
+                      className="sr-only peer"
+                      {...register(`reason`)}
+                    />
+                    <div className="px-4 h-[30px] flex items-center text-xs text-input rounded-full border border-message-user-background peer-checked:bg-input peer-checked:text-input-placholder peer-focus-visible:outline-1 peer-focus-visible:outline">
+                      {reason.title}
+                    </div>
+                  </label>
+                ))}
+            </div>
+          )}
+          <div className="mb-1 mt-3">
+            <textarea
+              name="description"
+              className="block text-sm h-[23px] overflow-hidden w-full leading-[1.5] border-textArea-border placeholder:text-sm text-input placeholder:text-textArea-placholder bg-transparent border-b outline-none"
+              style={{
+                resize: "none",
+              }}
+              ref={textareaRef}
+              onBlur={description.onBlur}
+              onChange={handleChange}
+              rows={1}
+              placeholder="רוצה לפרט? זה יעזור לנו להשתפר"
+            />
           </div>
           <div className="flex justify-between items-center">
             <span className="text-xs text-disclaimer">
               אין לשתף פרטים מזהים או מידע רגיש
             </span>
             <input
+              disabled={isSendButtonDisabled}
               type="submit"
               value="שליחה"
-              className="rounded-full h-[29px] text-xs font-bold px-3 cursor-pointer bg-button text-button-foreground"
+              className="disabled:opacity-45 disabled:cursor-not-allowed rounded-full h-[29px] text-xs font-bold px-3 cursor-pointer bg-button text-button-foreground"
             />
           </div>
         </form>
