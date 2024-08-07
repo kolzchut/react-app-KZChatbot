@@ -1,16 +1,12 @@
 import XButton from "@/assets/x.svg";
 import { useEffect, useState, useRef, ChangeEvent } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { ButtonType } from "@/types";
 
 type Inputs = {
   reason: ReasonType;
   description: string;
 };
-
-export enum ButtonType {
-  ThumbsUp = "thumbsUp",
-  ThumbsDown = "thumbsDown",
-}
 
 enum ReasonType {
   NotRelevant = "notRelevant",
