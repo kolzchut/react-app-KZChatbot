@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import HelpIcon from "@/assets/help.svg";
 import CloseIcon from "@/assets/close.svg";
 import { Message, MessageType, ButtonType } from "@/types";
@@ -40,6 +40,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [showInput, setShowInput] = useState(true);
   const [messages, setMessages] = useState<Message[]>(welcomeMessages);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const handleRatingButtonClick = (buttonType: ButtonType) => {
     setPressedRatingButton(
@@ -54,6 +55,7 @@ function App() {
     const form = event.target as HTMLFormElement;
     const input = form.elements.namedItem("question") as HTMLInputElement;
     const value = input.value;
+
     if (value) {
       setMessages((prevMessages) => {
         prevMessages.map((item) => {
@@ -63,6 +65,7 @@ function App() {
         });
 
         const newMessages: Message[] = [
+          ...prevMessages,
           {
             id: prevMessages.length + 1,
             content: value,
@@ -70,10 +73,6 @@ function App() {
             isFirstQuestion,
           },
         ];
-
-        if (!isFirstQuestion) {
-          newMessages.unshift(...prevMessages);
-        }
 
         return newMessages;
       });
@@ -103,6 +102,15 @@ function App() {
     setShowInput(false);
   };
 
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    console.log(messages);
+    scrollToBottom();
+  }, [messages]);
+
   return (
     <Popover open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <PopoverTrigger className="rounded-full bg-cta h-16 w-16 relative block">
@@ -127,6 +135,7 @@ function App() {
           handleRatingButtonClick={handleRatingButtonClick}
           pressedRatingButton={pressedRatingButton}
           isLoading={isLoading}
+          messagesEndRef={messagesEndRef}
         />
         <Footer
           isLoading={isLoading}

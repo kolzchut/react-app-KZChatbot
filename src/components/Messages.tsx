@@ -7,6 +7,7 @@ interface MessagesProps {
   pressedRatingButton: ButtonType | null;
   handleRatingButtonClick: (buttonType: ButtonType) => void;
   isLoading: boolean;
+  messagesEndRef: React.RefObject<HTMLDivElement>;
 }
 
 const Messages = ({
@@ -14,15 +15,16 @@ const Messages = ({
   pressedRatingButton,
   handleRatingButtonClick,
   isLoading,
+  messagesEndRef,
 }: MessagesProps) => {
   if (!messages) {
     return null;
   }
 
   return (
-    <div className="px-3 flex-1 overflow-auto">
+    <div className="px-3 flex-1 overflow-auto pb-4">
       {messages.map((message) => (
-        <div className="px-3 flex-1 overflow-auto" key={message.id}>
+        <div key={message.id}>
           {message.isFirstQuestion === false && (
             <hr className="h-[1px] border-line left-3 relative w-[calc(100%_+_1.5rem)] my-3" />
           )}
@@ -70,6 +72,7 @@ const Messages = ({
         </div>
       ))}
       {isLoading && <TypingIndicator />}
+      <div ref={messagesEndRef} />
     </div>
   );
 };
