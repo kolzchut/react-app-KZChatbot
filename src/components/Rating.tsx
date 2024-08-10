@@ -2,6 +2,8 @@ import XButton from "@/assets/x.svg";
 import { useEffect, useState, useRef, ChangeEvent } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ButtonType } from "@/types";
+import { Message } from "@/types";
+import { isBoolean } from "util";
 
 type Inputs = {
   reason: ReasonType;
@@ -20,8 +22,8 @@ interface Reason {
 }
 
 interface RatingProps {
-  pressedRatingButton: ButtonType | null;
-  handleRatingButtonClick: (value: ButtonType) => void;
+  message: Message;
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
 }
 
 const reasons: Reason[] = [
@@ -39,10 +41,7 @@ const reasons: Reason[] = [
   },
 ];
 
-const Rating = ({
-  pressedRatingButton,
-  handleRatingButtonClick,
-}: RatingProps) => {
+const Rating = ({ message, setMessages }: RatingProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -66,19 +65,41 @@ const Rating = ({
     setValue("description", e.target.value);
   };
 
+  const handleRating = (liked: boolean) => {
+    setMessages((prevMessages) =>
+      prevMessages.map((prevMessage) =>
+        prevMessage.id === message.id
+          ? {
+              ...prevMessage,
+              liked: prevMessage.liked === liked ? null : liked,
+            }
+          : prevMessage,
+      ),
+    );
+  };
+
   const handleCloseRating = () => {
-    setIsOpen(false);
+    setMessages((prevMessages) =>
+      prevMessages.map((prevMessage) =>
+        prevMessage.id === message.id
+          ? {
+              ...prevMessage,
+              liked: null,
+            }
+          : prevMessage,
+      ),
+    );
   };
 
   useEffect(() => {
     if (isFormSubmitted) return;
 
-    if (!pressedRatingButton) {
+    if (message.liked === null || message.liked === undefined) {
       setIsOpen(false);
       return;
     }
     setIsOpen(true);
-  }, [pressedRatingButton, isFormSubmitted]);
+  }, [message, isFormSubmitted]);
 
   return (
     <>
@@ -110,9 +131,9 @@ const Rating = ({
         <button
           disabled={isFormSubmitted}
           aria-label="סמנ/י שהתשובה עזרה לי"
-          aria-pressed={pressedRatingButton === ButtonType.ThumbsUp}
+          aria-pressed={message.liked === true}
           className="px-[6px] relative"
-          onClick={() => handleRatingButtonClick(ButtonType.ThumbsUp)}
+          onClick={() => handleRating(true)}
         >
           <svg
             width="16"
@@ -135,9 +156,9 @@ const Rating = ({
         <button
           disabled={isFormSubmitted}
           aria-label="סמנ/י שהתשובה לא עזרה לי"
-          aria-pressed={pressedRatingButton === ButtonType.ThumbsDown}
+          aria-pressed={message.liked === false}
           className="px-[6px] relative"
-          onClick={() => handleRatingButtonClick(ButtonType.ThumbsDown)}
+          onClick={() => handleRating(false)}
         >
           <svg
             width="16"
@@ -173,7 +194,7 @@ const Rating = ({
               <img src={XButton} alt="x icon" />
             </button>
           </div>
-          {pressedRatingButton === ButtonType.ThumbsDown && (
+          {!message.liked && (
             <div className="flex mt-2 -mx-1">
               {reasons &&
                 reasons.map((reason, index) => (

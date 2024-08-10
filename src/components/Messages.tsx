@@ -1,19 +1,17 @@
-import { Message, MessageType, ButtonType } from "@/types";
+import { Message, MessageType } from "@/types";
 import Rating from "./Rating";
 import { TypingIndicator } from "@/components";
 
 interface MessagesProps {
   messages: Message[];
-  pressedRatingButton: ButtonType | null;
-  handleRatingButtonClick: (buttonType: ButtonType) => void;
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
   isLoading: boolean;
   messagesEndRef: React.RefObject<HTMLDivElement>;
 }
 
 const Messages = ({
   messages,
-  pressedRatingButton,
-  handleRatingButtonClick,
+  setMessages,
   isLoading,
   messagesEndRef,
 }: MessagesProps) => {
@@ -63,10 +61,7 @@ const Messages = ({
                   </ul>
                 </div>
               )}
-              <Rating
-                pressedRatingButton={pressedRatingButton}
-                handleRatingButtonClick={handleRatingButtonClick}
-              />
+              <Rating message={message} setMessages={setMessages} />
             </>
           )}
         </div>

@@ -2,7 +2,7 @@ import "./App.css";
 import { useEffect, useState, useRef } from "react";
 import HelpIcon from "@/assets/help.svg";
 import CloseIcon from "@/assets/close.svg";
-import { Message, MessageType, ButtonType } from "@/types";
+import { Message, MessageType } from "@/types";
 import {
   Messages,
   Popover,
@@ -35,18 +35,10 @@ const welcomeMessages: Message[] = [
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
-  const [pressedRatingButton, setPressedRatingButton] =
-    useState<ButtonType | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showInput, setShowInput] = useState(true);
   const [messages, setMessages] = useState<Message[]>(welcomeMessages);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const handleRatingButtonClick = (buttonType: ButtonType) => {
-    setPressedRatingButton(
-      pressedRatingButton === buttonType ? null : buttonType,
-    );
-  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     let isFirstQuestion = true;
@@ -103,7 +95,9 @@ function App() {
   };
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   useEffect(() => {
@@ -131,9 +125,8 @@ function App() {
       >
         <ClosePopover setIsOpen={setIsOpen} />
         <Messages
+          setMessages={setMessages}
           messages={messages}
-          handleRatingButtonClick={handleRatingButtonClick}
-          pressedRatingButton={pressedRatingButton}
           isLoading={isLoading}
           messagesEndRef={messagesEndRef}
         />

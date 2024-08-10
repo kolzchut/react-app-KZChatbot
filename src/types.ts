@@ -10,6 +10,7 @@ export interface Message {
   type: MessageType;
   links?: { title: string; url: string }[];
   isFirstQuestion?: boolean;
+  liked?: boolean | null;
 }
 
 export enum ButtonType {
