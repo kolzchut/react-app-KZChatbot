@@ -24,6 +24,7 @@ interface Reason {
 interface RatingProps {
   message: Message;
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+  scrollToBottom: () => void;
 }
 
 const reasons: Reason[] = [
@@ -41,7 +42,7 @@ const reasons: Reason[] = [
   },
 ];
 
-const Rating = ({ message, setMessages }: RatingProps) => {
+const Rating = ({ message, setMessages, scrollToBottom }: RatingProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -91,6 +92,12 @@ const Rating = ({ message, setMessages }: RatingProps) => {
       setIsOpen(true);
     }
   }, [message, isFormSubmitted]);
+
+  useEffect(() => {
+    if (isOpen) {
+      scrollToBottom();
+    }
+  }, [isOpen, scrollToBottom]);
 
   return (
     <>

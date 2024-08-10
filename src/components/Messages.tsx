@@ -7,6 +7,7 @@ interface MessagesProps {
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
   isLoading: boolean;
   messagesEndRef: React.RefObject<HTMLDivElement>;
+  scrollToBottom: () => void;
 }
 
 const Messages = ({
@@ -14,6 +15,7 @@ const Messages = ({
   setMessages,
   isLoading,
   messagesEndRef,
+  scrollToBottom,
 }: MessagesProps) => {
   if (!messages) {
     return null;
@@ -61,7 +63,11 @@ const Messages = ({
                   </ul>
                 </div>
               )}
-              <Rating message={message} setMessages={setMessages} />
+              <Rating
+                message={message}
+                setMessages={setMessages}
+                scrollToBottom={scrollToBottom}
+              />
             </>
           )}
         </div>

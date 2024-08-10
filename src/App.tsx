@@ -56,6 +56,8 @@ function App() {
           }
         });
 
+        scrollToBottom();
+
         const newMessages: Message[] = [
           ...prevMessages,
           {
@@ -68,6 +70,7 @@ function App() {
 
         return newMessages;
       });
+
       input.value = "";
 
       await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -91,6 +94,7 @@ function App() {
         },
       ]);
     }
+    scrollToBottom();
     setShowInput(false);
   };
 
@@ -99,11 +103,6 @@ function App() {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
-
-  useEffect(() => {
-    console.log(messages);
-    scrollToBottom();
-  }, [messages]);
 
   return (
     <Popover open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
@@ -129,6 +128,7 @@ function App() {
           messages={messages}
           isLoading={isLoading}
           messagesEndRef={messagesEndRef}
+          scrollToBottom={scrollToBottom}
         />
         <Footer
           isLoading={isLoading}
