@@ -56,8 +56,6 @@ function App() {
           }
         });
 
-        scrollToBottom();
-
         const newMessages: Message[] = [
           ...prevMessages,
           {
@@ -94,15 +92,19 @@ function App() {
         },
       ]);
     }
-    scrollToBottom();
     setShowInput(false);
   };
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
+      console.log("scrolling");
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   return (
     <Popover open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
