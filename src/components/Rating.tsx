@@ -79,16 +79,7 @@ const Rating = ({ message, setMessages }: RatingProps) => {
   };
 
   const handleCloseRating = () => {
-    setMessages((prevMessages) =>
-      prevMessages.map((prevMessage) =>
-        prevMessage.id === message.id
-          ? {
-              ...prevMessage,
-              liked: null,
-            }
-          : prevMessage,
-      ),
-    );
+    setIsOpen(false);
   };
 
   useEffect(() => {
@@ -96,9 +87,9 @@ const Rating = ({ message, setMessages }: RatingProps) => {
 
     if (message.liked === null || message.liked === undefined) {
       setIsOpen(false);
-      return;
+    } else {
+      setIsOpen(true);
     }
-    setIsOpen(true);
   }, [message, isFormSubmitted]);
 
   return (
