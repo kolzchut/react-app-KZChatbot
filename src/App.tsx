@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import HelpIcon from "@/assets/help.svg";
 import CloseIcon from "@/assets/close.svg";
 import { Message, MessageType } from "@/types";
@@ -10,6 +10,7 @@ import {
   PopoverTrigger,
   Footer,
   ClosePopover,
+  ScrollWidget,
 } from "@/components";
 
 const welcomeMessages: Message[] = [
@@ -38,7 +39,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [showInput, setShowInput] = useState(true);
   const [messages, setMessages] = useState<Message[]>(welcomeMessages);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messageContainerRef = useRef<HTMLDivElement>(null);
+  const [showScrollWidget, setShowScrollWidget] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     let isFirstQuestion = true;
@@ -95,16 +97,27 @@ function App() {
     setShowInput(false);
   };
 
-  const scrollToBottom = () => {
-    if (messagesEndRef.current) {
-      console.log("scrolling");
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+  const scrollToBottom = useCallback(() => {
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTo({
+        top: messageContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, []);
+
+  const handleScroll = () => {
+    if (messageContainerRef.current) {
+      const { scrollHeight, scrollTop, clientHeight } =
+        messageContainerRef.current;
+      setShowScrollWidget(scrollHeight - scrollTop > clientHeight + 100);
     }
   };
 
   useEffect(() => {
+    if (messages.length < welcomeMessages.length) return;
     scrollToBottom();
-  }, [messages]);
+  }, [messages, scrollToBottom]);
 
   return (
     <Popover open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
@@ -129,8 +142,12 @@ function App() {
           setMessages={setMessages}
           messages={messages}
           isLoading={isLoading}
-          messagesEndRef={messagesEndRef}
+          ref={messageContainerRef}
+          onScroll={handleScroll}
+        />
+        <ScrollWidget
           scrollToBottom={scrollToBottom}
+          showScrollWidget={showScrollWidget}
         />
         <Footer
           isLoading={isLoading}

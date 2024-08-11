@@ -5,6 +5,7 @@ import Input from "./ui/Input";
 import { Popover, PopoverTrigger, PopoverContent } from "./ui/Popover";
 import Footer from "./Footer";
 import ClosePopover from "./ClosePopover";
+import ScrollWidget from "./ScrollWidget";
 
 export {
   Messages,
@@ -16,4 +17,5 @@ export {
   PopoverContent,
   Footer,
   ClosePopover,
+  ScrollWidget,
 };

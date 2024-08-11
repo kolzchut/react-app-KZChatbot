@@ -1,9 +1,7 @@
 import XButton from "@/assets/x.svg";
 import { useEffect, useState, useRef, ChangeEvent } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { ButtonType } from "@/types";
 import { Message } from "@/types";
-import { isBoolean } from "util";
 
 type Inputs = {
   reason: ReasonType;
@@ -24,7 +22,6 @@ interface Reason {
 interface RatingProps {
   message: Message;
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
-  scrollToBottom: () => void;
 }
 
 const reasons: Reason[] = [
@@ -42,7 +39,7 @@ const reasons: Reason[] = [
   },
 ];
 
-const Rating = ({ message, setMessages, scrollToBottom }: RatingProps) => {
+const Rating = ({ message, setMessages }: RatingProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -51,6 +48,7 @@ const Rating = ({ message, setMessages, scrollToBottom }: RatingProps) => {
   const descriptionValue = watch("description");
   const reasonValue = watch("reason");
   const isSendButtonDisabled = !reasonValue && !descriptionValue;
+  const ref = useRef<HTMLDivElement>(null);
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data);
@@ -95,12 +93,12 @@ const Rating = ({ message, setMessages, scrollToBottom }: RatingProps) => {
 
   useEffect(() => {
     if (isOpen) {
-      scrollToBottom();
+      ref.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [isOpen, scrollToBottom]);
+  }, [isOpen]);
 
   return (
-    <>
+    <div ref={ref}>
       <style>
         {`
         button[aria-pressed='true'] {
@@ -181,7 +179,7 @@ const Rating = ({ message, setMessages, scrollToBottom }: RatingProps) => {
       </div>
       {isOpen && (
         <form
-          className="mt-2 p-2 border border-line mb-4"
+          className="mt-2 p-2 border border-line"
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex justify-between items-center">
@@ -237,7 +235,7 @@ const Rating = ({ message, setMessages, scrollToBottom }: RatingProps) => {
           </div>
         </form>
       )}
-    </>
+    </div>
   );
 };
 
