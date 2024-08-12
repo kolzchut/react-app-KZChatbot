@@ -7,10 +7,19 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
 
   return {
+    build: {
+      rollupOptions: {
+        output: {
+          entryFileNames: `assets/[name].js`,
+          chunkFileNames: `assets/[name].js`,
+          assetFileNames: `assets/[name].[ext]`,
+        },
+      },
+    },
     server: {
       proxy: {
         "/api": {
-          target: env.VITE_API_URL,
+          target: env.VITE_API_REAL_URL,
           changeOrigin: true,
           secure: false,
           rewrite: (p) => p.replace(/^\/api/, ""),
@@ -21,7 +30,7 @@ export default defineConfig(({ mode }) => {
     preview: {
       proxy: {
         "/api": {
-          target: env.VITE_API_URL,
+          target: env.VITE_API_REAL_URL,
           changeOrigin: true,
           secure: false,
           rewrite: (p) => p.replace(/^\/api/, ""),
