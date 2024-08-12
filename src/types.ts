@@ -17,3 +17,14 @@ export enum ButtonType {
   ThumbsUp = "thumbsUp",
   ThumbsDown = "thumbsDown",
 }
+
+interface Document {
+  title: string;
+  url: string;
+}
+
+export interface Answer {
+  llmResult: string;
+  docs: Document[];
+  conversationId: string | null;
+}

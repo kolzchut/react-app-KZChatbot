@@ -2,7 +2,7 @@ import "./App.css";
 import { useEffect, useState, useRef, useCallback } from "react";
 import HelpIcon from "@/assets/help.svg";
 import CloseIcon from "@/assets/close.svg";
-import { Message, MessageType } from "@/types";
+import { Message, MessageType, Answer } from "@/types";
 import {
   Messages,
   Popover,
@@ -35,12 +35,34 @@ const welcomeMessages: Message[] = [
 ];
 
 function App() {
+  const [globalConfigObject, setGlobalConfigObject] = useState<
+    typeof window.KZChatbotConfig | null
+  >(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showInput, setShowInput] = useState(true);
   const [messages, setMessages] = useState<Message[]>(welcomeMessages);
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const [showScrollWidget, setShowScrollWidget] = useState(false);
+
+  const getAnswer = async (question: string): Promise<Answer> => {
+    const isProduction = import.meta.env.MODE === "production";
+    const url = isProduction
+      ? `${globalConfigObject?.restPath}/kzchatbot/v0/question`
+      : "/api/kzchatbot/v0/question";
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        text: question,
+        uuid: globalConfigObject?.uuid,
+      }),
+    });
+    const data = await response.json();
+    return data;
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     let isFirstQuestion = true;
@@ -50,7 +72,9 @@ function App() {
     const input = form.elements.namedItem("question") as HTMLInputElement;
     const value = input.value;
 
-    if (value) {
+    if (!value) return;
+
+    try {
       setMessages((prevMessages) => {
         prevMessages.map((item) => {
           if (item.type !== MessageType.StartBot) {
@@ -72,14 +96,15 @@ function App() {
       });
 
       input.value = "";
+      const answer = await getAnswer(value);
+      if (!answer.llmResult) throw new Error("No answer"); //TODO show error message
 
-      await new Promise((resolve) => setTimeout(resolve, 2000));
       setIsLoading(false);
       setMessages((prevMessages) => [
         ...prevMessages,
         {
           id: prevMessages.length + 1,
-          content: "מתחת לגיל 16: שכר המינימום השעתי הוא 23.7",
+          content: answer.llmResult,
           type: MessageType.Bot,
           links: [
             {
@@ -93,8 +118,10 @@ function App() {
           ],
         },
       ]);
+      setShowInput(false);
+    } catch (error) {
+      console.error(error);
     }
-    setShowInput(false);
   };
 
   const scrollToBottom = useCallback(() => {
@@ -118,6 +145,12 @@ function App() {
     if (messages.length < welcomeMessages.length) return;
     scrollToBottom();
   }, [messages, scrollToBottom]);
+
+  useEffect(() => {
+    if (window.KZChatbotConfig) {
+      setGlobalConfigObject(window.KZChatbotConfig);
+    }
+  }, []);
 
   return (
     <Popover open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
