@@ -1,50 +1,50 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap");
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "./styles/base.css";
+@import "./styles/utilities.css";
 
-@layer base {
-    :root {
-        --input-background: #ffffff;
-        --input-placeholder: #005aab;
-        --textarea-placeholder: #ffffff;
-        --textarea-border: #748da7;
-        --cta-background: #005aab;
-        --cta-foreground: #ffffff;
-        --popover: #2d5b85;
-        --popover-foreground: 222.2 84% 4.9%;
-        --disclaimer-foreground: #f0f7fe;
-        --links-foreground: #ffffff;
-        --message-bot-background: #ffffff;
-        --message-bot-foreground: #192832;
-        --message-user-background: #d4dde6;
-        --message-user-foreground: #192832;
-        --breaking-line: rgba(212, 221, 230, 0.2);
-        --button-background: #ffffff;
-        --button-foreground: #005aab;
+:root {
+    --kzcb-input-background: #ffffff;
+    --kzcb-input-placeholder: #005aab;
+    --kzcb-textarea-placeholder: #ffffff;
+    --kzcb-textarea-border: #748da7;
+    --kzcb-cta-background: #005aab;
+    --kzcb-cta-foreground: #ffffff;
+    --kzcb-popover: #2d5b85;
+    --kzcb-popover-foreground: 222.2 84% 4.9%;
+    --kzcb-disclaimer-foreground: #f0f7fe;
+    --kzcb-links-foreground: #ffffff;
+    --kzcb-message-bot-background: #ffffff;
+    --kzcb-message-bot-foreground: #192832;
+    --kzcb-message-user-background: #d4dde6;
+    --kzcb-message-user-foreground: #192832;
+    --kzcb-breaking-line: rgba(212, 221, 230, 0.2);
+    --kzcb-button-background: #ffffff;
+    --kzcb-button-foreground: #005aab;
 
-        --background: #005aab;
-        --foreground: 222.2 84% 4.9%;
-        --card: 0 0% 100%;
-        --card-foreground: 222.2 84% 4.9%;
-        --primary: 222.2 47.4% 11.2%;
-        --primary-foreground: 210 40% 98%;
-        --secondary: 210 40% 96.1%;
-        --secondary-foreground: 222.2 47.4% 11.2%;
-        --muted: 210 40% 96.1%;
-        --muted-foreground: 215.4 16.3% 46.9%;
-        --accent: 210 40% 96.1%;
-        --accent-foreground: 222.2 47.4% 11.2%;
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 210 40% 98%;
-        --border: 214.3 31.8% 91.4%;
-        --input: 214.3 31.8% 91.4%;
-        --ring: 222.2 84% 4.9%;
-        --radius: 0.5rem;
-        --chart-1: 12 76% 61%;
-        --chart-2: 173 58% 39%;
-        --chart-3: 197 37% 24%;
-        --chart-4: 43 74% 66%;
-        --chart-5: 27 87% 67%;
-    }
+    --kzcb-background: #005aab;
+    --kzcb-foreground: 222.2 84% 4.9%;
+    --kzcb-card: 0 0% 100%;
+    --kzcb-card-foreground: 222.2 84% 4.9%;
+    --kzcb-primary: 222.2 47.4% 11.2%;
+    --kzcb-primary-foreground: 210 40% 98%;
+    --kzcb-secondary: 210 40% 96.1%;
+    --kzcb-secondary-foreground: 222.2 47.4% 11.2%;
+    --kzcb-muted: 210 40% 96.1%;
+    --kzcb-muted-foreground: 215.4 16.3% 46.9%;
+    --kzcb-accent: 210 40% 96.1%;
+    --kzcb-accent-foreground: 222.2 47.4% 11.2%;
+    --kzcb-destructive-foreground: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --kzcb-border: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --kzcb-radius: 0.5rem;
+}
+
+#root {
+    font-family: "Open Sans", sans-serif;
+    display: flex;
+    position: fixed;
+    bottom: 0.75rem;
+    left: 0.75rem;
+    z-index: 999;
 }

@@ -1,4 +1,3 @@
-import "./App.css";
 import { useEffect, useState, useRef, useCallback } from "react";
 import HelpIcon from "@/assets/help.svg";
 import CloseIcon from "@/assets/close.svg";

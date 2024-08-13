@@ -103,13 +103,13 @@ const Rating = ({ message, setMessages }: RatingProps) => {
         {`
         button[aria-pressed='true'] {
           path {
-            fill: var(--popover);
+            fill: var(--kzcb-popover);
           }
           &::before {
           display: inline-flex;
             content: '';
             position: absolute;
-            background: var(--input-background);
+            background: var(--kzcb-input-background);
             width: 1.5rem;
             height: 1.5rem;
             top: 50%;
