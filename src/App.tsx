@@ -71,7 +71,15 @@ function App() {
     const input = form.elements.namedItem("question") as HTMLInputElement;
     const value = input.value;
 
-    if (!value) return;
+    if (
+      !value ||
+      !globalConfigObject ||
+      !globalConfigObject?.uuid ||
+      globalConfigObject.chatbotIsShown !== "1" ||
+      !globalConfigObject.slugs
+    ) {
+      return null;
+    }
 
     try {
       setMessages((prevMessages) => {
@@ -142,14 +150,6 @@ function App() {
     }
   }, []);
 
-  if (
-    !globalConfigObject ||
-    !globalConfigObject.uuid ||
-    globalConfigObject.chatbotIsShown !== "1"
-  ) {
-    return null;
-  }
-
   return (
     <Popover open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <PopoverTrigger className="rounded-full bg-cta h-16 w-16 relative block">
@@ -158,7 +158,9 @@ function App() {
           <span
             className={`text-xs font-bold ${isOpen ? "leading-4" : "leading-normal"} text-cta-foreground`}
           >
-            {isOpen ? "סגירה" : "כל שאלה"}
+            {isOpen
+              ? globalConfigObject?.slugs.close_chat_icon
+              : globalConfigObject?.slugs.chat_icon}
           </span>
         </div>
       </PopoverTrigger>
@@ -175,6 +177,7 @@ function App() {
           isLoading={isLoading}
           ref={messageContainerRef}
           onScroll={handleScroll}
+          slugs={globalConfigObject?.slugs}
         />
         <ScrollWidget
           scrollToBottom={scrollToBottom}
@@ -185,6 +188,7 @@ function App() {
           showInput={showInput}
           handleSubmit={handleSubmit}
           setShowInput={setShowInput}
+          slugs={globalConfigObject?.slugs}
         />
       </PopoverContent>
     </Popover>

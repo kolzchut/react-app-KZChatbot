@@ -4,42 +4,17 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { Message } from "@/types";
 
 type Inputs = {
-  reason: ReasonType;
+  reason: "0" | "1" | "2";
   description: string;
 };
-
-enum ReasonType {
-  NotRelevant = "notRelevant",
-  NotTrue = "notTrue",
-  NotSecure = "notSecure",
-}
-
-interface Reason {
-  title: string;
-  value: ReasonType;
-}
 
 interface RatingProps {
   message: Message;
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+  slugs: Partial<typeof window.KZChatbotConfig.slugs> | undefined;
 }
 
-const reasons: Reason[] = [
-  {
-    title: "לא רלוונטי",
-    value: ReasonType.NotRelevant,
-  },
-  {
-    title: "לא נכון",
-    value: ReasonType.NotTrue,
-  },
-  {
-    title: "לא מאובטח",
-    value: ReasonType.NotSecure,
-  },
-];
-
-const Rating = ({ message, setMessages }: RatingProps) => {
+const Rating = ({ message, setMessages, slugs }: RatingProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -49,6 +24,12 @@ const Rating = ({ message, setMessages }: RatingProps) => {
   const reasonValue = watch("reason");
   const isSendButtonDisabled = !reasonValue && !descriptionValue;
   const ref = useRef<HTMLDivElement>(null);
+
+  const reasons: string[] = [
+    slugs?.dislike_followup_q_first || "not true",
+    slugs?.dislike_followup_q_second || "not relevant",
+    slugs?.dislike_followup_q_third || "unclear",
+  ];
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data);
@@ -122,7 +103,7 @@ const Rating = ({ message, setMessages }: RatingProps) => {
       </style>
       <div className="flex items-center">
         <span className="text-message-user-background text-xs ml-1">
-          האם התשובה עזרה לך?
+          {slugs?.ranking_request}
         </span>
         <button
           disabled={isFormSubmitted}
@@ -183,8 +164,8 @@ const Rating = ({ message, setMessages }: RatingProps) => {
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex justify-between items-center">
-            <span className="text-sm font-bold text-input ">
-              תודה רבה על המשוב, נשמח לדעת למה
+            <span className="text-sm font-bold text-input">
+              {slugs?.dislike_follow_up_question}
             </span>
             <button onClick={handleCloseRating}>
               <img src={XButton} alt="x icon" />
@@ -197,12 +178,12 @@ const Rating = ({ message, setMessages }: RatingProps) => {
                   <label key={index} className="px-1">
                     <input
                       type="radio"
-                      value={reason.value}
+                      value={index}
                       className="sr-only peer"
                       {...register(`reason`)}
                     />
                     <div className="px-4 h-[30px] flex items-center text-xs text-input rounded-full border border-message-user-background peer-checked:bg-input peer-checked:text-input-placholder peer-focus-visible:outline-1 peer-focus-visible:outline">
-                      {reason.title}
+                      {reason}
                     </div>
                   </label>
                 ))}
@@ -219,12 +200,12 @@ const Rating = ({ message, setMessages }: RatingProps) => {
               onBlur={description.onBlur}
               onChange={handleChange}
               rows={1}
-              placeholder="רוצה לפרט? זה יעזור לנו להשתפר"
+              placeholder={slugs?.feedback_free_text}
             />
           </div>
           <div className="flex justify-between items-center">
             <span className="text-xs text-disclaimer">
-              אין לשתף פרטים מזהים או מידע רגיש
+              {slugs?.feedback_free_text_disclaimer}
             </span>
             <input
               disabled={isSendButtonDisabled}

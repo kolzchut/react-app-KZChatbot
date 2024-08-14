@@ -9,10 +9,11 @@ interface MessagesProps {
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
   isLoading: boolean;
   onScroll: () => void;
+  slugs: Partial<typeof window.KZChatbotConfig.slugs> | undefined;
 }
 
 const Messages = forwardRef<HTMLDivElement, MessagesProps>(
-  ({ messages, setMessages, isLoading, onScroll }, ref) => {
+  ({ messages, setMessages, isLoading, onScroll, slugs }, ref) => {
     if (!messages) {
       return null;
     }
@@ -47,7 +48,7 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(
                 {message.links && (
                   <div className="bg-message-bot-background text-message-bot-foreground border-r-4 border-message-user-background pr-[5px] py-2 mb-[6px]">
                     <span className="text-sm font-bold text-input-placholder mb-1 inline-block">
-                      כדאי לבקר בעמודים האלה:
+                      {slugs?.returning_links_title}
                     </span>
                     <ul className="list-inside">
                       {message.links.map((link, index) => (
@@ -67,7 +68,11 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(
                     </ul>
                   </div>
                 )}
-                <Rating message={message} setMessages={setMessages} />
+                <Rating
+                  message={message}
+                  setMessages={setMessages}
+                  slugs={slugs}
+                />
               </>
             )}
           </div>
