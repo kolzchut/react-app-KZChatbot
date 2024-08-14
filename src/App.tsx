@@ -12,27 +12,6 @@ import {
   ScrollWidget,
 } from "@/components";
 
-const welcomeMessages: Message[] = [
-  {
-    id: 1,
-    content:
-      "שלום! הצ'אט החכם של 'כל זכות' פועל בעזרת בינה מלאכותית ויכול למצוא לך תשובות מתוך 'כל זכות' מהר ובקלות.",
-    type: MessageType.StartBot,
-  },
-  {
-    id: 2,
-    content:
-      "אפשר לשאול כל שאלה על זכויות, בשפה חופשית. כדאי לציין מאפיינים כלליים רלוונטיים כמו מגדר, גיל, משך ההעסקה וכדומה, כדי לקבל תשובות מתאימות. חשוב: הצ'אט לא חסוי. אין למסור בו מידע מזהה כמו שם, כתובת או מידע רפואי רגיש. המידע נאסף לצורך שיפור השירות.",
-    type: MessageType.StartBot,
-  },
-  {
-    id: 3,
-    content:
-      "אנחנו בתקופת הרצה. הצ'אט יכול לטעות, ו'כל זכות' לא אחראית לתשובות שלו. כדאי לבדוק את המידע גם בעמוד המתאים ב'כל זכות'. הקישור יופיע בסוף התשובה.",
-    type: MessageType.StartBot,
-  },
-];
-
 function App() {
   const [globalConfigObject, setGlobalConfigObject] = useState<
     typeof window.KZChatbotConfig | null
@@ -40,7 +19,7 @@ function App() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showInput, setShowInput] = useState(true);
-  const [messages, setMessages] = useState<Message[]>(welcomeMessages);
+  const [messages, setMessages] = useState<Message[]>([]);
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const [showScrollWidget, setShowScrollWidget] = useState(false);
 
@@ -140,15 +119,34 @@ function App() {
   };
 
   useEffect(() => {
-    if (messages.length < welcomeMessages.length) return;
+    if (messages.length < 3) return;
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
   useEffect(() => {
     if (window.KZChatbotConfig) {
       setGlobalConfigObject(window.KZChatbotConfig);
+      setMessages([
+        {
+          id: 1,
+          content: globalConfigObject?.slugs.welcome_message_first || "",
+          type: MessageType.StartBot,
+        },
+        {
+          id: 2,
+          content:
+            "אפשר לשאול כל שאלה על זכויות, בשפה חופשית. כדאי לציין מאפיינים כלליים רלוונטיים כמו מגדר, גיל, משך ההעסקה וכדומה, כדי לקבל תשובות מתאימות. חשוב: הצ'אט לא חסוי. אין למסור בו מידע מזהה כמו שם, כתובת או מידע רפואי רגיש. המידע נאסף לצורך שיפור השירות.",
+          type: MessageType.StartBot,
+        },
+        {
+          id: 3,
+          content:
+            "אנחנו בתקופת הרצה. הצ'אט יכול לטעות, ו'כל זכות' לא אחראית לתשובות שלו. כדאי לבדוק את המידע גם בעמוד המתאים ב'כל זכות'. הקישור יופיע בסוף התשובה.",
+          type: MessageType.StartBot,
+        },
+      ]);
     }
-  }, []);
+  }, [setMessages, globalConfigObject]);
 
   return (
     <Popover open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
