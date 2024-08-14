@@ -40,7 +40,7 @@
     --kzcb-radius: 0.5rem;
 }
 
-#root {
+#kzchatbot {
     font-family: "Open Sans", sans-serif;
     display: flex;
     position: fixed;
