@@ -9,11 +9,11 @@ interface MessagesProps {
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
   isLoading: boolean;
   onScroll: () => void;
-  slugs: Partial<typeof window.KZChatbotConfig.slugs> | undefined;
+  globalConfigObject: typeof window.KZChatbotConfig | null;
 }
 
 const Messages = forwardRef<HTMLDivElement, MessagesProps>(
-  ({ messages, setMessages, isLoading, onScroll, slugs }, ref) => {
+  ({ messages, setMessages, isLoading, onScroll, globalConfigObject }, ref) => {
     if (!messages) {
       return null;
     }
@@ -48,7 +48,7 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(
                 {message.links && (
                   <div className="bg-message-bot-background text-message-bot-foreground border-r-4 border-message-user-background pr-[5px] py-2 mb-[6px]">
                     <span className="text-sm font-bold text-input-placholder mb-1 inline-block">
-                      {slugs?.returning_links_title}
+                      {globalConfigObject?.slugs?.returning_links_title}
                     </span>
                     <ul className="list-inside">
                       {message.links.map((link, index) => (
@@ -71,7 +71,7 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(
                 <Rating
                   message={message}
                   setMessages={setMessages}
-                  slugs={slugs}
+                  globalConfigObject={globalConfigObject}
                 />
               </>
             )}

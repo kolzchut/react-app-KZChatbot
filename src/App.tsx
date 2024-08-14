@@ -11,6 +11,7 @@ import {
   ClosePopover,
   ScrollWidget,
 } from "@/components";
+import { v4 as uuidv4 } from "uuid";
 
 function App() {
   const [globalConfigObject, setGlobalConfigObject] = useState<
@@ -71,7 +72,7 @@ function App() {
         const newMessages: Message[] = [
           ...prevMessages,
           {
-            id: prevMessages.length + 1,
+            id: uuidv4(),
             content: value,
             type: MessageType.User,
             isFirstQuestion,
@@ -89,7 +90,7 @@ function App() {
       setMessages((prevMessages) => [
         ...prevMessages,
         {
-          id: prevMessages.length + 1,
+          id: answer.conversationId,
           content: answer.llmResult,
           type: MessageType.Bot,
           links: answer.docs,
@@ -128,18 +129,18 @@ function App() {
       setGlobalConfigObject(window.KZChatbotConfig);
       setMessages([
         {
-          id: 1,
+          id: uuidv4(),
           content: globalConfigObject?.slugs.welcome_message_first || "",
           type: MessageType.StartBot,
         },
         {
-          id: 2,
+          id: uuidv4(),
           content:
             "אפשר לשאול כל שאלה על זכויות, בשפה חופשית. כדאי לציין מאפיינים כלליים רלוונטיים כמו מגדר, גיל, משך ההעסקה וכדומה, כדי לקבל תשובות מתאימות. חשוב: הצ'אט לא חסוי. אין למסור בו מידע מזהה כמו שם, כתובת או מידע רפואי רגיש. המידע נאסף לצורך שיפור השירות.",
           type: MessageType.StartBot,
         },
         {
-          id: 3,
+          id: uuidv4(),
           content:
             "אנחנו בתקופת הרצה. הצ'אט יכול לטעות, ו'כל זכות' לא אחראית לתשובות שלו. כדאי לבדוק את המידע גם בעמוד המתאים ב'כל זכות'. הקישור יופיע בסוף התשובה.",
           type: MessageType.StartBot,
@@ -175,7 +176,7 @@ function App() {
           isLoading={isLoading}
           ref={messageContainerRef}
           onScroll={handleScroll}
-          slugs={globalConfigObject?.slugs}
+          globalConfigObject={globalConfigObject}
         />
         <ScrollWidget
           scrollToBottom={scrollToBottom}

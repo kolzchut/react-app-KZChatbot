@@ -3,38 +3,86 @@ import { useEffect, useState, useRef, ChangeEvent } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Message } from "@/types";
 
-type Inputs = {
-  reason: "0" | "1" | "2";
+enum ReasonValue {
+  NOT_TRUE = "NOT_TRUE",
+  IRRELEVANT = "IRRELEVANT",
+  UNCLEAR = "UNCLEAR",
+}
+
+type FormFields = {
+  reason: ReasonValue;
   description: string;
 };
+
+interface Reason {
+  value: ReasonValue;
+  label: string;
+}
 
 interface RatingProps {
   message: Message;
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
-  slugs: Partial<typeof window.KZChatbotConfig.slugs> | undefined;
+  globalConfigObject: typeof window.KZChatbotConfig | null;
 }
 
-const Rating = ({ message, setMessages, slugs }: RatingProps) => {
+const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const { register, handleSubmit, watch, setValue } = useForm<Inputs>();
+  const { register, handleSubmit, watch, setValue } = useForm<FormFields>();
   const description = register("description");
   const descriptionValue = watch("description");
   const reasonValue = watch("reason");
   const isSendButtonDisabled = !reasonValue && !descriptionValue;
   const ref = useRef<HTMLDivElement>(null);
 
-  const reasons: string[] = [
-    slugs?.dislike_followup_q_first || "not true",
-    slugs?.dislike_followup_q_second || "not relevant",
-    slugs?.dislike_followup_q_third || "unclear",
+  const slugs = globalConfigObject?.slugs;
+
+  const reasons: Reason[] = [
+    {
+      value: ReasonValue.NOT_TRUE,
+      label: slugs?.dislike_followup_q_first || "not true",
+    },
+    {
+      value: ReasonValue.IRRELEVANT,
+      label: slugs?.dislike_followup_q_second || "not relevant",
+    },
+    {
+      value: ReasonValue.UNCLEAR,
+      label: slugs?.dislike_followup_q_third || "unclear",
+    },
   ];
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
-    setIsFormSubmitted(true);
-    setIsOpen(false);
+  const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    const isProduction = import.meta.env.MODE === "production";
+    const url = isProduction
+      ? `${globalConfigObject?.restPath}/kzchatbot/v0/question`
+      : "/api/kzchatbot/v0/question";
+    const { reason, description } = data;
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          answerId: message.id,
+          answerClassification: reason,
+          text: description,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.messageTranslations.he); // TODO: add type for data
+      }
+
+      setIsFormSubmitted(true);
+      setIsOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -45,17 +93,42 @@ const Rating = ({ message, setMessages, slugs }: RatingProps) => {
     setValue("description", e.target.value);
   };
 
-  const handleRating = (liked: boolean) => {
-    setMessages((prevMessages) =>
-      prevMessages.map((prevMessage) =>
-        prevMessage.id === message.id
-          ? {
-              ...prevMessage,
-              liked: prevMessage.liked === liked ? null : liked,
-            }
-          : prevMessage,
-      ),
-    );
+  const handleRating = async (liked: boolean) => {
+    const isProduction = import.meta.env.MODE === "production";
+    const url = isProduction
+      ? `${globalConfigObject?.restPath}/kzchatbot/v0/question`
+      : "/api/kzchatbot/v0/question";
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          like: liked,
+          answerId: message.id,
+        }),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.messageTranslations.he); // TODO: add type for data
+      }
+
+      setMessages((prevMessages) =>
+        prevMessages.map((prevMessage) =>
+          prevMessage.id === message.id
+            ? {
+                ...prevMessage,
+                liked: prevMessage.liked === liked ? null : liked,
+              }
+            : prevMessage,
+        ),
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleCloseRating = () => {
@@ -178,12 +251,12 @@ const Rating = ({ message, setMessages, slugs }: RatingProps) => {
                   <label key={index} className="px-1">
                     <input
                       type="radio"
-                      value={index}
+                      value={reason.value}
                       className="sr-only peer"
                       {...register(`reason`)}
                     />
                     <div className="px-4 h-[30px] flex items-center text-xs text-input rounded-full border border-message-user-background peer-checked:bg-input peer-checked:text-input-placholder peer-focus-visible:outline-1 peer-focus-visible:outline">
-                      {reason}
+                      {reason.label}
                     </div>
                   </label>
                 ))}

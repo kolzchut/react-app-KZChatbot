@@ -5,7 +5,7 @@ export enum MessageType {
 }
 
 export interface Message {
-  id: number;
+  id: string;
   content: string;
   type: MessageType;
   links?: { title: string; url: string }[];
@@ -26,5 +26,5 @@ interface Document {
 export interface Answer {
   llmResult: string;
   docs: Document[];
-  conversationId: string | null;
+  conversationId: string;
 }
