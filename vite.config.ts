@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         "/api": {
-          target: env.VITE_API_REAL_URL,
+          target: env.VITE_API_URL,
           changeOrigin: true,
           secure: false,
           rewrite: (p) => p.replace(/^\/api/, ""),
@@ -30,7 +30,7 @@ export default defineConfig(({ mode }) => {
     preview: {
       proxy: {
         "/api": {
-          target: env.VITE_API_REAL_URL,
+          target: env.VITE_API_URL,
           changeOrigin: true,
           secure: false,
           rewrite: (p) => p.replace(/^\/api/, ""),

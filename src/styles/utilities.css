@@ -604,4 +604,33 @@
     .data-\[side\=top\]\:slide-in-from-bottom-2[data-side="top"] {
         --tw-enter-translate-y: 0.5rem;
     }
+    .markdown {
+        > * {
+            overflow-wrap: break-word;
+            max-width: 100%;
+        }
+
+        ol {
+            list-style-type: decimal;
+            list-style-position: inside;
+        }
+
+        ul {
+            list-style-type: disc;
+            list-style-position: inside;
+        }
+
+        li > p {
+            display: inline-block;
+        }
+
+        a {
+            color: var(--kzcb-input-placeholder);
+        }
+
+        p,
+        li {
+            margin-bottom: 0.5rem;
+        }
+    }
 }

@@ -2,6 +2,7 @@ import { Message, MessageType } from "@/types";
 import Rating from "./Rating";
 import { TypingIndicator } from "@/components";
 import { forwardRef } from "react";
+import Markdown from "react-markdown";
 
 interface MessagesProps {
   messages: Message[];
@@ -34,7 +35,11 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(
                   : "bg-message-user-background text-message-user-foreground rounded-[10px_10px_0_10px] ml-[3.8rem]"
               }`}
             >
-              {message.content}
+              {message.type === MessageType.Bot ? (
+                <Markdown className="markdown">{message.content}</Markdown>
+              ) : (
+                message.content
+              )}
             </div>
 
             {message.type === MessageType.Bot && (

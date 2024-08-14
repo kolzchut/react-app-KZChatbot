@@ -56,7 +56,7 @@ function App() {
       },
       body: JSON.stringify({
         text: question,
-        uuid: globalConfigObject?.uuid,
+        uuid: globalConfigObject?.uuid || "",
       }),
     });
     const data = await response.json();
@@ -105,16 +105,7 @@ function App() {
           id: prevMessages.length + 1,
           content: answer.llmResult,
           type: MessageType.Bot,
-          links: [
-            {
-              title: "תשלום שכר לבני נוער (זכות)",
-              url: "",
-            },
-            {
-              title: "שכר מינימום לנוער",
-              url: "",
-            },
-          ],
+          links: answer.docs,
         },
       ]);
       setShowInput(false);
@@ -150,6 +141,14 @@ function App() {
       setGlobalConfigObject(window.KZChatbotConfig);
     }
   }, []);
+
+  if (
+    !globalConfigObject ||
+    !globalConfigObject.uuid ||
+    globalConfigObject.chatbotIsShown !== "1"
+  ) {
+    return null;
+  }
 
   return (
     <Popover open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
