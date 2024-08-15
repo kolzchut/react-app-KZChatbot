@@ -22,6 +22,8 @@ declare global {
         returning_links_title: string;
         tc_link: string;
         welcome_message_first: string;
+        welcome_message_second: string;
+        welcome_message_third: string;
       };
       restPath: string;
     };

@@ -135,14 +135,12 @@ function App() {
         },
         {
           id: uuidv4(),
-          content:
-            "אפשר לשאול כל שאלה על זכויות, בשפה חופשית. כדאי לציין מאפיינים כלליים רלוונטיים כמו מגדר, גיל, משך ההעסקה וכדומה, כדי לקבל תשובות מתאימות. חשוב: הצ'אט לא חסוי. אין למסור בו מידע מזהה כמו שם, כתובת או מידע רפואי רגיש. המידע נאסף לצורך שיפור השירות.",
+          content: globalConfigObject?.slugs.welcome_message_second || "",
           type: MessageType.StartBot,
         },
         {
           id: uuidv4(),
-          content:
-            "אנחנו בתקופת הרצה. הצ'אט יכול לטעות, ו'כל זכות' לא אחראית לתשובות שלו. כדאי לבדוק את המידע גם בעמוד המתאים ב'כל זכות'. הקישור יופיע בסוף התשובה.",
+          content: globalConfigObject?.slugs.welcome_message_third || "",
           type: MessageType.StartBot,
         },
       ]);
