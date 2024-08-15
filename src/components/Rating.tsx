@@ -56,8 +56,8 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     const isProduction = import.meta.env.MODE === "production";
     const url = isProduction
-      ? `${globalConfigObject?.restPath}/kzchatbot/v0/question`
-      : "/api/kzchatbot/v0/question";
+      ? `${globalConfigObject?.restPath}/kzchatbot/v0/rate`
+      : "/api/kzchatbot/v0/rate";
     const { reason, description } = data;
     try {
       const response = await fetch(url, {
@@ -72,9 +72,8 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
         }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
+        const data = await response.json();
         throw new Error(data.messageTranslations.he); // TODO: add type for data
       }
 
@@ -85,7 +84,7 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
     }
   };
 
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     if (!textareaRef.current) return;
     textareaRef.current.style.height = "auto";
     textareaRef.current.style.height =
@@ -93,11 +92,11 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
     setValue("description", e.target.value);
   };
 
-  const handleRating = async (liked: boolean) => {
+  const handleRating = async (liked: boolean | null) => {
     const isProduction = import.meta.env.MODE === "production";
     const url = isProduction
-      ? `${globalConfigObject?.restPath}/kzchatbot/v0/question`
-      : "/api/kzchatbot/v0/question";
+      ? `${globalConfigObject?.restPath}/kzchatbot/v0/rate`
+      : "/api/kzchatbot/v0/rate";
 
     try {
       const response = await fetch(url, {
@@ -110,9 +109,9 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
           answerId: message.id,
         }),
       });
-      const data = await response.json();
 
       if (!response.ok) {
+        const data = await response.json();
         throw new Error(data.messageTranslations.he); // TODO: add type for data
       }
 
@@ -183,7 +182,7 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
           aria-label="סמנ/י שהתשובה עזרה לי"
           aria-pressed={message.liked === true}
           className="px-[6px] relative"
-          onClick={() => handleRating(true)}
+          onClick={() => handleRating(message.liked === true ? null : true)}
         >
           <svg
             width="16"
@@ -208,7 +207,7 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
           aria-label="סמנ/י שהתשובה לא עזרה לי"
           aria-pressed={message.liked === false}
           className="px-[6px] relative"
-          onClick={() => handleRating(false)}
+          onClick={() => handleRating(message.liked === false ? null : false)}
         >
           <svg
             width="16"
@@ -271,7 +270,7 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
               }}
               ref={textareaRef}
               onBlur={description.onBlur}
-              onChange={handleChange}
+              onChange={handleTextChange}
               rows={1}
               placeholder={slugs?.feedback_free_text}
             />
