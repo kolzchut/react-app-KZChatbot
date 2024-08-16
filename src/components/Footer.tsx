@@ -21,7 +21,7 @@ const Footer = ({
   }
 
   return (
-    <div className="px-3">
+    <div className="px-4">
       {showInput ? (
         <>
           <div className="flex justify-end items-center text-links-foreground text-sm mb-2">

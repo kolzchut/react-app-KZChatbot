@@ -20,7 +20,7 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(
 
     return (
       <div
-        className="px-3 flex-1 overflow-auto pb-4"
+        className="px-4 flex-1 overflow-auto pb-4"
         onScroll={onScroll}
         ref={ref}
       >
