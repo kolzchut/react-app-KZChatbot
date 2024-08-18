@@ -86,6 +86,9 @@
     .mr-\[2px\] {
         margin-right: 2px;
     }
+    .mt-1 {
+        margin-top: 0.25rem;
+    }
     .mt-2 {
         margin-top: 0.5rem;
     }
@@ -345,6 +348,12 @@
     }
     .text-message-user-foreground {
         color: var(--kzcb-message-user-foreground);
+    }
+    .text-destructive {
+        color: var(--kzcb-destructive-foreground);
+    }
+    .bg-destructive {
+        background-color: var(--kzcb-destructive-background);
     }
     .text-popover-foreground {
         color: var(--kzcb-popover-foreground);

@@ -1,6 +1,6 @@
 import XButton from "@/assets/x.svg";
 import { useEffect, useState, useRef, ChangeEvent } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, UseFormRegisterReturn } from "react-hook-form";
 import { Message } from "@/types";
 
 enum ReasonValue {
@@ -29,13 +29,23 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const { register, handleSubmit, watch, setValue } = useForm<FormFields>();
-  const description = register("description");
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    reset,
+    formState: { errors, isValid },
+  } = useForm<FormFields>({
+    mode: "onChange",
+  });
+  const description = register("description", {
+    maxLength: { value: 150, message: "מקסימום 150 תווים" },
+  });
   const descriptionValue = watch("description");
   const reasonValue = watch("reason");
-  const isSendButtonDisabled = !reasonValue && !descriptionValue;
   const ref = useRef<HTMLDivElement>(null);
-
+  const isFormValid = isValid && (descriptionValue?.length > 0 || reasonValue);
   const slugs = globalConfigObject?.slugs;
 
   const reasons: Reason[] = [
@@ -78,18 +88,23 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
       }
 
       setIsFormSubmitted(true);
+      reset();
       setIsOpen(false);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleTextChange = (
+    e: ChangeEvent<HTMLTextAreaElement>,
+    description: UseFormRegisterReturn<"description">,
+  ) => {
     if (!textareaRef.current) return;
     textareaRef.current.style.height = "auto";
     textareaRef.current.style.height =
       Math.max(textareaRef.current.scrollHeight, 23) + "px";
     setValue("description", e.target.value);
+    description.onChange(e);
   };
 
   const handleRating = async (liked: boolean | null) => {
@@ -125,6 +140,7 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
             : prevMessage,
         ),
       );
+      reset();
     } catch (error) {
       console.error(error);
     }
@@ -270,17 +286,25 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
               }}
               ref={textareaRef}
               onBlur={description.onBlur}
-              onChange={handleTextChange}
+              onChange={(e) => handleTextChange(e, description)}
               rows={1}
               placeholder={slugs?.feedback_free_text}
             />
+            {errors.description && (
+              <p
+                className="text-sm text-destructive bg-destructive inline-block px-1 mt-1"
+                role="alert"
+              >
+                {errors.description.message}
+              </p>
+            )}
           </div>
           <div className="flex justify-between items-center">
             <span className="text-xs text-disclaimer">
               {slugs?.feedback_free_text_disclaimer}
             </span>
             <input
-              disabled={isSendButtonDisabled}
+              disabled={!isFormValid}
               type="submit"
               value="שליחה"
               className="disabled:opacity-45 disabled:cursor-not-allowed rounded-full h-[29px] text-xs font-bold px-3 cursor-pointer bg-button text-button-foreground"
