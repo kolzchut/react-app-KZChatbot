@@ -181,7 +181,7 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
           disabled={isFormSubmitted}
           aria-label="סמנ/י שהתשובה עזרה לי"
           aria-pressed={message.liked === true}
-          className="px-[6px] relative"
+          className="px-[6px] relative pointer-events-auto"
           onClick={() => handleRating(message.liked === true ? null : true)}
         >
           <svg
@@ -192,7 +192,7 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
             xmlns="http://www.w3.org/2000/svg"
             role="img"
             aria-hidden="true"
-            className="relative"
+            className="relative pointer-events-none"
           >
             <title>אייקון של אגודל למעלה</title>
             <desc>אייקון של אגודל מורמת מעלה שמצביע על כך שהתשובה עזרה לי</desc>
@@ -206,7 +206,7 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
           disabled={isFormSubmitted}
           aria-label="סמנ/י שהתשובה לא עזרה לי"
           aria-pressed={message.liked === false}
-          className="px-[6px] relative"
+          className="px-[6px] relative pointer-events-auto"
           onClick={() => handleRating(message.liked === false ? null : false)}
         >
           <svg
@@ -217,7 +217,7 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
             xmlns="http://www.w3.org/2000/svg"
             role="img"
             aria-hidden="true"
-            className="relative"
+            className="relative pointer-events-none"
           >
             <title>אייקון של אגודל למטה</title>
             <desc>
