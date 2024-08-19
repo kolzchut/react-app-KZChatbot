@@ -4,6 +4,7 @@ declare global {
       uuid: string;
       chatbotIsShown: "0" | "1";
       cookieExpiry: string;
+      feedbackCharacterLimit: number;
       slugs: {
         chat_icon: string;
         chat_tip_link: string;
@@ -24,6 +25,7 @@ declare global {
         welcome_message_first: string;
         welcome_message_second: string;
         welcome_message_third: string;
+        feedback_character_limit: string;
       };
       restPath: string;
     };

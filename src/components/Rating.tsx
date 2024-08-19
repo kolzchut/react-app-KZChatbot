@@ -39,14 +39,15 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
   } = useForm<FormFields>({
     mode: "onChange",
   });
+
+  const slugs = globalConfigObject?.slugs;
   const description = register("description", {
-    maxLength: { value: 150, message: "מקסימום 150 תווים" },
+    maxLength: { value: globalConfigObject?.feedbackCharacterLimit || 150, message: slugs?.feedback_character_limit || "" },
   });
   const descriptionValue = watch("description");
   const reasonValue = watch("reason");
   const ref = useRef<HTMLDivElement>(null);
   const isFormValid = isValid && (descriptionValue?.length > 0 || reasonValue);
-  const slugs = globalConfigObject?.slugs;
 
   const reasons: Reason[] = [
     {
