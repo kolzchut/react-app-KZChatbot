@@ -274,7 +274,7 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
                       className="sr-only peer"
                       {...register(`reason`)}
                     />
-                    <div className="px-4 h-[30px] flex items-center text-xs text-input rounded-full border border-message-user-background peer-checked:bg-input peer-checked:text-input-placholder peer-focus-visible:outline-1 peer-focus-visible:outline">
+                    <div className="text-center px-4 h-[40px] flex items-center text-xs text-input rounded-full border border-message-user-background peer-checked:bg-input peer-checked:text-input-placholder peer-focus-visible:outline-1 peer-focus-visible:outline">
                       {reason.label}
                     </div>
                   </label>
