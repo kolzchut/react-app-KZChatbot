@@ -42,7 +42,10 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
 
   const slugs = globalConfigObject?.slugs;
   const description = register("description", {
-    maxLength: { value: globalConfigObject?.feedbackCharacterLimit || 150, message: slugs?.feedback_character_limit || "" },
+    maxLength: {
+      value: globalConfigObject?.feedbackCharacterLimit || 150,
+      message: slugs?.feedback_character_limit || "",
+    },
   });
   const descriptionValue = watch("description");
   const reasonValue = watch("reason");
