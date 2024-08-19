@@ -328,7 +328,7 @@
 
     * {
       scrollbar-width: thin;
-      scrollbar-color:  var(--kzcb-message-user-background) orange;
+      scrollbar-color:  var(--kzcb-message-user-background) var(--kzcb-message-user-background);
     }
 
     *::-webkit-scrollbar {
