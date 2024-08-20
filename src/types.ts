@@ -2,6 +2,7 @@ export enum MessageType {
   StartBot = "startBot",
   Bot = "bot",
   User = "user",
+  Error = "error",
 }
 
 export interface Message {

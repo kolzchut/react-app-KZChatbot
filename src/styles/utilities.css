@@ -247,6 +247,9 @@
     .bg-transparent {
         background-color: transparent;
     }
+    .bg-alert {
+        background-color: var(--kzcb-alert-background);
+    }
     .p-0 {
         padding: 0;
     }
@@ -288,6 +291,10 @@
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
     }
+    .py-4 {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
     .py-5 {
         padding-top: 1.25rem;
         padding-bottom: 1.25rem;
@@ -313,6 +320,10 @@
     }
     .text-xs {
         font-size: 0.75rem;
+        line-height: 1rem;
+    }
+    .text-md {
+        font-size: 0.875rem;
         line-height: 1rem;
     }
     .font-bold {
@@ -342,6 +353,9 @@
     }
     .text-links-foreground {
         color: var(--kzcb-links-foreground);
+    }
+    .text-alert {
+        color: var(--kzcb-alert-foreground);
     }
     .text-message-bot-foreground {
         color: var(--kzcb-message-bot-foreground);

@@ -1,4 +1,4 @@
-import XButton from "@/assets/x.svg";
+import XIcon from "@/assets/x.svg";
 import { useEffect, useRef } from "react";
 import { Errors, Message } from "@/types";
 import { useRate } from "@/lib/useRate";
@@ -148,7 +148,7 @@ const Rate = ({
               {slugs?.dislike_follow_up_question}
             </span>
             <button onClick={handleCloseRate}>
-              <img src={XButton} alt="x icon" />
+              <img src={XIcon} alt="x icon" />
             </button>
           </div>
           {!message.liked && (

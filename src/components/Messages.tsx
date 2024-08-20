@@ -3,6 +3,7 @@ import Rate from "./Rate";
 import { TypingIndicator } from "@/components";
 import { forwardRef } from "react";
 import Markdown from "react-markdown";
+import AlertIcon from "@/assets/alert.svg";
 
 interface MessagesProps {
   messages: Message[];
@@ -33,6 +34,19 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(
       return null;
     }
 
+    const getMessageClasses = (messageType: MessageType) => {
+      if (
+        messageType === MessageType.Bot ||
+        messageType === MessageType.StartBot
+      ) {
+        return "text-sm p-3 mb-2 bg-message-bot-background text-message-bot-foreground rounded-[10px_10px_10px_0] mr-6";
+      } else if (messageType === MessageType.User) {
+        return "text-sm p-3 mb-2 bg-message-user-background text-message-user-foreground rounded-[10px_10px_0_10px] ml-[3.8rem]";
+      } else if (messageType === MessageType.Error) {
+        return "flex justify-between text-md px-3 py-4 mb-2 bg-alert text-alert rounded-[10px_10px_10px_0] mr-6";
+      }
+    };
+
     return (
       <div
         className="px-4 flex-1 overflow-auto pb-4"
@@ -46,22 +60,20 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(
                 {message.isFirstQuestion === false && (
                   <hr className="h-[1px] border-line left-3 relative w-[calc(100%_+_1.5rem)] my-3" />
                 )}
-                <div
-                  className={`text-sm p-3 mb-2 ${
-                    [MessageType.StartBot, MessageType.Bot].includes(
-                      message.type,
-                    )
-                      ? "bg-message-bot-background text-message-bot-foreground rounded-[10px_10px_10px_0] mr-6"
-                      : "bg-message-user-background text-message-user-foreground rounded-[10px_10px_0_10px] ml-[3.8rem]"
-                  }`}
-                >
+                <div className={getMessageClasses(message.type)}>
                   {message.type === MessageType.Bot ? (
                     <Markdown className="markdown">{message.content}</Markdown>
                   ) : (
                     message.content
                   )}
+                  {message.type === MessageType.Error && (
+                    <img
+                      src={AlertIcon}
+                      alt="Alert Icon"
+                      className="w-4 h-4 inline-block ml-2"
+                    />
+                  )}
                 </div>
-
                 {message.type === MessageType.Bot && (
                   <>
                     {message.links && (

@@ -20,6 +20,8 @@
     --kzcb-breaking-line: rgba(212, 221, 230, 0.2);
     --kzcb-button-background: #ffffff;
     --kzcb-button-foreground: #005aab;
+    --kzcb-alert-background: #FFECEC;
+    --kzcb-alert-foreground: #8D0000;
 
     --kzcb-background: #005aab;
     --kzcb-foreground: 222.2 84% 4.9%;

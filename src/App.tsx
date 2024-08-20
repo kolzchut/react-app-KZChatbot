@@ -12,6 +12,7 @@ import {
   ScrollWidget,
 } from "@/components";
 import { v4 as uuidv4 } from "uuid";
+import { HttpError } from "./lib/HttpError";
 
 function App() {
   const [globalConfigObject, setGlobalConfigObject] = useState<
@@ -29,11 +30,12 @@ function App() {
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const [showScrollWidget, setShowScrollWidget] = useState(false);
 
-  const getAnswer = async (question: string): Promise<Answer> => {
+  const getAnswer = async (question: string): Promise<Answer | void> => {
     const isProduction = import.meta.env.MODE === "production";
     const url = isProduction
       ? `${globalConfigObject?.restPath}/kzchatbot/v0/question`
       : "/api/kzchatbot/v0/question";
+
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -44,7 +46,11 @@ function App() {
         uuid: globalConfigObject?.uuid || "",
       }),
     });
+
     const data = await response.json();
+    if (!response.ok) {
+      throw new HttpError(data.message, response.status);
+    }
     return data;
   };
 
@@ -93,9 +99,8 @@ function App() {
 
       input.value = "";
       const answer = await getAnswer(value);
-      if (!answer.llmResult) throw new Error("No answer"); //TODO show error message
+      if (!answer?.llmResult) throw new Error("No answer"); //TODO show error message
 
-      setIsLoading(false);
       setMessages((prevMessages) => [
         ...prevMessages,
         {
@@ -107,7 +112,26 @@ function App() {
       ]);
       setShowInput(false);
     } catch (error) {
+      if (error instanceof HttpError) {
+        if (error.httpCode === 403) {
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            {
+              id: uuidv4(),
+              content: error.message,
+              type: MessageType.Error,
+            },
+          ]);
+        } else {
+          setErrors({
+            message: error.message,
+          });
+        }
+      }
       console.error(error);
+    } finally {
+      setQuestion("");
+      setIsLoading(false);
     }
   };
 
