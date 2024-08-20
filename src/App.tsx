@@ -124,7 +124,7 @@ function App() {
           ]);
         } else {
           setErrors({
-            message: error.message,
+            question: error.message,
           });
         }
       }
