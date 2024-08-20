@@ -26,6 +26,9 @@ declare global {
         welcome_message_second: string;
         welcome_message_third: string;
         feedback_character_limit: string;
+        questions_daily_limit: string;
+        question_character_limit: string;
+        banned_word_found: string;
       };
       restPath: string;
     };
