@@ -1,158 +1,32 @@
 import XButton from "@/assets/x.svg";
-import { useEffect, useState, useRef, ChangeEvent } from "react";
-import { useForm, SubmitHandler, UseFormRegisterReturn } from "react-hook-form";
+import { useEffect, useRef } from "react";
 import { Message } from "@/types";
+import { useRate } from "@/lib/useRate";
 
-enum ReasonValue {
-  NOT_TRUE = "NOT_TRUE",
-  IRRELEVANT = "IRRELEVANT",
-  UNCLEAR = "UNCLEAR",
-}
-
-type FormFields = {
-  reason: ReasonValue;
-  description: string;
-};
-
-interface Reason {
-  value: ReasonValue;
-  label: string;
-}
-
-interface RatingProps {
+interface RateProps {
   message: Message;
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
   globalConfigObject: typeof window.KZChatbotConfig | null;
 }
 
-const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+const Rate = ({ message, setMessages, globalConfigObject }: RateProps) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const {
-    register,
+    values,
+    errors,
+    isFormSubmitted,
+    handleChange,
     handleSubmit,
-    watch,
-    setValue,
-    reset,
-    formState: { errors, isValid },
-  } = useForm<FormFields>({
-    mode: "onChange",
-  });
+    reasons,
+    isOpen,
+    setIsOpen,
+    isFormValid,
+    handleRate,
+    handleCloseRate,
+  } = useRate({ globalConfigObject, message, setMessages, textareaRef });
 
   const slugs = globalConfigObject?.slugs;
-  const description = register("description", {
-    maxLength: {
-      value: globalConfigObject?.feedbackCharacterLimit || 150,
-      message: slugs?.feedback_character_limit || "",
-    },
-  });
-  const descriptionValue = watch("description");
-  const reasonValue = watch("reason");
   const ref = useRef<HTMLDivElement>(null);
-  const isFormValid = isValid && (descriptionValue?.length > 0 || reasonValue);
-
-  const reasons: Reason[] = [
-    {
-      value: ReasonValue.NOT_TRUE,
-      label: slugs?.dislike_followup_q_first || "not true",
-    },
-    {
-      value: ReasonValue.IRRELEVANT,
-      label: slugs?.dislike_followup_q_second || "not relevant",
-    },
-    {
-      value: ReasonValue.UNCLEAR,
-      label: slugs?.dislike_followup_q_third || "unclear",
-    },
-  ];
-
-  const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    const isProduction = import.meta.env.MODE === "production";
-    const url = isProduction
-      ? `${globalConfigObject?.restPath}/kzchatbot/v0/rate`
-      : "/api/kzchatbot/v0/rate";
-    const { reason, description } = data;
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          answerId: message.id,
-          answerClassification: reason,
-          text: description,
-        }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.messageTranslations.he); // TODO: add type for data
-      }
-
-      setIsFormSubmitted(true);
-      reset();
-      setIsOpen(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleTextChange = (
-    e: ChangeEvent<HTMLTextAreaElement>,
-    description: UseFormRegisterReturn<"description">,
-  ) => {
-    if (!textareaRef.current) return;
-    textareaRef.current.style.height = "auto";
-    textareaRef.current.style.height =
-      Math.max(textareaRef.current.scrollHeight, 23) + "px";
-    setValue("description", e.target.value);
-    description.onChange(e);
-  };
-
-  const handleRating = async (liked: boolean | null) => {
-    const isProduction = import.meta.env.MODE === "production";
-    const url = isProduction
-      ? `${globalConfigObject?.restPath}/kzchatbot/v0/rate`
-      : "/api/kzchatbot/v0/rate";
-
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          like: liked,
-          answerId: message.id,
-        }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.messageTranslations.he); // TODO: add type for data
-      }
-
-      setMessages((prevMessages) =>
-        prevMessages.map((prevMessage) =>
-          prevMessage.id === message.id
-            ? {
-                ...prevMessage,
-                liked: prevMessage.liked === liked ? null : liked,
-              }
-            : prevMessage,
-        ),
-      );
-      reset();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleCloseRating = () => {
-    setIsOpen(false);
-  };
 
   useEffect(() => {
     if (isFormSubmitted) return;
@@ -162,7 +36,7 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
     } else {
       setIsOpen(true);
     }
-  }, [message, isFormSubmitted]);
+  }, [message, isFormSubmitted, setIsOpen]);
 
   useEffect(() => {
     if (isOpen) {
@@ -202,7 +76,7 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
           aria-label="סמנ/י שהתשובה עזרה לי"
           aria-pressed={message.liked === true}
           className="px-[6px] relative pointer-events-auto"
-          onClick={() => handleRating(message.liked === true ? null : true)}
+          onClick={() => handleRate(message.liked === true ? null : true)}
         >
           <svg
             width="16"
@@ -227,7 +101,7 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
           aria-label="סמנ/י שהתשובה לא עזרה לי"
           aria-pressed={message.liked === false}
           className="px-[6px] relative pointer-events-auto"
-          onClick={() => handleRating(message.liked === false ? null : false)}
+          onClick={() => handleRate(message.liked === false ? null : false)}
         >
           <svg
             width="16"
@@ -251,28 +125,27 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
         </button>
       </div>
       {isOpen && (
-        <form
-          className="mt-2 p-2 border border-line"
-          onSubmit={handleSubmit(onSubmit)}
-        >
+        <form className="mt-2 p-2 border border-line" onSubmit={handleSubmit}>
           <div className="flex justify-between items-center">
             <span className="text-sm font-bold text-input">
               {slugs?.dislike_follow_up_question}
             </span>
-            <button onClick={handleCloseRating}>
+            <button onClick={handleCloseRate}>
               <img src={XButton} alt="x icon" />
             </button>
           </div>
           {!message.liked && (
             <div className="flex mt-2 -mx-1">
               {reasons &&
-                reasons.map((reason, index) => (
-                  <label key={index} className="px-1">
+                reasons.map((reason) => (
+                  <label key={reason.value} className="px-1">
                     <input
                       type="radio"
                       value={reason.value}
+                      name="reason"
                       className="sr-only peer"
-                      {...register(`reason`)}
+                      checked={values.reason === reason.value}
+                      onChange={handleChange}
                     />
                     <div className="text-center px-4 h-[40px] flex items-center text-xs text-input rounded-full border border-message-user-background peer-checked:bg-input peer-checked:text-input-placholder peer-focus-visible:outline-1 peer-focus-visible:outline">
                       {reason.label}
@@ -288,18 +161,19 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
               style={{
                 resize: "none",
               }}
+              value={values.description}
+              onChange={handleChange}
               ref={textareaRef}
-              onBlur={description.onBlur}
-              onChange={(e) => handleTextChange(e, description)}
               rows={1}
               placeholder={slugs?.feedback_free_text}
+              maxLength={globalConfigObject?.feedbackCharacterLimit || 150}
             />
             {errors.description && (
               <p
                 className="text-sm text-destructive bg-destructive inline-block px-1 mt-1"
                 role="alert"
               >
-                {errors.description.message}
+                {errors.description}
               </p>
             )}
           </div>
@@ -320,4 +194,4 @@ const Rating = ({ message, setMessages, globalConfigObject }: RatingProps) => {
   );
 };
 
-export default Rating;
+export default Rate;

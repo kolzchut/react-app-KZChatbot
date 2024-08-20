@@ -1,5 +1,5 @@
 import Messages from "./Messages";
-import Rating from "./Rating";
+import Rate from "./Rate";
 import TypingIndicator from "./TypingIndicator";
 import Input from "./ui/Input";
 import { Popover, PopoverTrigger, PopoverContent } from "./ui/Popover";
@@ -9,7 +9,7 @@ import ScrollWidget from "./ScrollWidget";
 
 export {
   Messages,
-  Rating,
+  Rate,
   TypingIndicator,
   Input,
   Popover,

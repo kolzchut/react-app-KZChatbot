@@ -1,5 +1,5 @@
 import { Message, MessageType } from "@/types";
-import Rating from "./Rating";
+import Rate from "./Rate";
 import { TypingIndicator } from "@/components";
 import { forwardRef } from "react";
 import Markdown from "react-markdown";
@@ -72,7 +72,7 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(
                         </ul>
                       </div>
                     )}
-                    <Rating
+                    <Rate
                       message={message}
                       setMessages={setMessages}
                       globalConfigObject={globalConfigObject}
