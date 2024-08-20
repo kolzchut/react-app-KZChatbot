@@ -5,6 +5,7 @@ declare global {
       chatbotIsShown: "0" | "1";
       cookieExpiry: string;
       feedbackCharacterLimit: number;
+      questionCharacterLimit: number;
       slugs: {
         chat_icon: string;
         chat_tip_link: string;

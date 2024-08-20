@@ -1,4 +1,4 @@
-import { Message, MessageType } from "@/types";
+import { Message, MessageType, Errors } from "@/types";
 import Rate from "./Rate";
 import { TypingIndicator } from "@/components";
 import { forwardRef } from "react";
@@ -10,10 +10,25 @@ interface MessagesProps {
   isLoading: boolean;
   onScroll: () => void;
   globalConfigObject: typeof window.KZChatbotConfig | null;
+  errors: Errors;
+  setErrors: React.Dispatch<React.SetStateAction<Errors>>;
+  initialErrors: Errors;
 }
 
 const Messages = forwardRef<HTMLDivElement, MessagesProps>(
-  ({ messages, setMessages, isLoading, onScroll, globalConfigObject }, ref) => {
+  (
+    {
+      messages,
+      setMessages,
+      isLoading,
+      onScroll,
+      globalConfigObject,
+      errors,
+      setErrors,
+      initialErrors,
+    },
+    ref,
+  ) => {
     if (!messages) {
       return null;
     }
@@ -76,6 +91,9 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(
                       message={message}
                       setMessages={setMessages}
                       globalConfigObject={globalConfigObject}
+                      errors={errors}
+                      setErrors={setErrors}
+                      initialErrors={initialErrors}
                     />
                   </>
                 )}

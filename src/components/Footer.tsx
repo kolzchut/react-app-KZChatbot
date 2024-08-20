@@ -1,5 +1,6 @@
 import PaperPlaneIcon from "@/assets/paper-plane.svg";
 import { Input } from "@/components";
+import { Errors } from "@/types";
 
 interface FooterProps {
   isLoading: boolean;
@@ -7,6 +8,11 @@ interface FooterProps {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   setShowInput: React.Dispatch<React.SetStateAction<boolean>>;
   slugs: Partial<typeof window.KZChatbotConfig.slugs> | undefined;
+  globalConfigObject: typeof window.KZChatbotConfig | null;
+  question: string;
+  setQuestion: React.Dispatch<React.SetStateAction<string>>;
+  errors: Errors;
+  setErrors: React.Dispatch<React.SetStateAction<Errors>>;
 }
 
 const Footer = ({
@@ -15,10 +21,30 @@ const Footer = ({
   handleSubmit,
   setShowInput,
   slugs,
+  globalConfigObject,
+  question,
+  setQuestion,
+  errors,
+  setErrors,
 }: FooterProps) => {
   if (isLoading) {
     return null;
   }
+
+  const handleOnMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuestion(e.target.value);
+
+    const charLimitSlug =
+      globalConfigObject?.slugs.feedback_character_limit || "";
+    const reachedCharLimit =
+      e.target.value.length >=
+      (globalConfigObject?.questionCharacterLimit || 150);
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      question: reachedCharLimit ? charLimitSlug : "",
+    }));
+  };
 
   return (
     <div className="px-4">
@@ -40,8 +66,12 @@ const Footer = ({
             <Input
               type="text"
               name="question"
+              value={question}
+              onChange={handleOnMessageChange}
               placeholder={slugs?.question_field}
               submitElement={<img src={PaperPlaneIcon} alt="TODO: change-me" />}
+              maxLength={globalConfigObject?.questionCharacterLimit || 150}
+              errors={errors}
             />
             <span className="text-xs text-disclaimer">
               {slugs?.question_disclaimer}

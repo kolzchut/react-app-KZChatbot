@@ -28,3 +28,7 @@ export interface Answer {
   docs: Document[];
   conversationId: string;
 }
+
+export type Errors = {
+  [key: string]: string;
+};

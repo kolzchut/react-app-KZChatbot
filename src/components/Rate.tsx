@@ -1,19 +1,28 @@
 import XButton from "@/assets/x.svg";
 import { useEffect, useRef } from "react";
-import { Message } from "@/types";
+import { Errors, Message } from "@/types";
 import { useRate } from "@/lib/useRate";
 
 interface RateProps {
   message: Message;
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
   globalConfigObject: typeof window.KZChatbotConfig | null;
+  errors: Errors;
+  setErrors: React.Dispatch<React.SetStateAction<Errors>>;
+  initialErrors: Errors;
 }
 
-const Rate = ({ message, setMessages, globalConfigObject }: RateProps) => {
+const Rate = ({
+  message,
+  setMessages,
+  globalConfigObject,
+  errors,
+  setErrors,
+  initialErrors,
+}: RateProps) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const {
     values,
-    errors,
     isFormSubmitted,
     handleChange,
     handleSubmit,
@@ -23,7 +32,15 @@ const Rate = ({ message, setMessages, globalConfigObject }: RateProps) => {
     isFormValid,
     handleRate,
     handleCloseRate,
-  } = useRate({ globalConfigObject, message, setMessages, textareaRef });
+  } = useRate({
+    globalConfigObject,
+    message,
+    setMessages,
+    textareaRef,
+    setErrors,
+    errors,
+    initialErrors,
+  });
 
   const slugs = globalConfigObject?.slugs;
   const ref = useRef<HTMLDivElement>(null);

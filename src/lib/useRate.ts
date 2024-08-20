@@ -1,13 +1,9 @@
-import { useState } from "react";
-import { Message } from "@/types";
+import { useEffect, useState } from "react";
+import { Message, Errors } from "@/types";
 
 type FormValues = {
   reason: string;
   description: string;
-};
-
-type Errors = {
-  [key: string]: string;
 };
 
 enum ReasonValue {
@@ -26,6 +22,9 @@ interface UseFormProps {
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
   globalConfigObject: typeof window.KZChatbotConfig | null;
   textareaRef: React.RefObject<HTMLTextAreaElement>;
+  errors: Errors;
+  setErrors: React.Dispatch<React.SetStateAction<Errors>>;
+  initialErrors: Errors;
 }
 
 const useRate = ({
@@ -33,6 +32,9 @@ const useRate = ({
   setMessages,
   globalConfigObject,
   textareaRef,
+  errors,
+  setErrors,
+  initialErrors,
 }: UseFormProps) => {
   const initialValues: FormValues = {
     reason: "",
@@ -40,7 +42,6 @@ const useRate = ({
   };
   const [values, setValues] = useState<FormValues>(initialValues);
   const [isOpen, setIsOpen] = useState(false);
-  const [errors, setErrors] = useState<Errors>({});
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const slugs = globalConfigObject?.slugs;
   const isFormValid =
@@ -62,6 +63,13 @@ const useRate = ({
     },
   ];
 
+  const autoExpandingTextarea = () => {
+    if (!textareaRef.current) return;
+    textareaRef.current.style.height = "auto";
+    textareaRef.current.style.height =
+      Math.max(textareaRef.current.scrollHeight, 23) + "px";
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -69,22 +77,16 @@ const useRate = ({
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
 
     if (name === "description") {
-      if (value.length >= (globalConfigObject?.feedbackCharacterLimit || 150)) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          description: globalConfigObject?.slugs.feedback_character_limit || "",
-        }));
-        return;
-      } else {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          description: "",
-        }));
-        if (!textareaRef.current) return;
-        textareaRef.current.style.height = "auto";
-        textareaRef.current.style.height =
-          Math.max(textareaRef.current.scrollHeight, 23) + "px";
-      }
+      autoExpandingTextarea();
+      const charLimitSlug =
+        globalConfigObject?.slugs.feedback_character_limit || "";
+      const reachedCharLimit =
+        value.length >= (globalConfigObject?.feedbackCharacterLimit || 150);
+
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        description: reachedCharLimit ? charLimitSlug : "",
+      }));
     }
   };
 
@@ -115,7 +117,7 @@ const useRate = ({
 
       setIsFormSubmitted(true);
       setValues(initialValues);
-      setErrors({});
+      setErrors(initialErrors);
       setIsOpen(false);
     } catch (error) {
       console.error(error);
@@ -157,7 +159,7 @@ const useRate = ({
         ),
       );
       setValues(initialValues);
-      setErrors({});
+      setErrors(initialErrors);
     } catch (error) {
       console.error(error);
     }
@@ -167,6 +169,10 @@ const useRate = ({
     setIsOpen(false);
   };
 
+  useEffect(() => {
+    console.log("values", values);
+    console.log("errors", errors);
+  }, [values, errors]);
   return {
     values,
     errors,

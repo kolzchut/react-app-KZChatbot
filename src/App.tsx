@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import HelpIcon from "@/assets/help.svg";
 import CloseIcon from "@/assets/close.svg";
-import { Message, MessageType, Answer } from "@/types";
+import { Errors, Message, MessageType, Answer } from "@/types";
 import {
   Messages,
   Popover,
@@ -20,6 +20,11 @@ function App() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showInput, setShowInput] = useState(true);
+  const [question, setQuestion] = useState<string>("");
+  const initialErrors: Errors = {
+    description: "",
+  };
+  const [errors, setErrors] = useState<Errors>(initialErrors);
   const [messages, setMessages] = useState<Message[]>([]);
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const [showScrollWidget, setShowScrollWidget] = useState(false);
@@ -44,12 +49,16 @@ function App() {
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    let isFirstQuestion = true;
     event.preventDefault();
+    if (question === "") {
+      return false;
+    }
+
     setIsLoading(true);
     const form = event.target as HTMLFormElement;
     const input = form.elements.namedItem("question") as HTMLInputElement;
     const value = input.value;
+    let isFirstQuestion = true;
 
     if (
       !value ||
@@ -175,6 +184,9 @@ function App() {
           ref={messageContainerRef}
           onScroll={handleScroll}
           globalConfigObject={globalConfigObject}
+          errors={errors}
+          setErrors={setErrors}
+          initialErrors={initialErrors}
         />
         <ScrollWidget
           scrollToBottom={scrollToBottom}
@@ -186,6 +198,11 @@ function App() {
           handleSubmit={handleSubmit}
           setShowInput={setShowInput}
           slugs={globalConfigObject?.slugs}
+          globalConfigObject={globalConfigObject}
+          question={question}
+          setQuestion={setQuestion}
+          errors={errors}
+          setErrors={setErrors}
         />
       </PopoverContent>
     </Popover>
