@@ -150,7 +150,7 @@ function App() {
   useEffect(() => {
     if (messages.length < 3) return;
     scrollToBottom();
-  }, [messages, scrollToBottom]);
+  }, [messages, scrollToBottom, errors]);
 
   useEffect(() => {
     if (window.KZChatbotConfig) {
