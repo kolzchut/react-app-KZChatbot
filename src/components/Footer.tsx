@@ -33,7 +33,7 @@ const Footer = ({
     setQuestion(e.target.value);
 
     const charLimitSlug =
-      globalConfigObject?.slugs.feedback_character_limit || "";
+      globalConfigObject?.slugs.question_character_limit || "";
     const reachedCharLimit =
       e.target.value.length >=
       (globalConfigObject?.questionCharacterLimit || 150);
