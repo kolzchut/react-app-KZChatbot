@@ -216,7 +216,6 @@ function App() {
           showInput={showInput}
           handleSubmit={handleSubmit}
           setShowInput={setShowInput}
-          slugs={globalConfigObject?.slugs}
           globalConfigObject={globalConfigObject}
           question={question}
           setQuestion={setQuestion}

@@ -59,6 +59,9 @@
         margin-top: 0.75rem;
         margin-bottom: 0.75rem;
     }
+    .mb-0 {
+        margin-bottom: 0;
+    }
     .mb-1 {
         margin-bottom: 0.25rem;
     }
@@ -143,12 +146,8 @@
     .flex-1 {
         flex: 1 1 0%;
     }
-    .-translate-y-1\/2 {
-        --tw-translate-y: -50%;
-        transform: translate(var(--tw-translate-x), var(--tw-translate-y))
-            rotate(var(--tw-rotate)) skew(var(--tw-skew-x))
-            skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
-            scaleY(var(--tw-scale-y));
+    .translate-y-1\/2 {
+        transform: translateY(-50%);
     }
     .rotate-180 {
         --tw-rotate: 180deg;

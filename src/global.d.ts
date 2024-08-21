@@ -6,6 +6,8 @@ declare global {
       cookieExpiry: string;
       feedbackCharacterLimit: number;
       questionCharacterLimit: number;
+      termsofServiceUrl: string;
+      usageHelpUrl: string;
       slugs: {
         chat_icon: string;
         chat_tip_link: string;

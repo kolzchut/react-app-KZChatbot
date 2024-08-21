@@ -26,7 +26,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {submitElement && (
             <button
               type="submit"
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 cursor-pointer bg-transparent border-none p-0 m-0"
+              className="absolute left-2 top-1/2 translate-y-1/2 cursor-pointer bg-transparent border-none p-0 m-0"
               style={{ pointerEvents: "auto" }}
             >
               {submitElement}
@@ -35,7 +35,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         </div>
         {errors.question && (
           <p
-            className="text-sm text-destructive bg-destructive inline-block px-1 mt-1"
+            className="text-sm text-destructive bg-destructive inline-block px-1 mt-1 mb-0"
             role="alert"
           >
             {errors.question}

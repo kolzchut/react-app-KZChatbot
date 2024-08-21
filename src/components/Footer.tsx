@@ -7,7 +7,6 @@ interface FooterProps {
   showInput: boolean;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   setShowInput: React.Dispatch<React.SetStateAction<boolean>>;
-  slugs: Partial<typeof window.KZChatbotConfig.slugs> | undefined;
   globalConfigObject: typeof window.KZChatbotConfig | null;
   question: string;
   setQuestion: React.Dispatch<React.SetStateAction<string>>;
@@ -20,7 +19,6 @@ const Footer = ({
   showInput,
   handleSubmit,
   setShowInput,
-  slugs,
   globalConfigObject,
   question,
   setQuestion,
@@ -30,7 +28,7 @@ const Footer = ({
   if (isLoading) {
     return null;
   }
-
+  const slugs = window.KZChatbotConfig.slugs;
   const handleOnMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuestion(e.target.value);
 
@@ -51,13 +49,19 @@ const Footer = ({
       {showInput ? (
         <>
           <div className="flex justify-end items-center text-links-foreground text-sm mb-2">
-            <a href="TODO: add link" target="_blank">
-              {slugs?.tc_link}
-            </a>
-            <span className="px-2 "> | </span>
-            <a href="TODO: add link" target="_blank">
-              {slugs?.chat_tip_link}
-            </a>
+            {globalConfigObject?.termsofServiceUrl && (
+              <>
+                <a href={globalConfigObject.termsofServiceUrl} target="_blank">
+                  {slugs?.tc_link}
+                </a>
+                <span className="px-2 "> | </span>
+              </>
+            )}
+            {globalConfigObject?.usageHelpUrl && (
+              <a href={globalConfigObject.usageHelpUrl} target="_blank">
+                {slugs?.chat_tip_link}
+              </a>
+            )}
           </div>
           <form
             onSubmit={handleSubmit}
@@ -69,7 +73,13 @@ const Footer = ({
               value={question}
               onChange={handleOnMessageChange}
               placeholder={slugs?.question_field}
-              submitElement={<img src={PaperPlaneIcon} alt="TODO: change-me" />}
+              submitElement={
+                <img
+                  src={PaperPlaneIcon}
+                  className="block"
+                  alt="TODO: change-me"
+                />
+              }
               maxLength={globalConfigObject?.questionCharacterLimit || 150}
               errors={errors}
             />
