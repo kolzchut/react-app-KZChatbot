@@ -113,20 +113,15 @@ function App() {
       setShowInput(false);
     } catch (error) {
       if (error instanceof HttpError) {
-        if (error.httpCode === 403) {
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            {
-              id: uuidv4(),
-              content: error.message,
-              type: MessageType.Error,
-            },
-          ]);
-        } else {
-          setErrors({
-            question: error.message,
-          });
-        }
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            id: uuidv4(),
+            content: error.message,
+            type:
+              error.httpCode === 403 ? MessageType.StartBot : MessageType.Error,
+          },
+        ]);
       }
       console.error(error);
     } finally {
