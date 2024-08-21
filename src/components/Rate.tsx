@@ -164,7 +164,7 @@ const Rate = ({
                       checked={values.reason === reason.value}
                       onChange={handleChange}
                     />
-                    <div className="text-center px-4 h-[40px] flex items-center text-xs text-input rounded-full border border-message-user-background peer-checked:bg-input peer-checked:text-input-placholder peer-focus-visible:outline-1 peer-focus-visible:outline">
+                    <div className="text-center px-3 h-[40px] flex items-center text-xs text-input rounded-full border border-message-user-background peer-checked:bg-input peer-checked:text-input-placholder peer-focus-visible:outline-1 peer-focus-visible:outline">
                       {reason.label}
                     </div>
                   </label>
