@@ -6,6 +6,7 @@ declare global {
       cookieExpiry: string;
       feedbackCharacterLimit: number;
       questionCharacterLimit: number;
+      questionsPermitted: number;
       termsofServiceUrl: string;
       usageHelpUrl: string;
       slugs: {

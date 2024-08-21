@@ -1,6 +1,7 @@
 import PaperPlaneIcon from "@/assets/paper-plane.svg";
 import { Input } from "@/components";
 import { Errors } from "@/types";
+import { useRef, useEffect } from "react";
 
 interface FooterProps {
   isLoading: boolean;
@@ -25,7 +26,18 @@ const Footer = ({
   errors,
   setErrors,
 }: FooterProps) => {
-  if (isLoading) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (showInput && inputRef.current) {
+      inputRef.current.focus(); // Focus the input when the component mounts
+    }
+  }, [inputRef, showInput]);
+
+  if (
+    isLoading ||
+    (globalConfigObject && globalConfigObject?.questionsPermitted < 1)
+  ) {
     return null;
   }
   const slugs = window.KZChatbotConfig.slugs;
@@ -68,6 +80,7 @@ const Footer = ({
             className="flex items-center flex-col pb-2"
           >
             <Input
+              ref={inputRef}
               type="text"
               name="question"
               value={question}
@@ -100,5 +113,4 @@ const Footer = ({
     </div>
   );
 };
-
 export default Footer;

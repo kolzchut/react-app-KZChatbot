@@ -169,10 +169,6 @@ const useRate = ({
     setIsOpen(false);
   };
 
-  useEffect(() => {
-    console.log("values", values);
-    console.log("errors", errors);
-  }, [values, errors]);
   return {
     values,
     errors,

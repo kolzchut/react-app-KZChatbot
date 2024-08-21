@@ -154,24 +154,38 @@ function App() {
 
   useEffect(() => {
     if (window.KZChatbotConfig) {
+      const initMessages =
+        window.KZChatbotConfig.questionsPermitted > 0
+          ? [
+              {
+                id: uuidv4(),
+                content:
+                  window.KZChatbotConfig?.slugs.welcome_message_first || "",
+                type: MessageType.StartBot,
+              },
+              {
+                id: uuidv4(),
+                content:
+                  window.KZChatbotConfig?.slugs.welcome_message_second || "",
+                type: MessageType.StartBot,
+              },
+              {
+                id: uuidv4(),
+                content:
+                  window.KZChatbotConfig?.slugs.welcome_message_third || "",
+                type: MessageType.StartBot,
+              },
+            ]
+          : [
+              {
+                id: uuidv4(),
+                content:
+                  window.KZChatbotConfig?.slugs.questions_daily_limit || "",
+                type: MessageType.StartBot,
+              },
+            ];
+      setMessages(initMessages);
       setGlobalConfigObject(window.KZChatbotConfig);
-      setMessages([
-        {
-          id: uuidv4(),
-          content: globalConfigObject?.slugs.welcome_message_first || "",
-          type: MessageType.StartBot,
-        },
-        {
-          id: uuidv4(),
-          content: globalConfigObject?.slugs.welcome_message_second || "",
-          type: MessageType.StartBot,
-        },
-        {
-          id: uuidv4(),
-          content: globalConfigObject?.slugs.welcome_message_third || "",
-          type: MessageType.StartBot,
-        },
-      ]);
     }
   }, [setMessages, globalConfigObject]);
 
