@@ -77,7 +77,7 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(
                 {message.type === MessageType.Bot && (
                   <>
                     {message.links && (
-                      <div className="bg-message-bot-background text-message-bot-foreground border-r-4 border-message-user-background pr-[5px] py-2 mb-[6px]">
+                      <div className="bg-message-bot-background text-message-bot-foreground border-r-4 border-message-user-background pr-[5px] pl-3 py-2 mb-[6px]">
                         <span className="text-sm font-bold text-input-placholder mb-1 inline-block">
                           {globalConfigObject?.slugs?.returning_links_title}
                         </span>
