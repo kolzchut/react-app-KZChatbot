@@ -63,17 +63,17 @@ const Footer = ({
       {showInput ? (
         <>
           <div className="flex justify-end items-center text-links-foreground text-sm mb-2">
-            {globalConfigObject?.termsofServiceUrl && (
+            {globalConfigObject?.usageHelpUrl && (
               <>
-                <a href={globalConfigObject.termsofServiceUrl} target="_blank">
-                  {slugs?.tc_link}
+                <a href={globalConfigObject.usageHelpUrl} target="_blank">
+                  {slugs?.chat_tip_link}
                 </a>
                 <span className="px-2 "> | </span>
               </>
             )}
-            {globalConfigObject?.usageHelpUrl && (
-              <a href={globalConfigObject.usageHelpUrl} target="_blank">
-                {slugs?.chat_tip_link}
+            {globalConfigObject?.termsofServiceUrl && (
+              <a href={globalConfigObject.termsofServiceUrl} target="_blank">
+                {slugs?.tc_link}
               </a>
             )}
           </div>
