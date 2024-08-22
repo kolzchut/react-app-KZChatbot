@@ -1,7 +1,7 @@
 import PaperPlaneIcon from "@/assets/paper-plane.svg";
 import { Input } from "@/components";
-import { Errors } from "@/types";
-import { useRef, useEffect } from "react";
+import { Errors, Message } from "@/types";
+import { useEffect, useRef } from "react";
 
 interface FooterProps {
   isLoading: boolean;
@@ -13,6 +13,7 @@ interface FooterProps {
   setQuestion: React.Dispatch<React.SetStateAction<string>>;
   errors: Errors;
   setErrors: React.Dispatch<React.SetStateAction<Errors>>;
+  messages: Message[];
 }
 
 const Footer = ({
@@ -25,14 +26,15 @@ const Footer = ({
   setQuestion,
   errors,
   setErrors,
+  messages,
 }: FooterProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (showInput && inputRef.current) {
-      inputRef.current.focus(); // Focus the input when the component mounts
+    if (showInput && inputRef.current && messages.length) {
+      inputRef.current.focus();
     }
-  }, [inputRef, showInput]);
+  }, [inputRef, showInput, messages]);
 
   if (
     isLoading ||

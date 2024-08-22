@@ -235,6 +235,7 @@ function App() {
           setQuestion={setQuestion}
           errors={errors}
           setErrors={setErrors}
+          messages={messages}
         />
       </PopoverContent>
     </Popover>
