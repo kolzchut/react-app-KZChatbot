@@ -161,7 +161,10 @@ function App() {
   }, [scrollToBottom, errors]);
 
   useEffect(() => {
-    if (messages[messages.length - 1].type === MessageType.Bot) {
+    if (
+      messages.length &&
+      messages[messages.length - 1].type === MessageType.Bot
+    ) {
       scrollToAnswer();
     }
   }, [messages, scrollToBottom, scrollToAnswer]);
