@@ -1,5 +1,5 @@
 import XIcon from "@/assets/x.svg";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Errors, Message } from "@/types";
 import { useRate } from "@/lib/useRate";
 
@@ -44,6 +44,7 @@ const Rate = ({
 
   const slugs = globalConfigObject?.slugs;
   const ref = useRef<HTMLDivElement>(null);
+  const [showDescription, setShowDescription] = useState(false);
 
   useEffect(() => {
     if (isFormSubmitted) return;
@@ -152,7 +153,7 @@ const Rate = ({
             </button>
           </div>
           {!message.liked && (
-            <div className="flex mt-2 -mx-1">
+            <div className="flex mt-2 -mx-1 mb-2">
               {reasons &&
                 reasons.map((reason) => (
                   <label key={reason.value} className="px-1">
@@ -171,29 +172,31 @@ const Rate = ({
                 ))}
             </div>
           )}
-          <div className="mb-1 mt-3">
-            <textarea
-              name="description"
-              className="block text-sm h-[23px] overflow-hidden w-full leading-[1.5] border-textArea-border placeholder:text-sm text-input placeholder:text-textArea-placholder bg-transparent border-b outline-none"
-              style={{
-                resize: "none",
-              }}
-              value={values.description}
-              onChange={handleChange}
-              ref={textareaRef}
-              rows={1}
-              placeholder={slugs?.feedback_free_text}
-              maxLength={globalConfigObject?.feedbackCharacterLimit || 150}
-            />
-            {errors.description && (
-              <p
-                className="text-sm text-destructive bg-destructive inline-block px-1 mt-1"
-                role="alert"
-              >
-                {errors.description}
-              </p>
-            )}
-          </div>
+          {(message.liked || values.reason !== "") && (
+            <div className="mb-1 mt-3">
+              <textarea
+                name="description"
+                className="block text-sm h-[23px] overflow-hidden w-full leading-[1.5] border-textArea-border placeholder:text-sm text-input placeholder:text-textArea-placholder bg-transparent border-b outline-none"
+                style={{
+                  resize: "none",
+                }}
+                value={values.description}
+                onChange={handleChange}
+                ref={textareaRef}
+                rows={1}
+                placeholder={slugs?.feedback_free_text}
+                maxLength={globalConfigObject?.feedbackCharacterLimit || 150}
+              />
+              {errors.description && (
+                <p
+                  className="text-sm text-destructive bg-destructive inline-block px-1 mt-1"
+                  role="alert"
+                >
+                  {errors.description}
+                </p>
+              )}
+            </div>
+          )}
           <div className="flex justify-between items-center">
             <span className="text-xs text-disclaimer">
               {slugs?.feedback_free_text_disclaimer}
