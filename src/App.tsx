@@ -139,6 +139,15 @@ function App() {
     }
   }, []);
 
+  const scrollToAnswer = useCallback(() => {
+    if (messageContainerRef.current) {
+      const lastMessage = messageContainerRef.current.lastElementChild;
+      if (lastMessage) {
+        lastMessage.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, []);
+
   const handleScroll = () => {
     if (messageContainerRef.current) {
       const { scrollHeight, scrollTop, clientHeight } =
@@ -148,9 +157,14 @@ function App() {
   };
 
   useEffect(() => {
-    if (messages.length < 3) return;
     scrollToBottom();
-  }, [messages, scrollToBottom, errors]);
+  }, [scrollToBottom, errors]);
+
+  useEffect(() => {
+    if (messages[messages.length - 1].type === MessageType.Bot) {
+      scrollToAnswer();
+    }
+  }, [messages, scrollToBottom, scrollToAnswer]);
 
   useEffect(() => {
     if (window.KZChatbotConfig) {
