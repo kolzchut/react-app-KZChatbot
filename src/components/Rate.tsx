@@ -1,5 +1,5 @@
 import XIcon from "@/assets/x.svg";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Errors, Message } from "@/types";
 import { useRate } from "@/lib/useRate";
 
@@ -44,7 +44,6 @@ const Rate = ({
 
   const slugs = globalConfigObject?.slugs;
   const ref = useRef<HTMLDivElement>(null);
-  const [showDescription, setShowDescription] = useState(false);
 
   useEffect(() => {
     if (isFormSubmitted) return;
@@ -176,14 +175,14 @@ const Rate = ({
             <div className="mb-1 mt-3">
               <textarea
                 name="description"
-                className="block text-sm h-[23px] overflow-hidden w-full leading-[1.5] border-textArea-border placeholder:text-sm text-input placeholder:text-textArea-placholder bg-transparent border-b outline-none"
+                className="block text-sm h-[69px] overflow-hidden w-full leading-[1.5] rounded-md border-textArea-border placeholder:text-sm text-input placeholder:text-textArea-placholder bg-transparent border-b outline-none border px-2 py-1"
                 style={{
                   resize: "none",
                 }}
                 value={values.description}
                 onChange={handleChange}
                 ref={textareaRef}
-                rows={1}
+                rows={3}
                 placeholder={slugs?.feedback_free_text}
                 maxLength={globalConfigObject?.feedbackCharacterLimit || 150}
               />

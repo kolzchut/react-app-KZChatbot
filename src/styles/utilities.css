@@ -119,14 +119,14 @@
     .h-\[1px\] {
         height: 1px;
     }
-    .h-\[23px\] {
-        height: 23px;
-    }
     .h-\[29px\] {
         height: 29px;
     }
     .h-\[40px\] {
         height: 40px;
+    }
+    .h-\[69px\] {
+        height: 69px;
     }
     .h-\[515px\] {
         height: 515px;
@@ -194,6 +194,9 @@
     }
     .overflow-hidden {
         overflow: hidden;
+    }
+    .rounded-md {
+        border-radius: 0.25rem;
     }
     .rounded-\[10px_10px_0_10px\] {
         border-radius: 10px 10px 0;
@@ -285,6 +288,10 @@
     .px-\[6px\] {
         padding-left: 6px;
         padding-right: 6px;
+    }
+    .py-1 {
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
     }
     .py-2 {
         padding-top: 0.5rem;

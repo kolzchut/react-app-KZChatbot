@@ -67,7 +67,7 @@ const useRate = ({
     if (!textareaRef.current) return;
     textareaRef.current.style.height = "auto";
     textareaRef.current.style.height =
-      Math.max(textareaRef.current.scrollHeight, 23) + "px";
+      Math.max(textareaRef.current.scrollHeight, 69) + "px";
   };
 
   const handleChange = (
