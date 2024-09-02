@@ -145,7 +145,9 @@ const Rate = ({
         <form className="mt-2 p-2 border border-line" onSubmit={handleSubmit}>
           <div className="flex justify-between items-center">
             <span className="text-sm font-bold text-input">
-              {slugs?.dislike_follow_up_question}
+              {message.liked
+                ? slugs?.like_follow_up_question
+                : slugs?.dislike_follow_up_question}
             </span>
             <button onClick={handleCloseRate}>
               <img src={XIcon} alt="x icon" />
@@ -183,7 +185,11 @@ const Rate = ({
                 onChange={handleChange}
                 ref={textareaRef}
                 rows={3}
-                placeholder={slugs?.feedback_free_text}
+                placeholder={
+                  message.liked
+                    ? slugs?.like_free_text
+                    : slugs?.dislike_free_text
+                }
                 maxLength={globalConfigObject?.feedbackCharacterLimit || 150}
               />
               {errors.description && (

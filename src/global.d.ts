@@ -14,10 +14,12 @@ declare global {
         chat_tip_link: string;
         close_chat_icon: string;
         dislike_follow_up_question: string;
+        like_follow_up_question: string;
+        dislike_free_text: string;
+        like_free_text: string;
         dislike_followup_q_first: string;
         dislike_followup_q_second: string;
         dislike_followup_q_third: string;
-        feedback_free_text: string;
         feedback_free_text_disclaimer: string;
         new_question_button: string;
         new_question_filed: string;
@@ -33,6 +35,7 @@ declare global {
         questions_daily_limit: string;
         question_character_limit: string;
         banned_word_found: string;
+        general_error: string;
       };
       restPath: string;
     };
