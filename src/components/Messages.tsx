@@ -36,8 +36,9 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(
 
     const getMessageClasses = (messageType: MessageType) => {
       if (
-        messageType === MessageType.Bot ||
-        messageType === MessageType.StartBot
+        [MessageType.Bot, MessageType.StartBot, MessageType.Warning].includes(
+          messageType,
+        )
       ) {
         return "text-sm p-3 mb-2 bg-message-bot-background text-message-bot-foreground rounded-[10px_10px_10px_0] mr-6";
       } else if (messageType === MessageType.User) {

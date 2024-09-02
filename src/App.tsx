@@ -116,8 +116,7 @@ function App() {
       let type: MessageType;
       if (error instanceof HttpError) {
         content = error.message;
-        type =
-          error.httpCode === 403 ? MessageType.StartBot : MessageType.Error;
+        type = error.httpCode === 403 ? MessageType.Warning : MessageType.Error;
       } else {
         content = globalConfigObject?.slugs.general_error;
         type = MessageType.Error;
@@ -137,11 +136,11 @@ function App() {
     }
   };
 
-  const scrollToBottom = useCallback(() => {
+  const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
     if (messageContainerRef.current) {
       messageContainerRef.current.scrollTo({
         top: messageContainerRef.current.scrollHeight,
-        behavior: "smooth",
+        behavior,
       });
     }
   }, []);
@@ -164,16 +163,23 @@ function App() {
   };
 
   useEffect(() => {
-    if (errors.description) {
-      scrollToBottom();
+    if (
+      errors.description ||
+      (messages.length &&
+        messages[messages.length - 1].type === MessageType.User)
+    ) {
+      scrollToBottom("instant");
     }
-  }, [scrollToBottom, errors]);
+  }, [scrollToBottom, errors, messages]);
 
   useEffect(() => {
+    const lastMessage = messages[messages.length - 1];
     if (
       messages.length &&
-      messages[messages.length - 1].liked === undefined &&
-      messages[messages.length - 1].type === MessageType.Bot
+      lastMessage.liked === undefined &&
+      [MessageType.Bot, MessageType.Warning, MessageType.Error].includes(
+        lastMessage.type,
+      )
     ) {
       scrollToAnswer();
     }
