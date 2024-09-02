@@ -99,7 +99,7 @@ function App() {
 
       input.value = "";
       const answer = await getAnswer(value);
-      if (!answer?.llmResult) throw new Error("No answer"); //TODO show error message
+      if (!answer?.llmResult) throw new Error();
 
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -112,17 +112,24 @@ function App() {
       ]);
       setShowInput(false);
     } catch (error) {
+      let content: string;
+      let type: MessageType;
       if (error instanceof HttpError) {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          {
-            id: uuidv4(),
-            content: error.message,
-            type:
-              error.httpCode === 403 ? MessageType.StartBot : MessageType.Error,
-          },
-        ]);
+        content = error.message;
+        type =
+          error.httpCode === 403 ? MessageType.StartBot : MessageType.Error;
+      } else {
+        content = globalConfigObject?.slugs.general_error;
+        type = MessageType.Error;
       }
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          id: uuidv4(),
+          content,
+          type,
+        },
+      ]);
       console.error(error);
     } finally {
       setQuestion("");
@@ -157,7 +164,9 @@ function App() {
   };
 
   useEffect(() => {
-    scrollToBottom();
+    if (errors.description) {
+      scrollToBottom();
+    }
   }, [scrollToBottom, errors]);
 
   useEffect(() => {
