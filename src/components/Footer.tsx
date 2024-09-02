@@ -2,6 +2,7 @@ import PaperPlaneIcon from "@/assets/paper-plane.svg";
 import { Input } from "@/components";
 import { Errors, Message } from "@/types";
 import { useEffect, useRef } from "react";
+import { useMobile } from "@/lib/useMobile";
 
 interface FooterProps {
   isLoading: boolean;
@@ -29,12 +30,22 @@ const Footer = ({
   messages,
 }: FooterProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const isMobile = useMobile();
 
   useEffect(() => {
+    let isBotStarted = true;
+    for (let i = 0; i < messages.length; i++) {
+      if (messages[i].type === undefined || messages[i].type !== "startBot") {
+        isBotStarted = false;
+        break;
+      }
+    }
+    if (isMobile && isBotStarted) return;
+
     if (showInput && inputRef.current && messages.length) {
       inputRef.current.focus();
     }
-  }, [inputRef, showInput, messages]);
+  }, [isMobile, inputRef, showInput, messages]);
 
   if (
     isLoading ||
