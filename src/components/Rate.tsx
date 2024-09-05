@@ -56,10 +56,10 @@ const Rate = ({
   }, [message, isFormSubmitted, setIsOpen]);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen || values.reason !== "") {
       ref.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [isOpen]);
+  }, [isOpen, values]);
 
   return (
     <div ref={ref}>
