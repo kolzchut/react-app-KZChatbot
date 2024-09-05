@@ -325,4 +325,12 @@
         --tw-contain-paint: ;
         --tw-contain-style: ;
     }
+
+    div[data-radix-popper-content-wrapper] {
+            visibility: hidden;
+        }
+
+    div[data-radix-popper-content-wrapper]:has(+ button[data-state="open"]) {
+        visibility: visible;
+    }
 }

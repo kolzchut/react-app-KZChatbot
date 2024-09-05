@@ -11,7 +11,10 @@ const PopoverContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
 >(({ className, align = "center", sideOffset = 4, ...props }, ref) => (
-  <PopoverPrimitive.Portal container={document.getElementById("kzchatbot")}>
+  <PopoverPrimitive.Portal
+    container={document.getElementById("kzchatbot")}
+    forceMount={true}
+  >
     <PopoverPrimitive.Content
       ref={ref}
       align={align}

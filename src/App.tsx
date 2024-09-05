@@ -18,7 +18,7 @@ function App() {
   const [globalConfigObject, setGlobalConfigObject] = useState<
     typeof window.KZChatbotConfig | null
   >(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const [chatIsOpen, chatSetIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showInput, setShowInput] = useState(true);
   const [question, setQuestion] = useState<string>("");
@@ -223,14 +223,14 @@ function App() {
   }, [setMessages, globalConfigObject]);
 
   return (
-    <Popover open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
+    <Popover open={chatIsOpen} onOpenChange={(open) => chatSetIsOpen(open)}>
       <PopoverTrigger className="rounded-full bg-cta h-16 w-16 relative block">
         <div className="flex flex-col items-center">
-          <img src={isOpen ? CloseIcon : HelpIcon} alt="TODO: change-me" />
+          <img src={chatIsOpen ? CloseIcon : HelpIcon} alt="TODO: change-me" />
           <span
-            className={`text-xs font-bold ${isOpen ? "leading-4" : "leading-normal"} text-cta-foreground`}
+            className={`text-xs font-bold ${chatIsOpen ? "leading-4" : "leading-normal"} text-cta-foreground`}
           >
-            {isOpen
+            {chatIsOpen
               ? globalConfigObject?.slugs.close_chat_icon
               : globalConfigObject?.slugs.chat_icon}
           </span>
@@ -242,7 +242,7 @@ function App() {
           marginLeft: "0.75rem",
         }}
       >
-        <ClosePopover setIsOpen={setIsOpen} />
+        <ClosePopover chatSetIsOpen={chatSetIsOpen} />
         <Messages
           setMessages={setMessages}
           messages={messages}

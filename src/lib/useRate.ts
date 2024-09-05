@@ -41,8 +41,9 @@ const useRate = ({
     description: "",
   };
   const [values, setValues] = useState<FormValues>(initialValues);
-  const [isOpen, setIsOpen] = useState(false);
-  const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
+  const [rateIsOpen, setRateIsOpen] = useState(false);
+  const [isFeedbackSubmitted, setIsFeedbackSubmitted] =
+    useState<boolean>(false);
   const slugs = globalConfigObject?.slugs;
   const isFormValid =
     errors.description === "" &&
@@ -115,13 +116,13 @@ const useRate = ({
         throw new Error(data.messageTranslations.he); // TODO: add type for data
       }
 
-      setIsFormSubmitted(true);
+      setIsFeedbackSubmitted(true);
       setValues(initialValues);
       setErrors(initialErrors);
-      setIsOpen(false);
+      setRateIsOpen(false);
     } catch (error) {
       console.error(error);
-      setIsFormSubmitted(false);
+      setIsFeedbackSubmitted(false);
     }
   };
 
@@ -166,18 +167,18 @@ const useRate = ({
   };
 
   const handleCloseRate = () => {
-    setIsOpen(false);
+    setRateIsOpen(false);
   };
 
   return {
     values,
     errors,
-    isFormSubmitted,
+    isFeedbackSubmitted,
     handleChange,
     handleSubmit,
     reasons,
-    isOpen,
-    setIsOpen,
+    rateIsOpen,
+    setRateIsOpen,
     isFormValid,
     handleRate,
     handleCloseRate,

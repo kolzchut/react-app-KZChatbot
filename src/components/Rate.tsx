@@ -23,12 +23,12 @@ const Rate = ({
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const {
     values,
-    isFormSubmitted,
+    isFeedbackSubmitted,
     handleChange,
     handleSubmit,
     reasons,
-    isOpen,
-    setIsOpen,
+    rateIsOpen,
+    setRateIsOpen,
     isFormValid,
     handleRate,
     handleCloseRate,
@@ -46,20 +46,20 @@ const Rate = ({
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isFormSubmitted) return;
+    if (isFeedbackSubmitted) return;
 
     if (message.liked === null || message.liked === undefined) {
-      setIsOpen(false);
+      setRateIsOpen(false);
     } else {
-      setIsOpen(true);
+      setRateIsOpen(true);
     }
-  }, [message, isFormSubmitted, setIsOpen]);
+  }, [message, isFeedbackSubmitted, setRateIsOpen]);
 
   useEffect(() => {
-    if (isOpen || values.reason !== "") {
+    if (rateIsOpen || values.reason !== "") {
       ref.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [isOpen, values]);
+  }, [rateIsOpen, values]);
 
   return (
     <div ref={ref}>
@@ -89,7 +89,7 @@ const Rate = ({
           {slugs?.ranking_request}
         </span>
         <button
-          disabled={isFormSubmitted}
+          disabled={isFeedbackSubmitted}
           aria-label="סמנ/י שהתשובה עזרה לי"
           aria-pressed={message.liked === true}
           className="px-[6px] relative pointer-events-auto"
@@ -114,7 +114,7 @@ const Rate = ({
           </svg>
         </button>
         <button
-          disabled={isFormSubmitted}
+          disabled={isFeedbackSubmitted}
           aria-label="סמנ/י שהתשובה לא עזרה לי"
           aria-pressed={message.liked === false}
           className="px-[6px] relative pointer-events-auto"
@@ -141,7 +141,7 @@ const Rate = ({
           </svg>
         </button>
       </div>
-      {isOpen && (
+      {rateIsOpen && (
         <form className="mt-2 p-2 border border-line" onSubmit={handleSubmit}>
           <div className="flex justify-between items-center">
             <span className="text-sm font-bold text-input">
