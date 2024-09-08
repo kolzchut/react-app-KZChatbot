@@ -48,6 +48,7 @@
     a {
         color: inherit;
         text-decoration: inherit;
+        transition: none;
     }
     b,
     strong {
