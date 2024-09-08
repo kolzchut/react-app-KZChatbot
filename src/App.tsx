@@ -269,6 +269,7 @@ function App() {
           errors={errors}
           setErrors={setErrors}
           messages={messages}
+          chatIsOpen={chatIsOpen}
         />
       </PopoverContent>
     </Popover>

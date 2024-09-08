@@ -15,6 +15,7 @@ interface FooterProps {
   errors: Errors;
   setErrors: React.Dispatch<React.SetStateAction<Errors>>;
   messages: Message[];
+  chatIsOpen: boolean;
 }
 
 const Footer = ({
@@ -28,6 +29,7 @@ const Footer = ({
   errors,
   setErrors,
   messages,
+  chatIsOpen,
 }: FooterProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const isMobile = useMobile();
@@ -42,10 +44,10 @@ const Footer = ({
     }
     if (isMobile && isBotStarted) return;
 
-    if (showInput && inputRef.current && messages.length) {
+    if (chatIsOpen && showInput && inputRef.current && messages.length) {
       inputRef.current.focus();
     }
-  }, [isMobile, inputRef, showInput, messages]);
+  }, [isMobile, inputRef, showInput, messages, chatIsOpen]);
 
   if (
     isLoading ||
