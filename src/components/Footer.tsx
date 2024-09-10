@@ -101,12 +101,16 @@ const Footer = ({
               value={question}
               onChange={handleOnMessageChange}
               placeholder={slugs?.question_field}
+              title={slugs?.send_button}
               submitElement={
+                <>
+                <span className="sr-only">{slugs?.send_button}</span>
                 <img
                   src={PaperPlaneIcon}
                   className="block"
-                  alt="TODO: change-me"
+                  alt=""
                 />
+                </>
               }
               maxLength={globalConfigObject?.questionCharacterLimit || 150}
               errors={errors}

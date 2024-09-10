@@ -224,9 +224,9 @@ function App() {
 
   return (
     <Popover open={chatIsOpen} onOpenChange={(open) => chatSetIsOpen(open)}>
-      <PopoverTrigger className="rounded-full bg-cta h-16 w-16 relative block">
+      <PopoverTrigger className="rounded-full bg-cta h-16 w-16 relative block" title={chatIsOpen ? globalConfigObject?.slugs.close_chat_icon : globalConfigObject?.slugs.open_chat_icon}>
         <div className="flex flex-col items-center">
-          <img src={chatIsOpen ? CloseIcon : HelpIcon} alt="TODO: change-me" />
+          <img src={chatIsOpen ? CloseIcon : HelpIcon} alt="" />
           <span
             className={`text-xs font-bold ${chatIsOpen ? "leading-4" : "leading-normal"} text-cta-foreground`}
           >
@@ -234,6 +234,7 @@ function App() {
               ? globalConfigObject?.slugs.close_chat_icon
               : globalConfigObject?.slugs.chat_icon}
           </span>
+			<p className={'sr-only'}>{chatIsOpen ? '' : globalConfigObject?.slugs.chat_description}</p>
         </div>
       </PopoverTrigger>
       <PopoverContent
@@ -242,7 +243,7 @@ function App() {
           marginLeft: "0.75rem",
         }}
       >
-        <ClosePopover chatSetIsOpen={chatSetIsOpen} />
+        <ClosePopover chatSetIsOpen={chatSetIsOpen} globalConfigObject={globalConfigObject}/>
         <Messages
           setMessages={setMessages}
           messages={messages}

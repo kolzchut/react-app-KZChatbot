@@ -11,7 +11,9 @@ declare global {
       usageHelpUrl: string;
       slugs: {
         chat_icon: string;
+		chat_description: string;
         chat_tip_link: string;
+		open_chat_icon: string;
         close_chat_icon: string;
         dislike_follow_up_question: string;
         like_follow_up_question: string;
@@ -36,6 +38,7 @@ declare global {
         question_character_limit: string;
         banned_word_found: string;
         general_error: string;
+		send_button: string;
       };
       restPath: string;
     };
