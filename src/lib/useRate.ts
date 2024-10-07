@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Message, Errors } from "@/types";
+import { pushAnalyticsEvent } from './analytics';
 
 type FormValues = {
   reason: string;
@@ -101,6 +102,13 @@ const useRate = ({
     const { reason: reason, description } = values;
     const reasonLabel = reasons.find((r) => r.value === reason)?.label || reason;
 
+	if (reason ) {
+      pushAnalyticsEvent("negative_feedback_reason", reasonLabel);
+	}
+	if ( description ) {
+      pushAnalyticsEvent("free_text_feedback");
+	}
+
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -132,6 +140,7 @@ const useRate = ({
 
   const handleRate = async (liked: boolean | null) => {
     setLike(liked); // Set the like value in state
+	pushAnalyticsEvent(liked ? "positive_feedback" : "negative_feedback");
     const isProduction = import.meta.env.MODE === "production";
     const url = isProduction
       ? `${globalConfigObject?.restPath}/kzchatbot/v0/rate`

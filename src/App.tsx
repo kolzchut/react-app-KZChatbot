@@ -11,6 +11,7 @@ import {
   ClosePopover,
   ScrollWidget,
 } from "@/components";
+import { pushAnalyticsEvent } from "@/lib/analytics";
 import { v4 as uuidv4 } from "uuid";
 import { HttpError } from "./lib/HttpError";
 
@@ -49,7 +50,8 @@ function App() {
 
     const data = await response.json();
     if (!response.ok) {
-      throw new HttpError(data.message, response.status);
+		pushAnalyticsEvent("error_received", response.status + ': ' + data.message);
+		throw new HttpError(data.message, response.status);
     }
     return data;
   };
@@ -77,6 +79,7 @@ function App() {
     }
 
     try {
+      pushAnalyticsEvent("question_asked");
       setMessages((prevMessages) => {
         prevMessages.map((item) => {
           if (item.type !== MessageType.StartBot) {
@@ -111,6 +114,7 @@ function App() {
         },
       ]);
       setShowInput(false);
+      pushAnalyticsEvent("answer_received");
     } catch (error) {
       let content: string;
       let type: MessageType;
@@ -135,6 +139,19 @@ function App() {
       setIsLoading(false);
     }
   };
+
+	const hasMessages = () => {
+		return messages.some(message => message.type === MessageType.User);
+	};
+
+	const handleChatSetIsOpen = (isOpen: boolean) => {
+		if (!isOpen && !hasMessages()) {
+			pushAnalyticsEvent("closed_unused");
+		} else if (isOpen) {
+			pushAnalyticsEvent("opened");
+		}
+		chatSetIsOpen(isOpen);
+	};
 
   const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
     if (messageContainerRef.current) {
@@ -223,7 +240,7 @@ function App() {
   }, [setMessages, globalConfigObject]);
 
   return (
-    <Popover open={chatIsOpen} onOpenChange={(open) => chatSetIsOpen(open)}>
+    <Popover open={chatIsOpen} onOpenChange={(open) => handleChatSetIsOpen(open)}>
       <PopoverTrigger className="rounded-full bg-cta h-16 w-16 relative block" title={chatIsOpen ? globalConfigObject?.slugs.close_chat_icon : globalConfigObject?.slugs.open_chat_icon}>
         <div className="flex flex-col items-center">
           <img src={chatIsOpen ? CloseIcon : HelpIcon} alt="" />
@@ -243,7 +260,7 @@ function App() {
           marginLeft: "0.75rem",
         }}
       >
-        <ClosePopover chatSetIsOpen={chatSetIsOpen} globalConfigObject={globalConfigObject}/>
+        <ClosePopover handleChatSetIsOpen={handleChatSetIsOpen} globalConfigObject={globalConfigObject} />
         <Messages
           setMessages={setMessages}
           messages={messages}

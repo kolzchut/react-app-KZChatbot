@@ -4,6 +4,7 @@ import { TypingIndicator } from "@/components";
 import { forwardRef } from "react";
 import Markdown from "react-markdown";
 import AlertIcon from "@/assets/alert.svg";
+import { pushAnalyticsEvent } from "@/lib/analytics";
 
 interface MessagesProps {
   messages: Message[];
@@ -92,7 +93,8 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(
                                 href={link.url}
                                 target="_blank"
                                 className="text-sm mr-[2px] text-input-placholder"
-                              >
+								onClick={() => pushAnalyticsEvent("link_clicked", link.title )}
+							  >
                                 {link.title}
                               </a>
                             </li>
