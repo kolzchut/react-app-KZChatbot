@@ -44,6 +44,7 @@ const useRate = ({
   const [rateIsOpen, setRateIsOpen] = useState(false);
   const [isFeedbackSubmitted, setIsFeedbackSubmitted] =
     useState<boolean>(false);
+  const [like, setLike] = useState<boolean | null>(null); // New state variable for like
   const slugs = globalConfigObject?.slugs;
   const isFormValid =
     errors.description === "" &&
@@ -108,6 +109,7 @@ const useRate = ({
         },
         body: JSON.stringify({
           answerId: message.id,
+          like: like,
           answerClassification: reasonLabel,
           text: description,
         }),
@@ -129,6 +131,7 @@ const useRate = ({
   };
 
   const handleRate = async (liked: boolean | null) => {
+    setLike(liked); // Set the like value in state
     const isProduction = import.meta.env.MODE === "production";
     const url = isProduction
       ? `${globalConfigObject?.restPath}/kzchatbot/v0/rate`
