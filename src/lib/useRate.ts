@@ -98,6 +98,8 @@ const useRate = ({
       ? `${globalConfigObject?.restPath}/kzchatbot/v0/rate`
       : "/api/kzchatbot/v0/rate";
     const { reason: reason, description } = values;
+    const reasonLabel = reasons.find((r) => r.value === reason)?.label || reason;
+
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -106,7 +108,7 @@ const useRate = ({
         },
         body: JSON.stringify({
           answerId: message.id,
-          answerClassification: reason,
+          answerClassification: reasonLabel,
           text: description,
         }),
       });
