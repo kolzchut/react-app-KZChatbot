@@ -14,6 +14,7 @@ import {
 import { pushAnalyticsEvent } from "@/lib/analytics";
 import { v4 as uuidv4 } from "uuid";
 import { HttpError } from "./lib/HttpError";
+import { useMobile } from "@/lib/useMobile";
 
 function App() {
   const [globalConfigObject, setGlobalConfigObject] = useState<
@@ -30,6 +31,7 @@ function App() {
   const [messages, setMessages] = useState<Message[]>([]);
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const [showScrollWidget, setShowScrollWidget] = useState(false);
+  const isMobile = useMobile();
 
   const getAnswer = async (question: string): Promise<Answer | void> => {
     const isProduction = import.meta.env.MODE === "production";
@@ -258,6 +260,8 @@ function App() {
         style={{
           direction: "rtl",
           marginLeft: "0.75rem",
+          width: !isMobile ? "500px" : "",
+          height: !isMobile ? "789px" : "",
         }}
       >
         <ClosePopover handleChatSetIsOpen={handleChatSetIsOpen} globalConfigObject={globalConfigObject} />
