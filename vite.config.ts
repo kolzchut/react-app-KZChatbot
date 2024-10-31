@@ -8,6 +8,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     build: {
+      assetsInlineLimit: 8096,
       rollupOptions: {
         output: {
           format: "iife",
