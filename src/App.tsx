@@ -262,6 +262,7 @@ function App() {
           marginLeft: "0.75rem",
           width: !isMobile ? "500px" : "",
           height: !isMobile ? "789px" : "",
+          overflow: "visible"
         }}
       >
         <ClosePopover handleChatSetIsOpen={handleChatSetIsOpen} globalConfigObject={globalConfigObject} />
