@@ -149,7 +149,11 @@ const Footer = ({
           target="_blank"
           aria-label="בקרו באתר של Webiks, נפתח בכרטיסייה חדשה"
         >
-          <img src={WebiksLogo} alt="לוגו של Webiks" />
+          <img
+            src={WebiksLogo}
+            alt="לוגו של Webiks"
+            style={{ width: "71px" }}
+          />
         </a>
       </div>
     </>

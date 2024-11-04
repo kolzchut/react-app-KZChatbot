@@ -262,6 +262,7 @@ function App() {
           marginLeft: "0.75rem",
           width: !isMobile ? "500px" : "",
           height: !isMobile ? "789px" : "",
+          maxHeight: "85vh",
           overflow: "visible"
         }}
       >
