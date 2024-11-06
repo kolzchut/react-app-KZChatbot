@@ -142,7 +142,14 @@ const Footer = ({
       )}
       <div
         className="flex"
-        style={{ transform: "translateY(calc(100% + .25rem))" }}
+        style={{
+          transform: "translateY(100%)",
+          background: "#e5e7eb",
+          padding: "0.375rem",
+          width: "100%",
+          position: "absolute",
+          bottom: "0",
+        }}
       >
         <a
           href="https://webiks.com"

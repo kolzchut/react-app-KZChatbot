@@ -52,8 +52,11 @@ function App() {
 
     const data = await response.json();
     if (!response.ok) {
-		pushAnalyticsEvent("error_received", response.status + ': ' + data.message);
-		throw new HttpError(data.message, response.status);
+      pushAnalyticsEvent(
+        "error_received",
+        response.status + ": " + data.message,
+      );
+      throw new HttpError(data.message, response.status);
     }
     return data;
   };
@@ -142,18 +145,18 @@ function App() {
     }
   };
 
-	const hasMessages = () => {
-		return messages.some(message => message.type === MessageType.User);
-	};
+  const hasMessages = () => {
+    return messages.some((message) => message.type === MessageType.User);
+  };
 
-	const handleChatSetIsOpen = (isOpen: boolean) => {
-		if (!isOpen && !hasMessages()) {
-			pushAnalyticsEvent("closed_unused");
-		} else if (isOpen) {
-			pushAnalyticsEvent("opened");
-		}
-		chatSetIsOpen(isOpen);
-	};
+  const handleChatSetIsOpen = (isOpen: boolean) => {
+    if (!isOpen && !hasMessages()) {
+      pushAnalyticsEvent("closed_unused");
+    } else if (isOpen) {
+      pushAnalyticsEvent("opened");
+    }
+    chatSetIsOpen(isOpen);
+  };
 
   const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
     if (messageContainerRef.current) {
@@ -242,8 +245,18 @@ function App() {
   }, [setMessages, globalConfigObject]);
 
   return (
-    <Popover open={chatIsOpen} onOpenChange={(open) => handleChatSetIsOpen(open)}>
-      <PopoverTrigger className="rounded-full bg-cta h-16 w-16 relative block" title={chatIsOpen ? globalConfigObject?.slugs.close_chat_icon : globalConfigObject?.slugs.open_chat_icon}>
+    <Popover
+      open={chatIsOpen}
+      onOpenChange={(open) => handleChatSetIsOpen(open)}
+    >
+      <PopoverTrigger
+        className="rounded-full bg-cta h-16 w-16 relative block z-50"
+        title={
+          chatIsOpen
+            ? globalConfigObject?.slugs.close_chat_icon
+            : globalConfigObject?.slugs.open_chat_icon
+        }
+      >
         <div className="flex flex-col items-center">
           <img src={chatIsOpen ? CloseIcon : HelpIcon} alt="" />
           <span
@@ -253,7 +266,9 @@ function App() {
               ? globalConfigObject?.slugs.close_chat_icon
               : globalConfigObject?.slugs.chat_icon}
           </span>
-			<p className={'sr-only'}>{chatIsOpen ? '' : globalConfigObject?.slugs.chat_description}</p>
+          <p className={"sr-only"}>
+            {chatIsOpen ? "" : globalConfigObject?.slugs.chat_description}
+          </p>
         </div>
       </PopoverTrigger>
       <PopoverContent
@@ -263,10 +278,14 @@ function App() {
           width: !isMobile ? "500px" : "",
           height: !isMobile ? "789px" : "",
           maxHeight: "85vh",
-          overflow: "visible"
+          overflow: "visible",
+          position: "relative",
         }}
       >
-        <ClosePopover handleChatSetIsOpen={handleChatSetIsOpen} globalConfigObject={globalConfigObject} />
+        <ClosePopover
+          handleChatSetIsOpen={handleChatSetIsOpen}
+          globalConfigObject={globalConfigObject}
+        />
         <Messages
           setMessages={setMessages}
           messages={messages}
