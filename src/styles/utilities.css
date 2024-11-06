@@ -378,6 +378,9 @@
     .text-destructive {
         color: var(--kzcb-destructive-foreground);
     }
+    .text-white {
+        color: var(--kzcb-white);
+    }
     .bg-destructive {
         background-color: var(--kzcb-destructive-background);
     }

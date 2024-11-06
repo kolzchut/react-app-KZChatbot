@@ -127,17 +127,20 @@ const Footer = ({
           </form>
         </div>
       ) : (
-        <div className="px-4">
+        <div className="px-4 text-center mb-2">
           <button
             onClick={() => {
               setShowInput(true);
               pushAnalyticsEvent("restart_clicked");
             }}
-            className="relative block mx-auto my-0 mb-6 bg-button text-button-foreground text-xs font-bold h-[29px] rounded-full px-5 before:absolute before:bg-line before:w-[200px] before:h-[1px] before:right-0 before:top-1/2 before:translate-x-full before:-translate-y-1/2 before:pointer-events-none
+            className="relative block mx-auto my-0 mb-2 bg-button text-button-foreground text-xs font-bold h-[29px] rounded-full px-5 before:absolute before:bg-line before:w-[200px] before:h-[1px] before:right-0 before:top-1/2 before:translate-x-full before:-translate-y-1/2 before:pointer-events-none
        after:absolute after:bg-line after:w-[200px] after:h-[1px] after:left-0 after:top-1/2 after:-translate-x-full after:-translate-y-1/2 after:pointer-events-none"
           >
             {slugs?.new_question_button}
           </button>
+          <span className="block text-xs text-white">
+            {slugs?.new_question_hint}
+          </span>
         </div>
       )}
       <div

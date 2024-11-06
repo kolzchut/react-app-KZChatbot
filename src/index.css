@@ -3,6 +3,7 @@
 @import "./styles/utilities.css";
 
 :root {
+    --kzcb-white: #ffffff;
     --kzcb-input-background: #ffffff;
     --kzcb-input-placeholder: #005aab;
     --kzcb-textarea-placeholder: #ffffff;
