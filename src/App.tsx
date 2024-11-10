@@ -142,6 +142,7 @@ function App() {
     } finally {
       setQuestion("");
       setIsLoading(false);
+      setErrors(initialErrors);
     }
   };
 

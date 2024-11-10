@@ -202,10 +202,18 @@ const Rate = ({
               )}
             </div>
           )}
-          <div className="flex justify-between items-center">
-            <span className="text-xs text-disclaimer">
-              {slugs?.feedback_free_text_disclaimer}
-            </span>
+          <div
+            className={`flex items-center ${
+              message.liked || values.reason !== ""
+                ? "justify-between"
+                : "justify-end"
+            }`}
+          >
+            {(message.liked || values.reason !== "") && (
+              <span className="text-xs text-disclaimer">
+                {slugs?.feedback_free_text_disclaimer}
+              </span>
+            )}
             <input
               disabled={!isFormValid}
               type="submit"
