@@ -2,7 +2,7 @@ declare global {
   interface Window {
     KZChatbotConfig: {
       uuid: string;
-      chatbotIsShown: "0" | "1";
+      chatbotIsShown: boolean;
       cookieExpiry: string;
       feedbackCharacterLimit: number;
       questionCharacterLimit: number;

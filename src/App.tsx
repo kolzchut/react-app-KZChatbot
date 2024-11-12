@@ -77,7 +77,7 @@ function App() {
       !value ||
       !globalConfigObject ||
       !globalConfigObject?.uuid ||
-      globalConfigObject.chatbotIsShown !== "1" ||
+      globalConfigObject.chatbotIsShown !== true ||
       !globalConfigObject.slugs
     ) {
       return null;
