@@ -93,7 +93,7 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(
                                 href={link.url}
                                 target="_blank"
                                 className="text-sm mr-[2px] text-input-placholder"
-								onClick={() => pushAnalyticsEvent("link_clicked", link.title )}
+								onClick={() => pushAnalyticsEvent("link_clicked", { link_text: link.title } ) }
 							  >
                                 {link.title}
                               </a>

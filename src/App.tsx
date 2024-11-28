@@ -50,15 +50,19 @@ function App() {
       }),
     });
 
-    const data = await response.json();
-    if (!response.ok) {
-      pushAnalyticsEvent(
-        "error_received",
-        response.status + ": " + data.message,
-      );
-      throw new HttpError(data.message, response.status);
-    }
-    return data;
+	let data;
+	try {
+		data = await response.json();
+	} catch (error) {
+		pushAnalyticsEvent("error_received", { error_message: "Invalid JSON response" });
+		throw new HttpError( globalConfigObject?.slugs.general_error ?? "Invalid JSON response", response.status);
+	}
+
+	if (!response.ok) {
+		pushAnalyticsEvent("error_received", { error_message: response.status + ": " + data.message });
+		throw new HttpError(data.message, response.status);
+	}
+	return data;
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
