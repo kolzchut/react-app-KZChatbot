@@ -103,7 +103,7 @@ const useRate = ({
     const reasonLabel = reasons.find((r) => r.value === reason)?.label || reason;
 
 	if (reason ) {
-      pushAnalyticsEvent("negative_feedback_reason", { reason: reasonLabel } );
+      pushAnalyticsEvent("negative_feedback_reason", reasonLabel);
 	}
 	if ( description ) {
       pushAnalyticsEvent("free_text_feedback");
