@@ -16,7 +16,7 @@ const ScrollWidget = ({
       hidden={!showScrollWidget}
       aria-label="גלול למטה"
     >
-      <img src={ArrowUpIcon} alt="חץ למטה" className="rotate-180" />
+      <img src={ArrowUpIcon} alt="חץ למטה" className="transform rotate-180" />
     </button>
   );
 };

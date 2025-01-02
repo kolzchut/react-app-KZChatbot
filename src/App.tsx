@@ -251,7 +251,9 @@ function App() {
       onOpenChange={(open) => handleChatSetIsOpen(open)}
     >
       <PopoverTrigger
-        className="rounded-full bg-cta h-16 w-16 relative block z-50"
+		className={`rounded-full bg-cta h-16 w-16 relative block z-50 ${
+			isMobile ? "" : "transform scale-120"
+		}`}
         title={
           chatIsOpen
             ? globalConfigObject?.slugs.close_chat_icon

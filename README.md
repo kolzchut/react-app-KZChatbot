@@ -1,3 +1,8 @@
+# IMPORTANT
+While this project appears to use Tailwind CSS, it actually doesn't - it just mimics its utility classes.
+Therefore, you can't just start adding more classes - nothing will scan to add them. Beware!
+
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
