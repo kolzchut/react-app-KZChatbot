@@ -53,3 +53,28 @@
     left: 0.75rem;
     z-index: 999;
 }
+
+#kzchatbot .kzcb-chat {
+	display: flex;
+	flex-direction: column;
+	width: 300px;
+	border-radius: var(--kzcb-radius);
+	background-color: var(--kzcb-background);
+	color: hsl(var(--kzcb-foreground));
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Larger icon on desktop. The @media decleration should be in sync with `useMobile.tsx` */
+@media (min-width: 768px) {
+	#kzchatbot-trigger {
+		transform: scaleX( 1.3 ) scaleY( 1.3 );
+	}
+
+	#kzchatbot {
+		bottom: 1.5rem;
+		left: 1.5rem;
+	}
+}
+
+
+
