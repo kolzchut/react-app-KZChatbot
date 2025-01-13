@@ -9,6 +9,7 @@ declare global {
       questionsPermitted: number;
       termsofServiceUrl: string;
       usageHelpUrl: string;
+      referrer: string;
       slugs: {
         chat_icon: string;
         chat_description: string;

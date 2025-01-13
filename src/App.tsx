@@ -47,6 +47,7 @@ function App() {
       body: JSON.stringify({
         text: question,
         uuid: globalConfigObject?.uuid || "",
+        asked_from: globalConfigObject?.referrer || ""
       }),
     });
 
