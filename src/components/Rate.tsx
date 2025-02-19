@@ -91,7 +91,7 @@ const Rate = ({
 					disabled={isFeedbackSubmitted}
 					aria-label="סמנ/י שהתשובה עזרה לי"
 					aria-pressed={message.liked === true}
-					className="px-[6px] relative pointer-events-auto"
+					className="px-[10px] relative pointer-events-auto"
 					onClick={() => handleRate(message.liked === true ? null : true)}
 				>
 					<svg
