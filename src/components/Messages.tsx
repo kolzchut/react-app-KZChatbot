@@ -3,6 +3,7 @@ import Rate from "./Rate";
 import { TypingIndicator } from "@/components";
 import { forwardRef } from "react";
 import Markdown from "react-markdown";
+import remarkGfm from 'remark-gfm';
 import AlertIcon from "@/assets/alert.svg";
 import { pushAnalyticsEvent } from "@/lib/analytics";
 
@@ -64,7 +65,9 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(
                 )}
                 <div className={getMessageClasses(message.type)}>
                   {message.type === MessageType.Bot ? (
-                    <Markdown className="markdown">{message.content}</Markdown>
+                    <Markdown
+						remarkPlugins={[remarkGfm]}
+						className="markdown">{message.content}</Markdown>
                   ) : (
                     message.content
                   )}

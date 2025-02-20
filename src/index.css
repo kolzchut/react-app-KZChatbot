@@ -46,22 +46,68 @@
 }
 
 #kzchatbot {
-    font-family: "Open Sans", sans-serif;
-    display: flex;
-    position: fixed;
-    bottom: 0.75rem;
-    left: 0.75rem;
-    z-index: 999;
-}
-
-#kzchatbot .kzcb-chat {
+	font-family: "Open Sans", sans-serif;
 	display: flex;
-	flex-direction: column;
-	width: 300px;
-	border-radius: var(--kzcb-radius);
-	background-color: var(--kzcb-background);
-	color: hsl(var(--kzcb-foreground));
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	position: fixed;
+	bottom: 0.75rem;
+	left: 0.75rem;
+	z-index: 999;
+
+	.kzcb-chat {
+		display: flex;
+		flex-direction: column;
+		width: 300px;
+		border-radius: var(--kzcb-radius);
+		background-color: var(--kzcb-background);
+		color: hsl(var(--kzcb-foreground));
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	}
+
+	/**
+	 * CSS styles for markdown tables.
+	 * @see https://github.com/micromark/micromark-extension-gfm-table#css
+	 */
+	.markdown {
+		/* Light theme. */
+		--color-canvas-default: #ffffff;
+		--color-canvas-subtle: #f6f8fa;
+		--color-border-default: #d0d7de;
+		--color-border-muted: hsla(210, 18%, 87%, 1);
+
+		table {
+			border-spacing: 0;
+			border-collapse: collapse;
+			display: block;
+			margin-top: 0;
+			margin-bottom: 16px;
+			width: max-content;
+			max-width: 100%;
+			overflow: auto;
+		}
+
+		tr {
+			background-color: var(--color-canvas-default);
+			border-top: 1px solid var(--color-border-muted);
+		}
+
+		tr:nth-child(2n) {
+			background-color: var(--color-canvas-subtle);
+		}
+
+		td,
+		th {
+			padding: 6px 13px;
+			border: 1px solid var(--color-border-default);
+		}
+
+		th {
+			font-weight: 600;
+		}
+
+		table img {
+			background-color: transparent;
+		}
+	}
 }
 
 /* Larger icon on desktop. The @media decleration should be in sync with `useMobile.tsx` */
