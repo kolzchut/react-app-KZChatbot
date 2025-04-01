@@ -334,4 +334,16 @@
     div[data-radix-popper-content-wrapper]:has(+ button[data-state="open"]) {
         visibility: visible;
     }
+
+	/**
+	 * iOS specific styles
+	 * This uses the -webkit-touch-callout property to target iOS devices
+	 * @see https://stackoverflow.com/questions/30102792/css-media-query-to-target-only-ios-devices
+ 	 */
+	@supports (-webkit-touch-callout: none) {
+		/* @Note the main input must never be less than 16px on iOS, or the screen will zoom in on click */
+		input[name="question"] {
+			font-size: 16px;
+		}
+	}
 }
