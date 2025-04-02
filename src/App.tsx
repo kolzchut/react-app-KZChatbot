@@ -147,18 +147,18 @@ function App() {
     }
   };
 
-  const hasMessages = () => {
-    return messages.some((message) => message.type === MessageType.User);
-  };
+	const hasMessages = useCallback(() => {
+		return messages.some((message) => message.type === MessageType.User);
+	}, [messages]);
 
-  const handleChatSetIsOpen = (isOpen: boolean) => {
-    if (!isOpen && !hasMessages()) {
-      pushAnalyticsEvent("closed_unused");
-    } else if (isOpen) {
-      pushAnalyticsEvent("opened");
-    }
-    chatSetIsOpen(isOpen);
-  };
+	const handleChatSetIsOpen = useCallback((isOpen: boolean) => {
+		if (!isOpen && !hasMessages()) {
+			pushAnalyticsEvent("closed_unused");
+		} else if (isOpen) {
+			pushAnalyticsEvent("opened");
+		}
+		chatSetIsOpen(isOpen);
+	}, [hasMessages]);
 
   const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
     if (messageContainerRef.current) {
@@ -246,6 +246,12 @@ function App() {
     }
   }, [setMessages, globalConfigObject]);
 
+  useEffect(() => {
+    if (globalConfigObject?.autoOpen) {
+      handleChatSetIsOpen(true);
+    }
+  }, [globalConfigObject, handleChatSetIsOpen]);
+
   return (
     <Popover
       open={chatIsOpen}
@@ -323,3 +329,4 @@ function App() {
 }
 
 export default App;
+

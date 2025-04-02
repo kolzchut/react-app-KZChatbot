@@ -40,6 +40,7 @@ declare global {
         new_question_hint: string;
       };
       restPath: string;
+      autoOpen: boolean;
     };
   }
 }
