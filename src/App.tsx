@@ -33,6 +33,22 @@ function App() {
   const [showScrollWidget, setShowScrollWidget] = useState(false);
   const isMobile = useMobile();
 
+  // Add useEffect to control body scrolling
+  useEffect(() => {
+    if (isMobile && chatIsOpen) {
+      // Prevent scrolling on the body when chat is open on mobile
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Restore scrolling when chat is closed
+      document.body.style.overflow = '';
+    }
+
+    // Cleanup function to restore scrolling when component unmounts
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobile, chatIsOpen]);
+
   const getAnswer = async (question: string): Promise<Answer | void> => {
     const isProduction = import.meta.env.MODE === "production";
     const url = isProduction
@@ -256,6 +272,7 @@ function App() {
     <Popover
       open={chatIsOpen}
       onOpenChange={(open) => handleChatSetIsOpen(open)}
+      // Removed modal property since it causes display issues
     >
       <PopoverTrigger
 		id="kzchatbot-trigger"
@@ -280,6 +297,23 @@ function App() {
           </p>
         </div>
       </PopoverTrigger>
+      {/* Overlay to block background clicks on mobile when chat is open */}
+      {isMobile && chatIsOpen && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            zIndex: 39, // Lower z-index to ensure it's below the popover content
+            background: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+            touchAction: "none", // Prevent touch events from passing through
+            pointerEvents: "auto", // Ensure clicks are captured
+          }}
+          onClick={(e) => e.stopPropagation()} // Prevent clicks from propagating
+        />
+      )}
       <PopoverContent
         style={{
           direction: "rtl",
@@ -289,6 +323,7 @@ function App() {
           maxHeight: "85vh",
           overflow: "visible",
           position: "relative",
+          zIndex: 50, // Explicitly set a high z-index to ensure it's above the overlay
         }}
       >
         <ClosePopover
@@ -329,4 +364,3 @@ function App() {
 }
 
 export default App;
-
