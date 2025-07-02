@@ -1,0 +1,139 @@
+/* Chat Area Container - Main layout matching Figma design */
+
+
+.gradient-border-wrapper {
+  position: relative;
+  /* width: 1140px; */
+  /* height: 211px; */
+  padding: 2px; /* Border thickness */
+  border-radius: 10px;
+  background: linear-gradient(135deg, #3284FF, #cbe0ff, #D65CFF, #f1c9ff);
+  background-size: 200% 200%;
+  animation: circularFlow 2s linear infinite;
+  box-shadow: none; /* no shadow normally */
+  transition: box-shadow 0.3s ease; /* smooth transition */
+}
+
+.gradient-border-wrapper:hover {
+  box-shadow: 0 0 16px 2px rgba(214, 92, 255, 0.3); /* pink glow on hover */
+}
+
+.gradient-border-wrapper.disabled {
+  z-index: -5; /* Move to the back */
+  background: none;
+  animation: none;
+}
+
+@keyframes circularFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 50% 100%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  75% {
+    background-position: 50% 0%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.chat-area-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 39rem;
+  /* height: 10rem; */
+  background: #999;
+  box-sizing: border-box;
+  font-family: "Open Sans", sans-serif;
+  margin: auto;
+  border-radius: 0.5rem;
+  position: relative;
+  top: 50%;
+}
+.chat-area-container.disabled {
+  opacity: 0.4;
+  z-index: 5;
+}
+
+
+.chat-area-content {
+  width: 101%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  /* position: fixed; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  margin: auto;
+  padding-top: 1.5rem;
+  background: transparent;
+}
+
+.chat-area-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
+  direction: rtl;
+  gap: 0.5rem;
+  color: #2D5B85;
+  font-family: "Open Sans";
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+
+/* Responsive design for different screen sizes */
+@media (max-width: 768px) {
+  .chat-area-container {
+    padding: 16px;
+    height: 100vh;
+  }
+  
+  .chat-area-content {
+    max-width: 100%;
+    padding: 20px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-area-container {
+    padding: 12px;
+  }
+  
+  .chat-area-content {
+    padding: 16px 0;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .chat-area-container {
+    background: #FFFFFF;
+    border: 2px solid #000000;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .chat-area-container {
+    background: linear-gradient(180deg, #1E293B 0%, #0F172A 100%);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .chat-area-container,
+  .chat-area-content {
+    transition: none;
+  }
+}

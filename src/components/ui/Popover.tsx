@@ -1,34 +1,47 @@
 import * as React from "react";
-import * as PopoverPrimitive from "@radix-ui/react-popover";
-
 import { cn } from "@/lib/utils";
 
-const Popover = PopoverPrimitive.Root;
+interface PopoverProps {
+  isChatOpen: boolean;
+  children: React.ReactNode;
+}
 
-const PopoverTrigger = PopoverPrimitive.Trigger;
+const Popover: React.FC<PopoverProps> = ({ isChatOpen, children }) => {
+  if (!isChatOpen) return null;
+  
+  return (
+    <div className="fixed inset-0 z-40">
+      {children}
+    </div>
+  );
+};
 
 const PopoverContent = React.forwardRef<
-  React.ElementRef<typeof PopoverPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
->(({ className, align = "center", sideOffset = 4, ...props }, ref) => (
-  <PopoverPrimitive.Portal
-    container={document.getElementById("kzchatbot")}
-    forceMount={true}
-  >
-    <PopoverPrimitive.Content
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & {
+    align?: "start" | "center" | "end";
+    sideOffset?: number;
+  }
+>(({ className, align = "center", sideOffset = 4, children, style, ...props }, ref) => {
+  return (
+    <div
       ref={ref}
-      align={align}
-      sideOffset={sideOffset}
       className={cn(
-        "border border-solid border-white overflow-hidden z-50 w-[327px] h-[515px] flex flex-col justify-between bg-popover text-popover-foreground outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        "fixed bottom-4 right-4 border border-solid border-white overflow-hidden z-50 w-[327px] h-[515px] flex flex-col justify-between bg-white text-gray-900 outline-none shadow-lg rounded-lg",
         className,
       )}
-      onPointerDownOutside={(e) => e.preventDefault()} // Prevent clicks outside from closing
-      onInteractOutside={(e) => e.preventDefault()} // Prevent any interaction outside from closing
+      style={{
+        transition: "all 0.2s ease-in-out",
+        opacity: 1,
+        transform: "scale(1)",
+        ...style
+      }}
       {...props}
-    />
-  </PopoverPrimitive.Portal>
-));
-PopoverContent.displayName = PopoverPrimitive.Content.displayName;
+    >
+      {children}
+    </div>
+  );
+});
+PopoverContent.displayName = "PopoverContent";
 
-export { Popover, PopoverTrigger, PopoverContent };
+export { Popover, PopoverContent };

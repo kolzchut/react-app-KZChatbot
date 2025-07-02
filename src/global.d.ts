@@ -11,6 +11,7 @@ declare global {
       usageHelpUrl: string;
       referrer: string;
       slugs: {
+        ask_ai: string
         chat_icon: string;
         chat_description: string;
         chat_tip_link: string;

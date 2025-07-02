@@ -5,6 +5,7 @@ import { forwardRef } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from 'remark-gfm';
 import AlertIcon from "@/assets/alert.svg";
+import Stars from "@/assets/purple-stars.svg";
 import { pushAnalyticsEvent } from "@/lib/analytics";
 
 interface MessagesProps {
@@ -18,56 +19,61 @@ interface MessagesProps {
   initialErrors: Errors;
 }
 
-const Messages = forwardRef<HTMLDivElement, MessagesProps>(
-  (
-    {
-      messages,
-      setMessages,
-      isLoading,
-      onScroll,
-      globalConfigObject,
-      errors,
-      setErrors,
-      initialErrors,
-    },
-    ref,
-  ) => {
-    if (!messages) {
-      return null;
+const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
+  messages,
+  setMessages,
+  isLoading,
+  onScroll,
+  globalConfigObject,
+  errors,
+  setErrors,
+  initialErrors,
+}, ref,) => {
+  if (!messages) {
+    return null;
+  }
+  console.log("messages", messages)
+  const getMessageClasses = (messageType: MessageType) => {
+    if (
+      [MessageType.Bot, MessageType.StartBot, MessageType.Warning].includes(
+        messageType,
+      )
+    ) {
+      return "message-bot-figma";
+    } else if (messageType === MessageType.User) {
+      return "message-user-figma";
+    } else if (messageType === MessageType.Error) {
+      return "flex justify-between text-md px-3 py-4 mb-2 bg-alert text-alert rounded-[10px_10px_10px_0] mr-6";
     }
+  }; return (
+    <div
+      className="chat-container"
+      onScroll={onScroll}
+      ref={ref}
+    >
+      {messages.map(
+        (message) =>
+          message.content && (
+            <div key={message.id}>
+              {message.isFirstQuestion === false && (
+                <hr className="h-[1px] border-line left-3 relative w-[calc(100%_+_1.5rem)] my-3" />
+              )}
 
-    const getMessageClasses = (messageType: MessageType) => {
-      if (
-        [MessageType.Bot, MessageType.StartBot, MessageType.Warning].includes(
-          messageType,
-        )
-      ) {
-        return "text-sm p-3 mb-2 bg-message-bot-background text-message-bot-foreground rounded-[10px_10px_10px_0] mr-6";
-      } else if (messageType === MessageType.User) {
-        return "text-sm p-3 mb-2 bg-message-user-background text-message-user-foreground rounded-[10px_10px_0_10px] ml-[3.8rem]";
-      } else if (messageType === MessageType.Error) {
-        return "flex justify-between text-md px-3 py-4 mb-2 bg-alert text-alert rounded-[10px_10px_10px_0] mr-6";
-      }
-    };
+              {message.type === MessageType.User ? (
+                <div className={getMessageClasses(message.type)}>
+                  {message.content}
+                </div>
+              ) : (<div className="message-bot-container">
+                {/* Bot Avatar */}
+                <div className="bot-avatar">
+                  <img src={Stars} alt="Bot Avatar" />
+                </div>
 
-    return (
-      <div
-        className="px-4 flex-1 overflow-auto pb-4"
-        onScroll={onScroll}
-        ref={ref}
-      >
-        {messages.map(
-          (message) =>
-            message.content && (
-              <div key={message.id}>
-                {message.isFirstQuestion === false && (
-                  <hr className="h-[1px] border-line left-3 relative w-[calc(100%_+_1.5rem)] my-3" />
-                )}
                 <div className={getMessageClasses(message.type)}>
                   {message.type === MessageType.Bot ? (
                     <Markdown
-						remarkPlugins={[remarkGfm]}
-						className="markdown">{message.content}</Markdown>
+                      remarkPlugins={[remarkGfm]}
+                      className="markdown">{message.content}</Markdown>
                   ) : (
                     message.content
                   )}
@@ -79,49 +85,52 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(
                     />
                   )}
                 </div>
-                {message.type === MessageType.Bot && (
-                  <>
-					  {message.links && message.links.length > 0 && (
-						  <div className="bg-message-bot-background text-message-bot-foreground border-r-4 border-message-user-background pr-[5px] pl-3 py-2 mb-[6px]">
-                        <span className="text-sm font-bold text-input-placholder mb-1 inline-block">
-                          {globalConfigObject?.slugs?.returning_links_title}
-                        </span>
-                        <ul className="list-inside">
-                          {message.links.map((link, index) => (
-                            <li
-                              key={index}
-                              className="text-sm mb-1 list-image-[url(assets/arrow-left.svg)]"
-                            >
-                              <a
-                                href={link.url}
-                                target="_blank"
-                                className="text-sm mr-[2px] text-input-placholder"
-								onClick={() => pushAnalyticsEvent("link_clicked", link.title )}
-							  >
-                                {link.title}
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    <Rate
-                      message={message}
-                      setMessages={setMessages}
-                      globalConfigObject={globalConfigObject}
-                      errors={errors}
-                      setErrors={setErrors}
-                      initialErrors={initialErrors}
-                    />
-                  </>
-                )}
               </div>
-            ),
-        )}
-        {isLoading && <TypingIndicator />}
-      </div>
-    );
-  },
+              )}
+
+              {message.type === MessageType.Bot && (
+                <>
+                  {/* AI Disclaimer */}
+                  <div className="ai-disclaimer">
+                    התשובה מבוססת AI. יש לבדוק את המידע המלא בדפים הבאים:
+                  </div>
+
+                  {/* Links Section */}
+                  {message.links && message.links.length > 0 && (
+                    <div className="links-container">
+                      {message.links.map((link, index) => (
+                        <a
+                          key={index}
+                          href={link.url}
+                          target="_blank"
+                          className="link-card"
+                          onClick={() => pushAnalyticsEvent("link_clicked", link.title)}
+                        >                            <svg className="link-icon" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.5 4.5h-3A1.5 1.5 0 003 6v7.5A1.5 1.5 0 004.5 15h7.5A1.5 1.5 0 0013.5 13.5v-3M10.5 3h3v3M7.5 10.5l6-6" stroke="var(--kzcb-cyan)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                          <span className="link-card-text">{link.title}</span>
+                        </a>
+                      ))}
+                    </div>
+                  )}
+
+                  <Rate
+                    message={message}
+                    setMessages={setMessages}
+                    globalConfigObject={globalConfigObject}
+                    errors={errors}
+                    setErrors={setErrors}
+                    initialErrors={initialErrors}
+                  />
+                </>
+              )}
+            </div>
+          ),
+      )}
+      {isLoading && <TypingIndicator />}
+    </div>
+  );
+},
 );
 
 export default Messages;

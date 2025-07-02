@@ -1,10 +1,13 @@
-import PaperPlaneIcon from "@/assets/paper-plane.svg";
-import { Input } from "@/components";
 import { Errors, Message } from "@/types";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMobile } from "@/lib/useMobile";
 import { pushAnalyticsEvent } from "@/lib/analytics";
 import WebiksLogo from "@/assets/webiks-logo.svg";
+import ChatInput from "./ChatInput";
+import "./chatInput.css";
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { setQuestion, selectQuestion } from '@/store/slices/questionSlice';
+import { openChat } from '@/store/slices/chatSlice';
 
 interface FooterProps {
   isLoading: boolean;
@@ -12,12 +15,10 @@ interface FooterProps {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   setShowInput: React.Dispatch<React.SetStateAction<boolean>>;
   globalConfigObject: typeof window.KZChatbotConfig | null;
-  question: string;
-  setQuestion: React.Dispatch<React.SetStateAction<string>>;
   errors: Errors;
   setErrors: React.Dispatch<React.SetStateAction<Errors>>;
   messages: Message[];
-  chatIsOpen: boolean;
+  isChatOpen: boolean;
 }
 
 const Footer = ({
@@ -26,15 +27,20 @@ const Footer = ({
   handleSubmit,
   setShowInput,
   globalConfigObject,
-  question,
-  setQuestion,
   errors,
   setErrors,
   messages,
-  chatIsOpen,
+  isChatOpen,
 }: FooterProps) => {
+  const dispatch = useAppDispatch();
+  const reduxQuestion = useAppSelector(selectQuestion);
+  const [localQuestion, setLocalQuestion] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const isMobile = useMobile();
+
+  // Persist submitted question in sessionStorage to prevent duplicate submission
+  const submittedKey = 'chatbot_submitted_question';
+
 
   useEffect(() => {
     let isBotStarted = true;
@@ -46,10 +52,41 @@ const Footer = ({
     }
     if (isMobile && isBotStarted) return;
 
-    if (chatIsOpen && showInput && inputRef.current && messages.length) {
+    if (isChatOpen && showInput && inputRef.current && messages.length) {
       inputRef.current.focus();
     }
-  }, [isMobile, inputRef, showInput, messages, chatIsOpen]);
+  }, [isMobile, inputRef, showInput, messages, isChatOpen]);
+
+  // Clear local state when Redux state is reset
+  useEffect(() => {
+    if (reduxQuestion === '') {
+      setLocalQuestion('');
+      sessionStorage.removeItem(submittedKey);
+    }
+  }, [reduxQuestion]);
+
+  // Handle submission when Redux question is set
+  useEffect(() => {
+    const submitted = sessionStorage.getItem(submittedKey);
+    if (
+      reduxQuestion &&
+      reduxQuestion.trim() &&
+      submitted !== reduxQuestion
+    ) {
+      // Create a fake form event to pass to handleSubmit
+      const fakeEvent = {
+        preventDefault: () => {},
+        target: {
+          elements: {
+            namedItem: () => ({ value: reduxQuestion })
+          }
+        }
+      } as unknown as React.FormEvent<HTMLFormElement>;
+
+      handleSubmit(fakeEvent);
+      sessionStorage.setItem(submittedKey, reduxQuestion);
+    }
+  }, [reduxQuestion]);
 
   if (
     isLoading ||
@@ -59,7 +96,7 @@ const Footer = ({
   }
   const slugs = window.KZChatbotConfig.slugs;
   const handleOnMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuestion(e.target.value);
+    setLocalQuestion(e.target.value);
 
     const charLimitSlug =
       globalConfigObject?.slugs.question_character_limit || "";
@@ -73,85 +110,66 @@ const Footer = ({
     }));
   };
 
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (localQuestion.trim()) {
+      // First, save to Redux store and open chat
+      dispatch(setQuestion(localQuestion.trim()));
+      dispatch(openChat());
+      // Clear local state immediately
+      setLocalQuestion('');
+      // The useEffect will handle calling handleSubmit when Redux state updates
+    }
+  };
+
   return (
     <>
       {showInput ? (
-        <div className="px-4">
-          <div className="flex justify-end items-center text-links-foreground text-sm mb-2">
-            {globalConfigObject?.usageHelpUrl && (
-              <>
-                <a
-                  href={globalConfigObject.usageHelpUrl}
-                  target="_blank"
-                  onClick={() => pushAnalyticsEvent("help_clicked")}
-                >
-                  {slugs?.chat_tip_link}
-                </a>
-                <span className="px-2 "> | </span>
-              </>
-            )}
-            {globalConfigObject?.termsofServiceUrl && (
-              <a
-                href={globalConfigObject.termsofServiceUrl}
-                target="_blank"
-                onClick={() => pushAnalyticsEvent("tos_clicked")}
-              >
-                {slugs?.tc_link}
-              </a>
-            )}
-          </div>
-          <form
-            onSubmit={handleSubmit}
-            className="flex items-center flex-col pb-2"
-          >
-            <Input
-              ref={inputRef}
-              type="text"
-              name="question"
-              value={question}
-              onChange={handleOnMessageChange}
-              placeholder={slugs?.question_field}
-              title={slugs?.send_button}
-              submitElement={
-                <>
-                  <span className="sr-only">{slugs?.send_button}</span>
-                  <img src={PaperPlaneIcon} className="block" alt="" />
-                </>
-              }
-              maxLength={globalConfigObject?.questionCharacterLimit || 150}
-              errors={errors}
-            />
-            <span className="text-xs text-disclaimer">
-              {slugs?.question_disclaimer}
-            </span>
-          </form>
-        </div>
+        <ChatInput question={localQuestion} handleSubmit={handleFormSubmit} errors={errors} handleOnMessageChange={handleOnMessageChange} />
       ) : (
-        <div className="px-4 text-center mb-2">
-          <button
-            onClick={() => {
-              setShowInput(true);
-              pushAnalyticsEvent("restart_clicked");
-            }}
-            className="relative block mx-auto my-0 mb-2 bg-button text-button-foreground text-xs font-bold h-[29px] rounded-full px-5 before:absolute before:bg-line before:w-[200px] before:h-[1px] before:right-0 before:top-1/2 before:translate-x-full before:-translate-y-1/2 before:pointer-events-none
-       after:absolute after:bg-line after:w-[200px] after:h-[1px] after:left-0 after:top-1/2 after:-translate-x-full after:-translate-y-1/2 after:pointer-events-none"
-          >
-            {slugs?.new_question_button}
-          </button>
-          <span className="block text-xs text-white">
-            {slugs?.new_question_hint}
-          </span>
+        <div className="new-question-section">
+          <div className="new-question-divider-container">
+            <div className="new-question-divider"></div>
+            <button
+              onClick={() => {
+                setShowInput(true);
+                pushAnalyticsEvent("restart_clicked");
+              }}
+              className="new-question-button"
+            >
+              <div className="new-question-icon">
+                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="16" cy="16" r="16" fill="url(#gradient)" />
+                  <path d="M16 10v12m-6-6h12" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                  <defs>
+                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="11.952%" stopColor="#3284ff" />
+                      <stop offset="83.062%" stopColor="#d65cff" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>              <span className="new-question-button-text">
+                {slugs?.new_question_button || "שאלה חדשה"}
+              </span>
+            </button>
+            <div className="new-question-divider"></div>
+          </div>
+          <div className="new-question-disclaimer">
+            הצ'אט לא זוכר תשובות לשאלות קודמות. יש לנסח שאלה חדשה.
+          </div>
         </div>
       )}
       <div
+      //TODO: fix it
         className="flex"
         style={{
-          transform: "translateY(100%)",
+          // transform: "translateY(100%)",
           background: "#e5e7eb",
-          padding: "0.375rem",
-          width: "100%",
-          position: "absolute",
-          bottom: "0",
+          // padding: "0.375rem",
+          // width: "100%",
+          height: "50px",
+          // position: "absolute",
+          // bottom: "0",
         }}
       >
         <a

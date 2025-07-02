@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <link rel="icon" type="image/svg+xml" href="/vite.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Vite + React + TS</title>
+        <title>KZ Chatbot</title>
         <!-- emulate js config object -->
          <script>
             window.KZChatbotConfig = {
@@ -19,6 +19,7 @@
                     "/terms-of-use",
                 usageHelpUrl: "/faq",
                 slugs: {
+					ask_ai: "שאלו את ה-AI שלנו",
                     question_character_limit: "max",
                     chat_icon: "כל שאלה",
                     chat_tip_link: "טיפים לניסוח שאלה טובה",
@@ -37,7 +38,7 @@
                     ranking_request: "האם התשובה עזרה לך?",
                     returning_links_title: "כדאי לבדוק את התשובה גם כאן:",
                     tc_link: "תנאי שימוש",
-                    welcome_message_first: "aa",
+                    welcome_message_first: "ברוכים הבאים לצ'אט ה-AI, כאן ניתן לשאול שאלה בכל נושא",
                     welcome_message_second: "bb",
                     welcome_message_third: "cc",
                     questions_daily_limit: "הגעת למספר השאלות המותרות ליום",
@@ -51,6 +52,7 @@
     </head>
     <body>
 		<div class="dummy-content" style="max-width: 1000px; margin: 0 auto; padding: 20px;">
+			<div id="chat-button"></div>
 			<h1>A corrupti soluta vel magni deserunt et commodi rerum. </h1>
 			<p>Et aperiam galisum et nobis dolorUt explicabo quo recusandae dolorem 33 velit tenetur quo perferendis
 				harum. Sed dolore laborum ut impedit oditSed illum et libero ratione aut nostrum beatae et voluptates
@@ -61,6 +63,7 @@
 				commodi qui voluptates necessitatibus <em>Qui pariatur et velit doloribus</em>! In alias molestiae cum
 				quam vitaeQuo sint ut aliquid accusantium in sunt voluptatem et ratione inventore! </p>
 			<h2>Aut iusto molestiae aut deserunt quis ea iusto consequatur. </h2>
+			<div id="chat-section"></div>
 			<p>Est voluptatem nemoEx esse ut sint voluptates et eius sint. Et vero deleniti ut neque temporeAut
 				obcaecati qui cumque dolorem est tempore sint vel dolores possimus est cumque galisum. Et debitis
 				autemSed quia vel iusto amet At officia repellendus ut omnis libero qui voluptatem consequatur. Et
