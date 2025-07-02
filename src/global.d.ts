@@ -39,6 +39,7 @@ declare global {
         general_error: string;
         send_button: string;
         new_question_hint: string;
+        chat_disclaimer: string
       };
       restPath: string;
       autoOpen: boolean;

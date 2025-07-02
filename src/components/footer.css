@@ -1,0 +1,31 @@
+
+
+.webiks-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1%;
+    padding-left: 2%;
+    padding-right: 2%;
+
+
+    /* flex: 1 0 0; */
+    background-color: #E8EEF4;
+    /* height: "50px" */
+}
+
+.webiks-logo {
+    width: 3.75rem;
+    height: 1.45238rem;
+}
+
+.footer-disclaimer-text {
+    color: #4D6F8F;
+    text-align: right;
+    font-family: "Open Sans";
+    font-size: 0.7rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+}

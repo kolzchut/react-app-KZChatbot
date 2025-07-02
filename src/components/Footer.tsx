@@ -2,12 +2,14 @@ import { Errors, Message } from "@/types";
 import { useEffect, useRef, useState } from "react";
 import { useMobile } from "@/lib/useMobile";
 import { pushAnalyticsEvent } from "@/lib/analytics";
-import WebiksLogo from "@/assets/webiks-logo.svg";
+
 import ChatInput from "./ChatInput";
 import "./chatInput.css";
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setQuestion, selectQuestion } from '@/store/slices/questionSlice';
 import { openChat } from '@/store/slices/chatSlice';
+import "./footer.css"
+import WebiksFooter from "./WebiksFooter";
 
 interface FooterProps {
   isLoading: boolean;
@@ -113,12 +115,9 @@ const Footer = ({
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (localQuestion.trim()) {
-      // First, save to Redux store and open chat
       dispatch(setQuestion(localQuestion.trim()));
       dispatch(openChat());
-      // Clear local state immediately
       setLocalQuestion('');
-      // The useEffect will handle calling handleSubmit when Redux state updates
     }
   };
 
@@ -157,33 +156,10 @@ const Footer = ({
           <div className="new-question-disclaimer">
             הצ'אט לא זוכר תשובות לשאלות קודמות. יש לנסח שאלה חדשה.
           </div>
+          
         </div>
       )}
-      <div
-      //TODO: fix it
-        className="flex"
-        style={{
-          // transform: "translateY(100%)",
-          background: "#e5e7eb",
-          // padding: "0.375rem",
-          // width: "100%",
-          height: "50px",
-          // position: "absolute",
-          // bottom: "0",
-        }}
-      >
-        <a
-          href="https://webiks.com"
-          target="_blank"
-          aria-label="בקרו באתר של Webiks, נפתח בכרטיסייה חדשה"
-        >
-          <img
-            src={WebiksLogo}
-            alt="לוגו של Webiks"
-            style={{ width: "71px" }}
-          />
-        </a>
-      </div>
+      <WebiksFooter />
     </>
   );
 };

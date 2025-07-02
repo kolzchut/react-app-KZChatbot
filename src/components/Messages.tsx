@@ -32,7 +32,6 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
   if (!messages) {
     return null;
   }
-  console.log("messages", messages)
   const getMessageClasses = (messageType: MessageType) => {
     if (
       [MessageType.Bot, MessageType.StartBot, MessageType.Warning].includes(

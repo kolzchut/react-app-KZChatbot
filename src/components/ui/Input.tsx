@@ -28,6 +28,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             <button
               type="submit"
               className="chat-input-submit-button"
+              disabled={props.disabled}
             >
               {submitElement}
             </button>

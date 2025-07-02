@@ -258,6 +258,7 @@ function App() {
     }
   }, [setMessages, globalConfigObject]);
 
+
   return (
     <Popover isChatOpen={isChatOpen}>
       {/* Overlay to block background clicks on mobile when chat is open */}
@@ -286,17 +287,17 @@ function App() {
           direction: "rtl",
           margin: "0",
           marginBottom: isMobile ? "0" : "-2.5vh",
-          width: isMobile ? "100vw" : "70vh",
-          minWidth: isMobile ? "none" : "400px",
-          maxWidth: isMobile ? "none" : "500px",
-          height: isMobile ? "100vh" : "96vh",
+          width: isMobile ? "100vw" : "40vw",
+          // minWidth: isMobile ? "none" : "400px",
+          // maxWidth: isMobile ? "none" : "500px",
+          height: "100vh",
           maxHeight: isMobile ? "none" : "800px",
           overflow: "hidden",
-          position: isMobile ? "fixed" : "fixed",
-          top: isMobile ? "0" : "auto",
+          position: "fixed",
+          top: "0",
           right: isMobile ? "0" : "auto",
-          bottom: isMobile ? "0" : "1rem",
-          left: isMobile ? "0" : "1rem",
+          bottom: "0",
+          left: "0",
           zIndex: 50,
           padding: 0,
           backgroundColor: "#ffffff",

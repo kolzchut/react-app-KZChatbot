@@ -30,7 +30,7 @@ const ChatArea: React.FC = () => {
         <div className={`chat-area-container${isChatOpen ? ' disabled' : ''}`}>
         <div className={`gradient-border-wrapper${isChatOpen ? ' disabled' : ''}`}>
         <div className={`chat-area-container${isChatOpen ? ' disabled' : ''}`}>
-          <div className="chat-area-content">
+          <div className={`chat-area-content${isChatOpen ? ' disabled' : ''}`}>
             <div className="chat-area-header">
               <img src={Stars} alt="AI Bot" className="ai-icon" />
               <span>{slugs.ask_ai}</span>
@@ -39,6 +39,7 @@ const ChatArea: React.FC = () => {
               handleSubmit={handleSubmit}
               question={localQuestion}
               handleOnMessageChange={handleOnMessageChange}
+              disabled={isChatOpen}
             />
           </div>
         </div>

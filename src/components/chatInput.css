@@ -434,3 +434,9 @@
     color: #333333;
   }
 }
+.chat-input-submit-button:disabled {
+  cursor: not-allowed;
+}
+.disabled {
+  cursor: not-allowed;
+}
