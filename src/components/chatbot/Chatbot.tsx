@@ -6,17 +6,17 @@ import {
   PopoverContent,
   Footer,
   ClosePopover,
-  ScrollWidget,
 } from "@/components";
 import { pushAnalyticsEvent } from "@/lib/analytics";
 import { v4 as uuidv4 } from "uuid";
-import { HttpError } from "./lib/HttpError";
+import { HttpError } from "../../lib/HttpError";
 import { useMobile } from "@/lib/useMobile";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { openChat, closeChat, selectIsChatOpen } from "@/store/slices/chatSlice";
-import { selectQuestion, setQuestion, resetQuestion } from "@/store/slices/questionSlice";
+import { selectQuestion, resetQuestion } from "@/store/slices/questionSlice";
+import WebiksFooter from "./WebiksFooter";
 
-function App() {
+function Chatbot() {
   const dispatch = useAppDispatch();
   const isChatOpen = useAppSelector(selectIsChatOpen);
   const question = useAppSelector(selectQuestion);
@@ -32,26 +32,20 @@ function App() {
   const [errors, setErrors] = useState<Errors>(initialErrors);
   const [messages, setMessages] = useState<Message[]>([]);
   const messageContainerRef = useRef<HTMLDivElement>(null);
-  const [showScrollWidget, setShowScrollWidget] = useState(false);
   const isMobile = useMobile();
 
-  // Add useEffect to control body scrolling
   useEffect(() => {
     if (isMobile && isChatOpen) {
-      // Prevent scrolling on the body when chat is open on mobile
       document.body.style.overflow = 'hidden';
     } else {
-      // Restore scrolling when chat is closed
       document.body.style.overflow = '';
     }
 
-    // Cleanup function to restore scrolling when component unmounts
     return () => {
       document.body.style.overflow = '';
     };
   }, [isMobile, isChatOpen]);
 
-  // Add sleep utility function
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
   const getAnswer = async (question: string): Promise<Answer | void> => {
@@ -171,19 +165,6 @@ function App() {
     }
   };
 
-  // const hasMessages = useCallback(() => {
-  //   return messages.some((message) => message.type === MessageType.User);
-  // }, [messages]);
-
-  // const handleChatSetIsOpen = useCallback((isOpen: boolean) => {
-  //   if (!isOpen && !hasMessages()) {
-  //     pushAnalyticsEvent("closed_unused");
-  //   } else if (isOpen) {
-  //     pushAnalyticsEvent("opened");
-  //   }
-  //   dispatch(isOpen ? openChat() : closeChat());
-  // }, [dispatch, hasMessages]);
-
   const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
     if (messageContainerRef.current) {
       messageContainerRef.current.scrollTo({
@@ -202,13 +183,6 @@ function App() {
     }
   }, []);
 
-  const handleScroll = () => {
-    if (messageContainerRef.current) {
-      const { scrollHeight, scrollTop, clientHeight } =
-        messageContainerRef.current;
-      setShowScrollWidget(scrollHeight - scrollTop > clientHeight + 100);
-    }
-  };
 
   useEffect(() => {
     if (
@@ -278,7 +252,6 @@ function App() {
           onClick={(e) => {
             e.stopPropagation();
             dispatch(openChat());
-            // handleChatSetIsOpen(false); // Close chat when clicking on overlay
           }}
         />
       )}
@@ -287,11 +260,8 @@ function App() {
           direction: "rtl",
           margin: "0",
           marginBottom: isMobile ? "0" : "-2.5vh",
-          width: isMobile ? "100vw" : "40vw",
-          // minWidth: isMobile ? "none" : "400px",
-          // maxWidth: isMobile ? "none" : "500px",
+          width: isMobile ? "100vw" : "45vw",
           height: "100vh",
-          maxHeight: isMobile ? "none" : "800px",
           overflow: "hidden",
           position: "fixed",
           top: "0",
@@ -324,16 +294,11 @@ function App() {
             messages={messages}
             isLoading={isLoading}
             ref={messageContainerRef}
-            onScroll={handleScroll}
             globalConfigObject={globalConfigObject}
             errors={errors}
             setErrors={setErrors}
             initialErrors={initialErrors}
           />
-          <ScrollWidget
-          scrollToBottom={scrollToBottom}
-          showScrollWidget={showScrollWidget}
-        />
           <Footer
             isLoading={isLoading}
             showInput={showInput}
@@ -345,10 +310,11 @@ function App() {
             messages={messages}
             isChatOpen={isChatOpen}
           />
+          <WebiksFooter />
         </div>
       </PopoverContent>
     </Popover>
   );
 }
 
-export default App;
+export default Chatbot;

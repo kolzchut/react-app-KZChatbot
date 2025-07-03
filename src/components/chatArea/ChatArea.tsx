@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './chatArea.css';
-import ChatInput from './ChatInput';
+import ChatInput from '../chatbot/ChatInput';
 import Stars from "@/assets/purple-stars.svg";
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { openChat, selectIsChatOpen } from '@/store/slices/chatSlice';
@@ -27,8 +27,8 @@ const ChatArea: React.FC = () => {
   };
 
   return (
-        <div className={`chat-area-container${isChatOpen ? ' disabled' : ''}`}>
-        <div className={`gradient-border-wrapper${isChatOpen ? ' disabled' : ''}`}>
+    <div className={`chat-area-container${isChatOpen ? ' disabled' : ''}`}>
+      <div className={`gradient-border-wrapper${isChatOpen ? ' disabled' : ''}`}>
         <div className={`chat-area-container${isChatOpen ? ' disabled' : ''}`}>
           <div className={`chat-area-content${isChatOpen ? ' disabled' : ''}`}>
             <div className="chat-area-header">
@@ -43,8 +43,8 @@ const ChatArea: React.FC = () => {
             />
           </div>
         </div>
-        </div>
-        </div>
+      </div>
+    </div>
   );
 };
 

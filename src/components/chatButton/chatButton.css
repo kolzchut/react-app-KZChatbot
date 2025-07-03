@@ -26,6 +26,10 @@
   padding: 13px 21px;
 }
 
+.chat-button:hover .button-data {
+  background: transparent;
+}
+
 .chat-button-text {
   font-family: inherit;
   font-size: inherit;
@@ -38,21 +42,6 @@
   background-clip: text;
 }
 
-.chat-button-icon {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-  transition: filter 0.3s ease;
-}
-
-/* .chat-button:hover { */
-  /* transform: translateY(-1px); */
-/* } */
-
-.chat-button:hover .button-data {
-  background: transparent;
-}
-
 .chat-button:hover .chat-button-text {
   background: white;
   -webkit-background-clip: text;
@@ -60,9 +49,17 @@
   background-clip: text;
 }
 
+.chat-button-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  transition: filter 0.3s ease;
+}
+
 .chat-button:hover .chat-button-icon {
   filter: brightness(0) invert(1);
 }
+
 
 .chat-button:active {
   transform: translateY(0);
@@ -88,7 +85,6 @@
   filter: none;
 }
 
-/* Mobile styles - circular button with only icon */
 .chat-button-mobile {
   width: 2.75rem;
   height: 2.75rem;

@@ -2,7 +2,6 @@ import WebiksLogo from "@/assets/webiks.svg";
 import "./footer.css"
 
 const WebiksFooter = () => {
-
     const slugs = window.KZChatbotConfig?.slugs || {};
 
     return (
@@ -15,7 +14,7 @@ const WebiksFooter = () => {
                 target="_blank"
                 aria-label="בקרו באתר של Webiks, נפתח בכרטיסייה חדשה"
             >
-                <span className="flex row align-center justify-center footer-disclaimer-text weight-bold">
+                <span className="footer-disclaimer-text by-webiks">
                     by
                     <img
                         src={WebiksLogo}

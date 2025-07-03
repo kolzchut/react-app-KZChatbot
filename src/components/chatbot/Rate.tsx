@@ -2,6 +2,9 @@ import XIcon from "@/assets/x.svg";
 import { useEffect, useRef } from "react";
 import { Errors, Message } from "@/types";
 import { useRate } from "@/lib/useRate";
+import LikeIcon from "@/assets/like.svg"
+import PressedLikeIcon from "@/assets/pressed-like.svg"
+import "./footer.css"
 
 interface RateProps {
 	message: Message;
@@ -61,42 +64,36 @@ const Rate = ({
 	}, [rateIsOpen]);
 	return (
 		<div ref={ref} className="rating-container">
-			<div className="rating-text">
-				האם התשובה עזרה לך?
+			<div className="rating-visible">
+				<div className="rating-text">
+					האם התשובה עזרה לך?
+				</div>
+
+				<button
+					disabled={isFeedbackSubmitted}
+					aria-label="סמנ/י שהתשובה עזרה לי"
+					aria-pressed={message.liked === true}
+					className="rating-icon"
+					onClick={() => handleRate(message.liked === true ? null : true)}
+				>
+					<img src={message.liked ? PressedLikeIcon : LikeIcon} alt="like" />
+				</button>
+
+				<button
+					disabled={isFeedbackSubmitted}
+					aria-label="סמנ/י שהתשובה לא עזרה לי"
+					aria-pressed={message.liked === false}
+					className="rating-icon rating-icon-rotated"
+					onClick={() => handleRate(message.liked === false ? null : false)}
+				>
+					<img src={message.liked === false ? PressedLikeIcon : LikeIcon} alt="dislike" />
+				</button>
 			</div>
 
-			{/* Thumbs Up Icon */}
-			<button
-				disabled={isFeedbackSubmitted}
-				aria-label="סמנ/י שהתשובה עזרה לי"
-				aria-pressed={message.liked === true}
-				className="rating-icon"
-				onClick={() => handleRate(message.liked === true ? null : true)}
-			>
-				<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-					<path d="M7 10V20H21V10L17 6H11L7 10Z" fill={message.liked === true ? "#2d5b85" : "#d1d5db"} />
-					<path d="M3 10H7V20H3C2.4 20 2 19.6 2 19V11C2 10.4 2.4 10 3 10Z" fill={message.liked === true ? "#2d5b85" : "#d1d5db"} />
-				</svg>
-			</button>
-
-			{/* Thumbs Down Icon */}
-			<button
-				disabled={isFeedbackSubmitted}
-				aria-label="סמנ/י שהתשובה לא עזרה לי"
-				aria-pressed={message.liked === false}
-				className="rating-icon rating-icon-rotated"
-				onClick={() => handleRate(message.liked === false ? null : false)}
-			>
-				<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-					<path d="M7 10V20H21V10L17 6H11L7 10Z" fill={message.liked === false ? "#2d5b85" : "#d1d5db"} />
-					<path d="M3 10H7V20H3C2.4 20 2 19.6 2 19V11C2 10.4 2.4 10 3 10Z" fill={message.liked === false ? "#2d5b85" : "#d1d5db"} />
-				</svg>
-			</button>
-
 			{rateIsOpen && (
-				<form className="mt-2 p-2 border border-line" onSubmit={handleSubmit}>
+				<form className="rating-form" onSubmit={handleSubmit}>
 					<div className="flex justify-between items-center">
-						<span className="text-sm font-bold text-input">
+						<span className="text-sm font-bold rate-text">
 							{message.liked
 								? slugs?.like_follow_up_question
 								: slugs?.dislike_follow_up_question}
@@ -108,7 +105,7 @@ const Rate = ({
 					<div className="mb-1 mt-3">
 						<textarea
 							name="description"
-							className="block text-sm h-[69px] overflow-hidden w-full leading-[1.5] rounded-md border-textArea-border placeholder:text-sm text-input placeholder:text-textArea-placholder bg-transparent border-b outline-none border px-2 py-1"
+							className="block text-sm h-[69px] overflow-hidden w-full leading-[1.5] rate-border rounded-xl  placeholder:text-sm rate-text bg-transparent border-b outline-none border px-2 py-1"
 							style={{
 								resize: "none",
 							}}
@@ -132,16 +129,17 @@ const Rate = ({
 							</p>
 						)}
 					</div>
-					<div className="flex items-center justify-between">
+					<div className="flex items-center justify-between p-2">
 						<span className="text-xs text-disclaimer">
 							{slugs?.feedback_free_text_disclaimer}
 						</span>
-						<input
-							disabled={!isFormValid}
-							type="submit"
-							value="שליחה"
-							className="disabled:opacity-45 disabled:cursor-not-allowed rounded-full h-[29px] text-xs font-bold px-3 cursor-pointer bg-button text-button-foreground"
-						/>
+						<button disabled={!isFormValid} type="submit">
+							<div className={`button-layout ${isFormValid ? "" : "disabled"}`}>
+								<span className={`send-button ${isFormValid ? "" : "disabled"}`}>
+									<span className={`button-text ${isFormValid ? "" : "disabled"}`}>שליחה</span>
+								</span>
+							</div>
+						</button>
 					</div>
 				</form>
 			)}

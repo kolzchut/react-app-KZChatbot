@@ -1,27 +1,21 @@
-/* Chat Area Container - Main layout matching Figma design */
-
-
 .gradient-border-wrapper {
   position: relative;
-  /* width: 1140px; */
-  /* height: 211px; */
-  padding: 2px; /* Border thickness */
+  padding: 2px;
   border-radius: 10px;
   background: linear-gradient(135deg, #3284FF, #cbe0ff, #D65CFF, #f1c9ff);
   background-size: 200% 200%;
   animation: circularFlow 2s linear infinite;
-  box-shadow: none; /* no shadow normally */
-  transition: box-shadow 0.3s ease; /* smooth transition */
+  box-shadow: none;
+  transition: box-shadow 0.3s ease;
 }
 
 .gradient-border-wrapper:hover {
-  box-shadow: 0 0 16px 2px rgba(214, 92, 255, 0.3); /* pink glow on hover */
+  box-shadow: 0 0 16px 2px rgba(214, 92, 255, 0.3);
 }
 
 .gradient-border-wrapper.disabled {
-  z-index: -5; /* Move to the back */
+  z-index: -5;
   opacity: 0.6;
-  /* background: none; */
   animation: none;
 }
 
@@ -60,7 +54,6 @@
   z-index: 5;
   opacity: 0.9;
   background-color: white;
-  /* background-color: white; */
 }
 
 
@@ -69,9 +62,6 @@
   max-width: 600px;
   display: flex;
   flex-direction: column;
-  /* position: fixed; */
-  /* justify-content: center; */
-  /* align-items: center; */
   margin: auto;
   padding-top: 1.5rem;
   background: transparent;
@@ -97,12 +87,10 @@
 }
 
 
-/* Responsive design for different screen sizes */
 @media (max-width: 768px) {
   .chat-area-container {
     padding: 16px;
     width: 90vw;
-    height: 15vh;
   }
   
   .chat-area-content {
@@ -114,6 +102,7 @@
 @media (max-width: 480px) {
   .chat-area-container {
     padding: 12px;
+    width: 90vw;
   }
   
   .chat-area-content {
@@ -121,7 +110,6 @@
   }
 }
 
-/* High contrast mode support */
 @media (prefers-contrast: high) {
   .chat-area-container {
     background: #FFFFFF;
@@ -129,14 +117,12 @@
   }
 }
 
-/* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .chat-area-container {
     background: linear-gradient(180deg, #1E293B 0%, #0F172A 100%);
   }
 }
 
-/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   .chat-area-container,
   .chat-area-content {

@@ -3,51 +3,51 @@
 @import "./styles/utilities.css";
 
 :root {
-    --kzcb-white: #ffffff;
-    --kzcb-input-background: #ffffff;
-    --kzcb-input-placeholder: #005aab;
-    --kzcb-textarea-placeholder: #ffffff;
-    --kzcb-textarea-border: #ffffff;
-    --kzcb-cta-background: #005aab;
-    --kzcb-cta-foreground: #ffffff;
-    --kzcb-popover: #f2f6fa;
-    --kzcb-popover-foreground: 222.2 84% 4.9%;
-    --kzcb-disclaimer-foreground: rgba(45, 91, 133, 0.7);
-    --kzcb-links-foreground: #3284ff;
-    --kzcb-message-bot-background: #ffffff;
-    --kzcb-message-bot-foreground: #595959;
-    --kzcb-message-user-background: #2d5b85;
-    --kzcb-message-user-foreground: #ffffff;
-    --kzcb-breaking-line: rgba(212, 221, 230, 0.2);
-    --kzcb-button-background: #ffffff;
-    --kzcb-button-foreground: #005aab;
-    --kzcb-alert-background: #FFECEC;
-    --kzcb-alert-foreground: #8D0000;
-    
-    --kzcb-cyan: #3284ff;
-    --kzcb-purple: #d65cff;
-    --kzcb-main-blue: #2d5b85;
-    --kzcb-text-gray: #595959;
+	--kzcb-white: #ffffff;
+	--kzcb-input-background: #ffffff;
+	--kzcb-input-placeholder: #005aab;
+	--kzcb-textarea-placeholder: #9CA3AF;
+	--kzcb-textarea-border: #ffffff;
+	--kzcb-cta-background: #005aab;
+	--kzcb-cta-foreground: #ffffff;
+	--kzcb-popover: #f2f6fa;
+	--kzcb-popover-foreground: 222.2 84% 4.9%;
+	--kzcb-disclaimer-foreground: rgba(45, 91, 133, 0.7);
+	--kzcb-links-foreground: #3284ff;
+	--kzcb-message-bot-background: #ffffff;
+	--kzcb-message-bot-foreground: #595959;
+	--kzcb-message-user-background: #2d5b85;
+	--kzcb-message-user-foreground: #ffffff;
+	--kzcb-breaking-line: rgba(212, 221, 230, 0.2);
+	--kzcb-button-background: #ffffff;
+	--kzcb-button-foreground: #005aab;
+	--kzcb-alert-background: #FFECEC;
+	--kzcb-alert-foreground: #8D0000;
 
-    --kzcb-background: #005aab;
-    --kzcb-foreground: 222.2 84% 4.9%;
-    --kzcb-card: 0 0% 100%;
-    --kzcb-card-foreground: 222.2 84% 4.9%;
-    --kzcb-primary: 222.2 47.4% 11.2%;
-    --kzcb-primary-foreground: 210 40% 98%;
-    --kzcb-secondary: 210 40% 96.1%;
-    --kzcb-secondary-foreground: 222.2 47.4% 11.2%;
-    --kzcb-muted: 210 40% 96.1%;
-    --kzcb-muted-foreground: 215.4 16.3% 46.9%;
-    --kzcb-accent: 210 40% 96.1%;
-    --kzcb-accent-foreground: 222.2 47.4% 11.2%;
-    --kzcb-destructive-background: #e80000;
-    --kzcb-destructive-foreground: #ffffff;
-    --destructive-foreground: 210 40% 98%;
-    --kzcb-border: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --kzcb-radius: 0.5rem;
-    --tw-translate-y: 50%;
+	--kzcb-cyan: #3284ff;
+	--kzcb-purple: #d65cff;
+	--kzcb-main-blue: #2d5b85;
+	--kzcb-text-gray: #595959;
+
+	--kzcb-background: #005aab;
+	--kzcb-foreground: 222.2 84% 4.9%;
+	--kzcb-card: 0 0% 100%;
+	--kzcb-card-foreground: 222.2 84% 4.9%;
+	--kzcb-primary: 222.2 47.4% 11.2%;
+	--kzcb-primary-foreground: 210 40% 98%;
+	--kzcb-secondary: 210 40% 96.1%;
+	--kzcb-secondary-foreground: 222.2 47.4% 11.2%;
+	--kzcb-muted: 210 40% 96.1%;
+	--kzcb-muted-foreground: 215.4 16.3% 46.9%;
+	--kzcb-accent: 210 40% 96.1%;
+	--kzcb-accent-foreground: 222.2 47.4% 11.2%;
+	--kzcb-destructive-background: #e80000;
+	--kzcb-destructive-foreground: #ffffff;
+	--destructive-foreground: 210 40% 98%;
+	--kzcb-border: 214.3 31.8% 91.4%;
+	--ring: 222.2 84% 4.9%;
+	--kzcb-radius: 0.5rem;
+	--tw-translate-y: 50%;
 }
 
 #kzchatbot {
@@ -57,6 +57,7 @@
 	bottom: 0.75rem;
 	left: 0.75rem;
 	z-index: 999;
+
 	.kzcb-chat {
 		display: flex;
 		flex-direction: column;
@@ -117,7 +118,7 @@
 
 @media (min-width: 768px) {
 	#kzchatbot-trigger {
-		transform: scaleX( 1.3 ) scaleY( 1.3 );
+		transform: scaleX(1.3) scaleY(1.3);
 	}
 
 	#kzchatbot {
@@ -134,17 +135,18 @@
 		max-height: none;
 		border-radius: 0;
 	}
-	
+
 	.chat-header {
 		padding: 12px 16px;
 		height: 56px;
 	}
-	
+
 	.header-title {
 		font-size: 18px;
 	}
-	
-	.ai-icon, .close-icon {
+
+	.ai-icon,
+	.close-icon {
 		width: 28px;
 		height: 28px;
 	}
@@ -226,7 +228,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
-	align-items: flex-end;
+	/* align-items: flex-end; */
 	overflow-y: auto;
 	flex: 1;
 	height: 100%;
@@ -236,8 +238,9 @@
 	background-color: var(--kzcb-main-blue);
 	color: #ffffff;
 	padding: 16px;
-	border-radius: 8px 8px 8px 0;
-	max-width: 610px;
+	border-radius: 8px 8px 0 8px;
+	/* max-width: 610px; */
+	max-width: 80%;
 	align-self: flex-end;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 16px;
@@ -264,7 +267,7 @@
 	color: var(--kzcb-text-gray);
 	padding: 16px;
 	border-radius: 8px 8px 8px 0;
-	max-width: 610px;
+	max-width: 100%;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 16px;
 	font-weight: 400;
@@ -280,6 +283,7 @@
 	text-align: right;
 	direction: rtl;
 	line-height: 26px;
+	margin-top: 1rem;
 }
 
 .links-container {
@@ -296,7 +300,7 @@
 	padding: 16px;
 	display: flex;
 	align-items: center;
-	justify-content: flex-end;
+	/* justify-content: flex-end; */
 	gap: 8px;
 	width: 100%;
 	text-decoration: none;
@@ -319,18 +323,27 @@
 
 .rating-container {
 	display: flex;
+	flex-direction: column;
+	gap: 0.5rem
+}
+
+.rating-visible {
+	display: flex;
 	flex-direction: row;
 	gap: 8px;
 	align-items: center;
-	justify-content: flex-end;
+	justify-content: flex-start;
+	position: relative;
+	height: 2rem;
+	top: 0.65rem;
 }
 
 .rating-text {
-	font-family: 'Open Sans', sans-serif;
-	font-size: 14px;
-	font-weight: 600;
-	color: var(--kzcb-disclaimer-foreground);
+	color: rgba(45, 91, 133, 0.70);
 	text-align: center;
+	font-family: "Open Sans";
+	font-size: 0.875rem;
+	font-weight: 600;
 }
 
 .rating-icon {
@@ -342,4 +355,3 @@
 .rating-icon-rotated {
 	transform: rotate(180deg);
 }
-

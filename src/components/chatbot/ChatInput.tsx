@@ -1,4 +1,4 @@
-import Input from "./ui/Input";
+import Input from "../ui/Input";
 import SendEnebled from "@/assets/send-enabled.svg";
 import SendDisabled from "@/assets/send-disabled.svg";
 import { pushAnalyticsEvent } from "@/lib/analytics";

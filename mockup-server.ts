@@ -29,8 +29,8 @@ export async function startMockupServer(): Promise<MockupServer> {
 			'\n' +
 			'אם יש לך שאלות נוספות, אנא שאל.',
         docs: [
-          { url: 'https://example.com/doc1', title: 'Example Document 1' },
-          { url: 'https://example.com/doc2', title: 'Example Document 2' }
+          { url: 'https://example.com/doc1', title: 'כותרת בעברית' },
+          { url: 'https://example.com/doc2', title: 'כותרת בעברית' }
         ]
       };
     },

@@ -2,14 +2,14 @@ import { Errors, Message } from "@/types";
 import { useEffect, useRef, useState } from "react";
 import { useMobile } from "@/lib/useMobile";
 import { pushAnalyticsEvent } from "@/lib/analytics";
-
+import WebiksFooter from "./WebiksFooter";
+import NewQuestion from "./NewQuestion";
 import ChatInput from "./ChatInput";
 import "./chatInput.css";
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setQuestion, selectQuestion } from '@/store/slices/questionSlice';
 import { openChat } from '@/store/slices/chatSlice';
 import "./footer.css"
-import WebiksFooter from "./WebiksFooter";
 
 interface FooterProps {
   isLoading: boolean;
@@ -59,7 +59,6 @@ const Footer = ({
     }
   }, [isMobile, inputRef, showInput, messages, isChatOpen]);
 
-  // Clear local state when Redux state is reset
   useEffect(() => {
     if (reduxQuestion === '') {
       setLocalQuestion('');
@@ -67,7 +66,6 @@ const Footer = ({
     }
   }, [reduxQuestion]);
 
-  // Handle submission when Redux question is set
   useEffect(() => {
     const submitted = sessionStorage.getItem(submittedKey);
     if (
@@ -75,7 +73,6 @@ const Footer = ({
       reduxQuestion.trim() &&
       submitted !== reduxQuestion
     ) {
-      // Create a fake form event to pass to handleSubmit
       const fakeEvent = {
         preventDefault: () => {},
         target: {
@@ -96,7 +93,6 @@ const Footer = ({
   ) {
     return null;
   }
-  const slugs = window.KZChatbotConfig.slugs;
   const handleOnMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLocalQuestion(e.target.value);
 
@@ -129,37 +125,17 @@ const Footer = ({
         <div className="new-question-section">
           <div className="new-question-divider-container">
             <div className="new-question-divider"></div>
-            <button
-              onClick={() => {
+            <NewQuestion onClick={() => {
                 setShowInput(true);
                 pushAnalyticsEvent("restart_clicked");
-              }}
-              className="new-question-button"
-            >
-              <div className="new-question-icon">
-                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="16" cy="16" r="16" fill="url(#gradient)" />
-                  <path d="M16 10v12m-6-6h12" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                  <defs>
-                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="11.952%" stopColor="#3284ff" />
-                      <stop offset="83.062%" stopColor="#d65cff" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-              </div>              <span className="new-question-button-text">
-                {slugs?.new_question_button || "שאלה חדשה"}
-              </span>
-            </button>
+              }} />
             <div className="new-question-divider"></div>
           </div>
           <div className="new-question-disclaimer">
             הצ'אט לא זוכר תשובות לשאלות קודמות. יש לנסח שאלה חדשה.
           </div>
-          
         </div>
       )}
-      <WebiksFooter />
     </>
   );
 };

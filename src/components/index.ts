@@ -1,11 +1,10 @@
-import Messages from "./Messages";
-import Rate from "./Rate";
-import TypingIndicator from "./TypingIndicator";
+import Messages from "./chatbot/Messages";
+import Rate from "./chatbot/Rate";
+import TypingIndicator from "./chatbot/TypingIndicator";
 import Input from "./ui/Input";
 import { Popover, PopoverContent } from "./ui/Popover";
-import Footer from "./Footer";
-import ClosePopover from "./ClosePopover";
-import ScrollWidget from "./ScrollWidget";
+import Footer from "./chatbot/Footer";
+import ClosePopover from "./chatbot/ClosePopover";
 
 export {
   Messages,
@@ -16,5 +15,4 @@ export {
   PopoverContent,
   Footer,
   ClosePopover,
-  ScrollWidget,
 };
