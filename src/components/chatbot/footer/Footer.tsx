@@ -1,14 +1,12 @@
-import { Errors, Message } from "@/types";
 import { useEffect, useRef, useState } from "react";
-import { useMobile } from "@/lib/useMobile";
-import { pushAnalyticsEvent } from "@/lib/analytics";
-import WebiksFooter from "./WebiksFooter";
-import NewQuestion from "./NewQuestion";
-import ChatInput from "./ChatInput";
-import "./chatInput.css";
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setQuestion, selectQuestion } from '@/store/slices/questionSlice';
-import { openChat } from '@/store/slices/chatSlice';
+import { Errors, Message } from "@/types.ts";
+import { useMobile } from "@/lib/useMobile.ts";
+import { pushAnalyticsEvent } from "@/lib/analytics.ts";
+import { useAppDispatch, useAppSelector } from '@/store/hooks.ts';
+import { setQuestion, selectQuestion } from '@/store/slices/questionSlice.ts';
+import { openChat } from '@/store/slices/chatSlice.ts';
+import NewQuestion from "../newQuestion/NewQuestion.tsx";
+import ChatInput from "../chatInput/ChatInput.tsx";
 import "./footer.css"
 
 interface FooterProps {
@@ -40,9 +38,7 @@ const Footer = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const isMobile = useMobile();
 
-  // Persist submitted question in sessionStorage to prevent duplicate submission
   const submittedKey = 'chatbot_submitted_question';
-
 
   useEffect(() => {
     let isBotStarted = true;
@@ -74,7 +70,7 @@ const Footer = ({
       submitted !== reduxQuestion
     ) {
       const fakeEvent = {
-        preventDefault: () => {},
+        preventDefault: () => { },
         target: {
           elements: {
             namedItem: () => ({ value: reduxQuestion })
@@ -120,23 +116,19 @@ const Footer = ({
   return (
     <>
       {showInput ? (
-        <ChatInput question={localQuestion} handleSubmit={handleFormSubmit} errors={errors} handleOnMessageChange={handleOnMessageChange} />
+        <ChatInput
+          question={localQuestion}
+          handleSubmit={handleFormSubmit}
+          errors={errors}
+          handleOnMessageChange={handleOnMessageChange} />
       ) : (
-        <div className="new-question-section">
-          <div className="new-question-divider-container">
-            <div className="new-question-divider"></div>
-            <NewQuestion onClick={() => {
-                setShowInput(true);
-                pushAnalyticsEvent("restart_clicked");
-              }} />
-            <div className="new-question-divider"></div>
-          </div>
-          <div className="new-question-disclaimer">
-            הצ'אט לא זוכר תשובות לשאלות קודמות. יש לנסח שאלה חדשה.
-          </div>
-        </div>
+        <NewQuestion onClick={() => {
+          setShowInput(true);
+          pushAnalyticsEvent("restart_clicked");
+        }} />
       )}
     </>
   );
 };
+
 export default Footer;

@@ -1,9 +1,10 @@
-import Input from "../ui/Input";
-import SendEnebled from "@/assets/send-enabled.svg";
+import { Errors } from "@/types.ts";
+import Input from "../../ui/input/Input.tsx";
+import DisclaimerFooter from "./DisclaimerFooter.tsx";
+import SendEnabled from "@/assets/send-enabled.svg";
 import SendDisabled from "@/assets/send-disabled.svg";
-import { pushAnalyticsEvent } from "@/lib/analytics";
-import { Errors } from "@/types";
 import "./chatInput.css";
+
 
 interface ChatInputProps {
     handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -33,29 +34,14 @@ const ChatInput = ({ handleSubmit, errors, question, handleOnMessageChange, disa
                     submitElement={
                         <div className="chat-input-texts-section">
                             <span className="sr-only">{slugs?.send_button}</span>
-                            <img src={question ? SendEnebled : SendDisabled} className="block" alt="" />
+                            <img src={question ? SendEnabled : SendDisabled} className="block" alt="" />
                         </div>
                     }
                     maxLength={globalConfigObject?.questionCharacterLimit || 150}
                     errors={errors}
                     disabled={disabled}
                 />
-                <div className="chat-input-footer-info">
-                    <span className="chat-input-disclaimer">
-                        {slugs?.question_disclaimer}
-                    </span>
-                    <span className="chat-input-disclaimer underline">
-                        {globalConfigObject?.termsofServiceUrl && (
-                            <a
-                                href={globalConfigObject.termsofServiceUrl}
-                                target="_blank"
-                                onClick={() => pushAnalyticsEvent("tos_clicked")}
-                            >
-                                {slugs?.tc_link}
-                            </a>
-                        )}
-                    </span>
-                </div>
+                <DisclaimerFooter />
             </form>
         </div>
     )

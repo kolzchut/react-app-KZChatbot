@@ -2,7 +2,6 @@ import { FC } from "react";
 import "./typingIndicator.css";
 
 
-
 const TypingIndicator: FC = () => {
   return (
     <div>

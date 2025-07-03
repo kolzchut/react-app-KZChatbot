@@ -2,8 +2,8 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectIsChatOpen, openChat } from '../../store/slices/chatSlice';
 import { useMobile } from '../../lib/useMobile';
-import './chatButton.css';
 import starsIcon from '../../assets/no-circle-stars.svg';
+import './chatButton.css';
 
 
 const MobileComponent = () => (

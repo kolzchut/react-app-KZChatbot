@@ -109,23 +109,3 @@
     padding: 16px 0;
   }
 }
-
-@media (prefers-contrast: high) {
-  .chat-area-container {
-    background: #FFFFFF;
-    border: 2px solid #000000;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .chat-area-container {
-    background: linear-gradient(180deg, #1E293B 0%, #0F172A 100%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .chat-area-container,
-  .chat-area-content {
-    transition: none;
-  }
-}

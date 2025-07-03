@@ -1,0 +1,43 @@
+.chat-input-footer-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 8px;
+  padding: 0 4px;
+}
+
+.chat-input-disclaimer {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #6B7280;
+  font-family: "Open Sans", sans-serif;
+}
+
+.chat-input-disclaimer.underline {
+  text-decoration: underline;
+}
+
+.chat-input-disclaimer a {
+  color: #6B7280;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.chat-input-disclaimer a:hover {
+  color: #2563EB;
+  text-decoration: underline;
+}
+
+
+@media (max-width: 768px) {
+      .chat-input-disclaimer {
+    font-size: 11px;
+    line-height: 14px;
+  }
+  
+  .chat-input-footer-info {
+    margin-top: 6px;
+  }
+}

@@ -27,7 +27,7 @@ const PopoverContent = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "fixed bottom-4 right-4 border border-solid border-white overflow-hidden z-50 w-[327px] h-[515px] flex flex-col justify-between bg-white text-gray-900 outline-none shadow-lg rounded-lg",
+        "fixed bottom-4 right-4 border border-solid border-white overflow-hidden z-50 w-[327px] flex flex-col justify-between bg-white text-gray-900 outline-none shadow-lg rounded-lg",
         className,
       )}
       style={{

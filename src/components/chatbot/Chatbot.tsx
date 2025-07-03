@@ -1,5 +1,12 @@
 import { useEffect, useState, useRef, useCallback } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { Errors, Message, MessageType, Answer } from "@/types";
+import { HttpError } from "../../lib/HttpError";
+import { pushAnalyticsEvent } from "@/lib/analytics";
+import { useMobile } from "@/lib/useMobile";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { openChat, closeChat, selectIsChatOpen } from "@/store/slices/chatSlice";
+import { selectQuestion, resetQuestion } from "@/store/slices/questionSlice";
 import {
   Messages,
   Popover,
@@ -7,16 +14,11 @@ import {
   Footer,
   ClosePopover,
 } from "@/components";
-import { pushAnalyticsEvent } from "@/lib/analytics";
-import { v4 as uuidv4 } from "uuid";
-import { HttpError } from "../../lib/HttpError";
-import { useMobile } from "@/lib/useMobile";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { openChat, closeChat, selectIsChatOpen } from "@/store/slices/chatSlice";
-import { selectQuestion, resetQuestion } from "@/store/slices/questionSlice";
-import WebiksFooter from "./WebiksFooter";
+import WebiksFooter from "./webiksFooter/WebiksFooter";
+import "./chatbot.css";
 
-function Chatbot() {
+
+const Chatbot = () => {
   const dispatch = useAppDispatch();
   const isChatOpen = useAppSelector(selectIsChatOpen);
   const question = useAppSelector(selectQuestion);
@@ -85,11 +87,11 @@ function Chatbot() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     if (question === "" || !question.trim()) {
       return false;
     }
-    
+
     setIsLoading(true);
     let isFirstQuestion = true;
 
@@ -235,60 +237,23 @@ function Chatbot() {
 
   return (
     <Popover isChatOpen={isChatOpen}>
-      {/* Overlay to block background clicks on mobile when chat is open */}
       {isMobile && (
         <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 39, // Lower z-index to ensure it's below the popover content
-            background: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
-            touchAction: "none", // Prevent touch events from passing through
-            pointerEvents: "auto", // Ensure clicks are captured
-          }}
+          className="chatbot-overlay"
           onClick={(e) => {
             e.stopPropagation();
             dispatch(openChat());
           }}
         />
       )}
-      <PopoverContent
-        style={{
-          direction: "rtl",
-          margin: "0",
-          marginBottom: isMobile ? "0" : "-2.5vh",
-          width: isMobile ? "100vw" : "45vw",
-          height: "100vh",
-          overflow: "hidden",
-          position: "fixed",
-          top: "0",
-          right: isMobile ? "0" : "auto",
-          bottom: "0",
-          left: "0",
-          zIndex: 50,
-          padding: 0,
-          backgroundColor: "#ffffff",
-          display: "flex",
-          flexDirection: "column",
-          borderRadius: isMobile ? "0" : "8px",
-        }}
-      >
+      <PopoverContent className={`chatbot-popover-content ${isMobile ? "mobile" : "desktop"}`}>
         <ClosePopover
           handleChatSetIsOpen={() => {
             dispatch(closeChat());
           }}
           globalConfigObject={globalConfigObject}
         />
-        <div style={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          backgroundColor: "#f2f6fa",
-          overflow: "hidden"
-        }}>
+        <div className="chatbot-popover-main">
           <Messages
             setMessages={setMessages}
             messages={messages}

@@ -1,5 +1,5 @@
 import WebiksLogo from "@/assets/webiks.svg";
-import "./footer.css"
+import "./webiksFooter.css"
 
 const WebiksFooter = () => {
     const slugs = window.KZChatbotConfig?.slugs || {};

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import './chatArea.css';
-import ChatInput from '../chatbot/ChatInput';
-import Stars from "@/assets/purple-stars.svg";
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { openChat, selectIsChatOpen } from '@/store/slices/chatSlice';
 import { setQuestion } from '@/store/slices/questionSlice';
+import Stars from "@/assets/purple-stars.svg";
+import './chatArea.css';
+import ChatInput from '../chatbot/chatInput/ChatInput';
 
 
 const ChatArea: React.FC = () => {

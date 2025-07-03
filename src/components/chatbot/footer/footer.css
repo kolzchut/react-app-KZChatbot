@@ -1,0 +1,48 @@
+.rating-form {
+    margin-top: 2px;
+    padding: 1rem;
+    border: 1px solid #4D6F8F;
+    background: white;
+    border-radius: 0.5rem;
+    color: black
+}
+
+.rate-border {
+    border-width: 0.25rem;
+    border-radius: 0.5rem;
+}
+
+.rate-text {
+    color: black;
+}
+
+.send-button-wrapper.disabled {
+    cursor: not-allowed;
+}
+
+
+.button-layout {
+    background-color: #2c5785;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    color: white;
+        
+}
+
+.button-text.disabled {
+    cursor: not-allowed;
+}
+
+.button-layout.disabled {
+    opacity: 0.1;
+    cursor: not-allowed;
+}
+
+.button-send.disabled {
+    opacity: 0.1;
+    cursor: not-allowed;
+}

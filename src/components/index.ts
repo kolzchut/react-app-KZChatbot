@@ -1,9 +1,9 @@
 import Messages from "./chatbot/Messages";
 import Rate from "./chatbot/Rate";
-import TypingIndicator from "./chatbot/TypingIndicator";
-import Input from "./ui/Input";
+import TypingIndicator from "./chatbot/typingIndicator/TypingIndicator.tsx";
+import Input from "./ui/input/Input.tsx";
 import { Popover, PopoverContent } from "./ui/Popover";
-import Footer from "./chatbot/Footer";
+import Footer from "./chatbot/footer/Footer.tsx";
 import ClosePopover from "./chatbot/ClosePopover";
 
 export {

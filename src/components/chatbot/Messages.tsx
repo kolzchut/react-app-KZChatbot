@@ -1,13 +1,13 @@
-import { Message, MessageType, Errors } from "@/types";
-import Rate from "./Rate";
-import { TypingIndicator } from "@/components";
 import { forwardRef } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from 'remark-gfm';
+import { Message, MessageType, Errors } from "@/types";
+import { pushAnalyticsEvent } from "@/lib/analytics";
+import Rate from "./Rate";
+import TypingIndicator from "@/components/chatbot/typingIndicator/TypingIndicator.tsx";
+import Link from "@/assets/link.svg"
 import AlertIcon from "@/assets/alert.svg";
 import Stars from "@/assets/purple-stars.svg";
-import { pushAnalyticsEvent } from "@/lib/analytics";
-import Link from "@/assets/link.svg"
 
 interface MessagesProps {
   messages: Message[];
@@ -18,6 +18,20 @@ interface MessagesProps {
   setErrors: React.Dispatch<React.SetStateAction<Errors>>;
   initialErrors: Errors;
 }
+
+const getMessageClasses = (messageType: MessageType) => {
+  if (
+    [MessageType.Bot, MessageType.StartBot, MessageType.Warning].includes(
+      messageType,
+    )
+  ) {
+    return "message-bot-figma";
+  } else if (messageType === MessageType.User) {
+    return "message-user-figma";
+  } else if (messageType === MessageType.Error) {
+    return "flex justify-between text-md px-3 py-4 mb-2 bg-alert text-alert rounded-[10px_10px_10px_0] mr-6";
+  }
+};
 
 const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
   messages,
@@ -31,19 +45,8 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
   if (!messages) {
     return null;
   }
-  const getMessageClasses = (messageType: MessageType) => {
-    if (
-      [MessageType.Bot, MessageType.StartBot, MessageType.Warning].includes(
-        messageType,
-      )
-    ) {
-      return "message-bot-figma";
-    } else if (messageType === MessageType.User) {
-      return "message-user-figma";
-    } else if (messageType === MessageType.Error) {
-      return "flex justify-between text-md px-3 py-4 mb-2 bg-alert text-alert rounded-[10px_10px_10px_0] mr-6";
-    }
-  }; return (
+
+  return (
     <div
       className="chat-container"
       ref={ref}

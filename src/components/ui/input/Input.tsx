@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Errors } from "@/types";
 import { cn } from "@/lib/utils";
-import "../chatbot/chatInput.css";
+import "./input.css"
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
