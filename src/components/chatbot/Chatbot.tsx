@@ -48,14 +48,8 @@ const Chatbot = () => {
     };
   }, [isMobile, isChatOpen]);
 
-  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
   const getAnswer = async (question: string): Promise<Answer | void> => {
     const isProduction = import.meta.env.MODE === "production";
-
-    if (!isProduction) {
-      await sleep(3000);
-    }
 
     const url = isProduction
       ? `${globalConfigObject?.restPath}/kzchatbot/v0/question`

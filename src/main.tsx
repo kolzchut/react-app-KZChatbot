@@ -7,14 +7,6 @@ import "./index.css";
 import ChatButton from "./components/chatButton/ChatButton.tsx";
 import ChatArea from "./components/chatArea/ChatArea.tsx";
 
-// ReactDOM.createRoot(document.getElementById("kzchatbot")!).render(
-//   <React.StrictMode>
-//     <Provider store={store}>
-//       <App />
-//     </Provider>
-//   </React.StrictMode>,
-// );
-
 
 const mountComponent = (id: string, Component: JSX.Element) => {
   ReactDOM.createRoot(document.getElementById(id)!).render(
