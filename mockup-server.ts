@@ -72,9 +72,13 @@ export async function startMockupServer(): Promise<MockupServer> {
           const response = mockResponses[endpoint](req.body);
 
           // Add artificial delay to simulate network request
+          let delay = 600;
+          if (endpoint === '/kzchatbot/v0/question') {
+            delay = 1000 + Math.floor(Math.random() * 2000); // 1-3 seconds
+          }
           setTimeout(() => {
             res.status(200).json(response);
-          }, 600);
+          }, delay);
         } catch (err) {
           console.error(`🔶 [Mockup Server] Error:`, err);
           res.status(500).json({ error: 'Server error' });
