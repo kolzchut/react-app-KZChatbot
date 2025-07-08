@@ -2,6 +2,8 @@
 import express from 'express';
 import cors from 'cors';
 import http from 'http';
+import path from 'path';
+import fs from 'fs';
 
 interface MockupServer {
   url: string;
@@ -10,8 +12,8 @@ interface MockupServer {
 
 export async function startMockupServer(): Promise<MockupServer> {
   // Sample responses
-  const mockResponses: Record<string, (req: any) => any> = {
-    '/kzchatbot/v0/question': (req) => {
+  const mockResponses: Record<string, (req: unknown) => unknown> = {
+    '/kzchatbot/v0/question': () => {
       return {
         conversationId: 'mock-conv-' + Date.now(),
         llmResult: '"בהסתמך על המידע באתר, הנה טבלת השוואה בין סוגי עוסקים:\n' +
@@ -79,6 +81,22 @@ export async function startMockupServer(): Promise<MockupServer> {
         }
       });
     });
+  });
+
+  // Serve static files and index.html for frontend routes
+  const publicDir = path.resolve(__dirname);
+
+  app.get('*', (req, res, next) => {
+    // Only handle browser navigation requests (not API calls)
+    if (req.method !== 'GET' || req.url.startsWith('/rest.php')) {
+      return next();
+    }
+    const indexPath = path.join(publicDir, 'index.html');
+    if (fs.existsSync(indexPath)) {
+      res.sendFile(indexPath);
+    } else {
+      res.status(404).send('index.html not found');
+    }
   });
 
   // Create HTTP server
