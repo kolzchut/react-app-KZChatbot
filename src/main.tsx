@@ -9,15 +9,27 @@ import ChatArea from "./components/chatArea/ChatArea.tsx";
 
 
 const mountComponent = (id: string, Component: JSX.Element) => {
-  ReactDOM.createRoot(document.getElementById(id)!).render(
-    <React.StrictMode>
-      <Provider store={store}>
-        {Component}
-      </Provider>
-    </React.StrictMode>,
-  );
+	let el = document.getElementById(id);
+	if (!el) {
+		if ( id === "kzchatbot" ) {
+			el = document.createElement('div');
+			el.id = id;
+			el.className = id;
+			document.body.appendChild(el);
+		} else {
+			// eslint-disable-next-line no-console
+			console.debug(`[KZChatbot] Container element with id '#${id}' not found. Skipping mount.`);
+			return;
+		}
+	}
+	ReactDOM.createRoot(el).render(
+		<React.StrictMode>
+			<Provider store={store}>
+				{Component}
+			</Provider>
+		</React.StrictMode>,
+	);
 }
-
 
 mountComponent("kzchatbot", <Chatbot />);
 mountComponent("chat-button", <ChatButton />);
