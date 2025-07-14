@@ -32,13 +32,11 @@
     margin-bottom: 0;
     width: 100vw;
     right: 0;
-    border-radius: 0;
 }
 
 .chatbot-popover-content.desktop {
     width: 45vw;
     right: auto;
-    border-radius: 8px;
 }
 
 .chatbot-popover-main {
