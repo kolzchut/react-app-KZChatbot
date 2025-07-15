@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import "./Popover.css";
 
 interface PopoverProps {
   isChatOpen: boolean;
@@ -10,7 +11,7 @@ const Popover: React.FC<PopoverProps> = ({ isChatOpen, children }) => {
   if (!isChatOpen) return null;
   
   return (
-    <div className="fixed inset-0 z-40">
+    <div className="popover-overlay">
       {children}
     </div>
   );
@@ -27,13 +28,10 @@ const PopoverContent = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "fixed bottom-4 right-4 border border-solid border-white overflow-hidden z-50 w-[327px] flex flex-col justify-between bg-white text-gray-900 outline-none shadow-lg rounded-lg",
+        "popover-content",
         className,
       )}
       style={{
-        transition: "all 0.2s ease-in-out",
-        opacity: 1,
-        transform: "scale(1)",
         ...style
       }}
       {...props}

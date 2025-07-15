@@ -8,6 +8,7 @@ import TypingIndicator from "@/components/chatbot/typingIndicator/TypingIndicato
 import Link from "@/assets/link.svg"
 import AlertIcon from "@/assets/alert.svg";
 import Stars from "@/assets/purple-stars.svg";
+import "./Messages.css";
 
 interface MessagesProps {
   messages: Message[];
@@ -29,7 +30,7 @@ const getMessageClasses = (messageType: MessageType) => {
   } else if (messageType === MessageType.User) {
     return "message-user-block";
   } else if (messageType === MessageType.Error) {
-    return "flex justify-between text-md px-3 py-4 mb-2 bg-alert text-alert rounded-[10px_10px_10px_0] mr-6";
+    return "message-error";
   }
 };
 
@@ -54,7 +55,7 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
           message.content && (
             <div key={message.id}>
               {message.isFirstQuestion === false && (
-                <hr className="h-[1px] border-line left-3 relative w-[calc(100%_+_1.5rem)] my-3" />
+                <hr className="message-divider" />
               )}
 
               {message.type === MessageType.User ? (
@@ -78,7 +79,7 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
                     <img
                       src={AlertIcon}
                       alt="Alert Icon"
-                      className="w-4 h-4 inline-block ml-2"
+                      className="message-error-icon"
                     />
                   )}
                 </div>

@@ -90,8 +90,8 @@ const Rate = ({
 
 			{rateIsOpen && (
 				<form className="rating-form" onSubmit={handleSubmit}>
-					<div className="flex justify-between items-center">
-						<span className="text-sm font-bold rate-text">
+					<div className="rate-form-header">
+						<span className="rate-form-header-text">
 							{message.liked
 								? slugs?.like_follow_up_question
 								: slugs?.dislike_follow_up_question}
@@ -100,10 +100,10 @@ const Rate = ({
 							<img src={XIcon} alt="x icon" />
 						</button>
 					</div>
-					<div className="mb-1 mt-3">
+					<div className="rate-textarea-container">
 						<textarea
 							name="description"
-							className="block text-sm h-[69px] overflow-hidden w-full leading-[1.5] rate-border rounded-xl  placeholder:text-sm rate-text bg-transparent border-b outline-none border px-2 py-1"
+							className="rate-textarea"
 							style={{
 								resize: "none",
 							}}
@@ -120,15 +120,15 @@ const Rate = ({
 						/>
 						{errors.description && (
 							<p
-								className="text-sm text-destructive bg-destructive inline-block px-1 mt-1"
+								className="rate-error-message"
 								role="alert"
 							>
 								{errors.description}
 							</p>
 						)}
 					</div>
-					<div className="flex items-center justify-between p-2">
-						<span className="text-xs text-disclaimer">
+					<div className="rate-form-footer">
+						<span className="rate-disclaimer">
 							{slugs?.feedback_free_text_disclaimer}
 						</span>
 						<button disabled={!isFormValid} type="submit">

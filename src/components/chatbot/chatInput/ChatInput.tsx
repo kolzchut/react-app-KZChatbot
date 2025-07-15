@@ -34,7 +34,7 @@ const ChatInput = ({ handleSubmit, errors, question, handleOnMessageChange, disa
                     submitElement={
                         <div className="chat-input-texts-section">
                             <span className="sr-only">{slugs?.send_button}</span>
-                            <img src={question ? SendEnabled : SendDisabled} className="block" alt="" />
+                            <img src={question ? SendEnabled : SendDisabled} className="chat-input-icon" alt="" />
                         </div>
                     }
                     maxLength={globalConfigObject?.questionCharacterLimit || 150}

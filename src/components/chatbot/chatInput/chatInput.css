@@ -63,3 +63,7 @@
 .disabled {
   cursor: not-allowed;
 }
+
+.chat-input-icon {
+  display: block;
+}
