@@ -2,20 +2,19 @@ import WebiksLogo from "@/assets/webiks.svg";
 import "./webiksFooter.css"
 
 const WebiksFooter = () => {
-    const slugs = window.KZChatbotConfig?.slugs || {};
+    const slugs = window.KZChatbotConfig?.slugs;
 
     return (
         <div className="webiks-footer">
             <span className="footer-disclaimer-text">
-                {slugs.chat_disclaimer}
+                {slugs?.chat_disclaimer || "הצ׳אט יכול לטעות. 'כל זכות' לא אחראית לנכונות התשובות וממליצה לבדוק את המידע גם בעמוד המתאים באתר."}
             </span>
             <a
                 href="https://webiks.com"
                 target="_blank"
-                aria-label="בקרו באתר של Webiks, נפתח בכרטיסייה חדשה"
             >
                 <span className="footer-disclaimer-text by-webiks">
-                    by
+                    {slugs?.by || "by"}
                     <img
                         src={WebiksLogo}
                         alt="Webiks"

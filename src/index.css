@@ -234,7 +234,7 @@
 	height: 100%;
 }
 
-.message-user-figma {
+.message-user-block {
 	background-color: var(--kzcb-main-blue);
 	color: #ffffff;
 	padding: 16px;
@@ -262,7 +262,7 @@
 	height: 32px;
 }
 
-.message-bot-figma {
+.message-bot-block {
 	background-color: #ffffff;
 	color: var(--kzcb-text-gray);
 	padding: 16px;

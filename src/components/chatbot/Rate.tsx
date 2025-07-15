@@ -66,12 +66,11 @@ const Rate = ({
 		<div ref={ref} className="rating-container">
 			<div className="rating-visible">
 				<div className="rating-text">
-					האם התשובה עזרה לך?
+				{slugs?.ranking_request || "האם התשובה עזרה לך?"}
 				</div>
 
 				<button
 					disabled={isFeedbackSubmitted}
-					aria-label="סמנ/י שהתשובה עזרה לי"
 					aria-pressed={message.liked === true}
 					className="rating-icon"
 					onClick={() => handleRate(message.liked === true ? null : true)}
@@ -81,7 +80,6 @@ const Rate = ({
 
 				<button
 					disabled={isFeedbackSubmitted}
-					aria-label="סמנ/י שהתשובה לא עזרה לי"
 					aria-pressed={message.liked === false}
 					className="rating-icon rating-icon-rotated"
 					onClick={() => handleRate(message.liked === false ? null : false)}
@@ -136,7 +134,7 @@ const Rate = ({
 						<button disabled={!isFormValid} type="submit">
 							<div className={`button-layout ${isFormValid ? "" : "disabled"}`}>
 								<span className={`send-button ${isFormValid ? "" : "disabled"}`}>
-									<span className={`button-text ${isFormValid ? "" : "disabled"}`}>שליחה</span>
+									<span className={`button-text ${isFormValid ? "" : "disabled"}`}>{slugs?.send || "שליחה"}</span>
 								</span>
 							</div>
 						</button>

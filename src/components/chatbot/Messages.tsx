@@ -25,9 +25,9 @@ const getMessageClasses = (messageType: MessageType) => {
       messageType,
     )
   ) {
-    return "message-bot-figma";
+    return "message-bot-block";
   } else if (messageType === MessageType.User) {
-    return "message-user-figma";
+    return "message-user-block";
   } else if (messageType === MessageType.Error) {
     return "flex justify-between text-md px-3 py-4 mb-2 bg-alert text-alert rounded-[10px_10px_10px_0] mr-6";
   }
@@ -47,10 +47,7 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
   }
 
   return (
-    <div
-      className="chat-container"
-      ref={ref}
-    >
+    <div className="chat-container" ref={ref}>
       {messages.map(
         (message) =>
           message.content && (

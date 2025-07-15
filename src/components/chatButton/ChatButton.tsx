@@ -45,7 +45,6 @@ const ChatButton: React.FC = () => {
         <button
             onClick={handleToggleChat}
             className={buttonClasses}
-            aria-label="Open chat"
             disabled={isChatOpen}
         >
             {isMobile ? <MobileComponent /> : <DesktopComponent />}
