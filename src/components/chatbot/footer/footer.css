@@ -71,14 +71,14 @@
     overflow: hidden;
     width: 100%;
     line-height: 1.5;
-    border-width: 0.25rem;
+    border-width: 0.1rem !important;
     border-radius: 0.75rem;
     color: black;
     background-color: transparent;
     border-bottom-width: 1px;
     outline: none;
     border-style: solid;
-    padding: 0.25rem 0.5rem;
+    padding: 0.6rem 0.7rem !important;
     resize: none;
 }
 
@@ -103,6 +103,6 @@
 }
 
 .rate-disclaimer {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     color: #6b7280;
 }

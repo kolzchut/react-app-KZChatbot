@@ -87,7 +87,7 @@
 }
 
 .link-card {
-	border: 1px solid var(--kzcb-cyan);
+	border: 1px solid var(--kzcb-cyan) !important;
 	border-radius: 8px;
 	padding: 16px;
 	display: flex;

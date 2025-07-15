@@ -96,9 +96,6 @@ const Rate = ({
 								? slugs?.like_follow_up_question
 								: slugs?.dislike_follow_up_question}
 						</span>
-						<button onClick={handleCloseRate}>
-							<img src={XIcon} alt="x icon" />
-						</button>
 					</div>
 					<div className="rate-textarea-container">
 						<textarea
