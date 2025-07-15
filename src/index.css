@@ -228,7 +228,6 @@
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
-	/* align-items: flex-end; */
 	overflow-y: auto;
 	flex: 1;
 	height: 100%;

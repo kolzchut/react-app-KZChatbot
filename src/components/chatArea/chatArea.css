@@ -2,7 +2,7 @@
   position: relative;
   padding: 2px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #3284FF, #cbe0ff, #D65CFF, #f1c9ff);
+  background: linear-gradient(135deg, rgba(50, 132, 255, 0.6), rgba(203, 224, 255, 0.6), rgba(214, 92, 255, 0.6), rgba(241, 201, 255, 0.6));
   background-size: 200% 200%;
   animation: circularFlow 2s linear infinite;
   box-shadow: none;
@@ -41,8 +41,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  width: 39rem;
+  width: 100%;
   background: white;
   box-sizing: border-box;
   font-family: "Open Sans", sans-serif;
@@ -58,8 +57,8 @@
 
 
 .chat-area-content {
-  width: 101%;
-  max-width: 600px;
+  width: 95%;
+  max-width: 95%;
   display: flex;
   flex-direction: column;
   margin: auto;
