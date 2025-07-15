@@ -33,7 +33,7 @@ const ChatArea: React.FC = () => {
           <div className={`chat-area-content${isChatOpen ? ' disabled' : ''}`}>
             <div className="chat-area-header">
               <img src={Stars} alt="AI Bot" className="ai-icon" />
-              <span>{slugs.ask_ai}</span>
+              <span>{slugs.chat_description}</span>
             </div>
             <ChatInput
               handleSubmit={handleSubmit}

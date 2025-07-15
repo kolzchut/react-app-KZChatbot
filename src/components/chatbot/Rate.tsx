@@ -134,7 +134,7 @@ const Rate = ({
 						<button disabled={!isFormValid} type="submit">
 							<div className={`button-layout ${isFormValid ? "" : "disabled"}`}>
 								<span className={`send-button ${isFormValid ? "" : "disabled"}`}>
-									<span className={`button-text ${isFormValid ? "" : "disabled"}`}>{slugs?.send || "שליחה"}</span>
+									<span className={`button-text ${isFormValid ? "" : "disabled"}`}>{slugs?.send_button || "שליחה"}</span>
 								</span>
 							</div>
 						</button>

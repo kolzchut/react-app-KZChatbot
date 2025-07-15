@@ -15,7 +15,7 @@ const MobileComponent = () => (
 );
 
 const DesktopComponent = () => {
-    const ask_ai = window.KZChatbotConfig?.slugs.ask_ai || 'שאלו את ה-AI שלנו';
+    const chat_description = window.KZChatbotConfig?.slugs.chat_description || 'שאלו את ה-AI שלנו';
     return (
         <span className='button-data'>
             <img
@@ -24,7 +24,7 @@ const DesktopComponent = () => {
                 className="chat-button-icon"
             />
             <span className="chat-button-text">
-                {ask_ai}
+                {chat_description}
             </span>
         </span>
     );

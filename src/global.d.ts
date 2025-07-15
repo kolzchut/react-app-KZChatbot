@@ -11,9 +11,8 @@ declare global {
       usageHelpUrl: string;
       referrer: string;
       slugs: {
-        ask_ai: string
+		chat_description: string
         chat_icon: string;
-        chat_description: string;
         chat_tip_link: string;
         open_chat_icon: string;
         close_chat_icon: string;
@@ -40,7 +39,6 @@ declare global {
         send_button: string;
         new_question_hint: string;
         chat_disclaimer: string;
-        send: string;
         by: string;
         getting_answer: string;
       };

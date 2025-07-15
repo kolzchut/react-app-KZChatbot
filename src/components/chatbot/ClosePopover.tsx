@@ -17,13 +17,13 @@ const ClosePopover = ({ globalConfigObject, handleChatSetIsOpen }: ClosePopoverP
           <img src={Stars} alt="AI Bot" className="ai-icon" />
         </div>
         <h1 className="header-title">
-          {slugs?.ask_ai}
+          {slugs?.chat_description}
         </h1>
       </div>
 
-      <button 
-        onClick={() => handleChatSetIsOpen(false)} 
-        aria-label={slugs?.close_chat_icon || "סגור צ'אט"} 
+      <button
+        onClick={() => handleChatSetIsOpen(false)}
+        aria-label={slugs?.close_chat_icon || "סגור צ'אט"}
         title={slugs?.close_chat_icon || "סגור צ'אט"}
         className="close-button"
       >
