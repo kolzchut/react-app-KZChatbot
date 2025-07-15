@@ -36,6 +36,7 @@
 
 .chatbot-popover-content.desktop {
     width: 45vw;
+    max-width: 45vw;
     right: auto;
 }
 

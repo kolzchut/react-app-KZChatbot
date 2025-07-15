@@ -89,7 +89,7 @@
 @media (max-width: 768px) {
   .chat-area-container {
     padding: 16px;
-    width: 90vw;
+    /* width: 90vw; */
   }
   
   .chat-area-content {
@@ -101,7 +101,7 @@
 @media (max-width: 480px) {
   .chat-area-container {
     padding: 12px;
-    width: 90vw;
+    /* width: 90vw; */
   }
   
   .chat-area-content {
