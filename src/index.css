@@ -233,6 +233,11 @@
 	height: 100%;
 }
 
+.flex-spacer {
+	flex: 1;
+	min-height: 0;
+}
+
 .message-user-block {
 	background-color: var(--kzcb-main-blue);
 	color: #ffffff;

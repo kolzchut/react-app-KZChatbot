@@ -48,6 +48,7 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
 
   return (
     <div className="chat-container" ref={ref}>
+      <div className="flex-spacer"></div>
       {messages.map(
         (message) =>
           message.content && (
