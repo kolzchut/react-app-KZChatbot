@@ -3,7 +3,6 @@ import { Errors, Message } from "@/types";
 import { useRate } from "@/lib/useRate";
 import LikeIcon from "@/assets/like.svg"
 import PressedLikeIcon from "@/assets/pressed-like.svg"
-import XIcon from "@/assets/x.svg";
 import "./footer/footer.css"
 
 interface RateProps {
@@ -33,7 +32,6 @@ const Rate = ({
 		setRateIsOpen,
 		isFormValid,
 		handleRate,
-		handleCloseRate,
 	} = useRate({
 		globalConfigObject,
 		message,
