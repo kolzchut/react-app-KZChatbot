@@ -48,6 +48,12 @@ const Chatbot = () => {
     };
   }, [isMobile, isChatOpen]);
 
+    useEffect(() => {
+    if (globalConfigObject?.autoOpen) {
+      dispatch(openChat());
+    }
+  }, [globalConfigObject]);
+
   const getAnswer = async (question: string): Promise<Answer | void> => {
     const isProduction = import.meta.env.MODE === "production";
 
