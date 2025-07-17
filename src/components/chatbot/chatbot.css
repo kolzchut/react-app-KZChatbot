@@ -15,6 +15,10 @@
     direction: rtl;
     margin: 0;
     height: 100vh;
+	/* Override for newer browsers that support svh units
+	 * This ensures the popover isn't too tall on mobile devices with the address bar visible
+	 */
+	height: 100svh;
     overflow: hidden;
     position: fixed;
     top: 0;
