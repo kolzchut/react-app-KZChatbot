@@ -237,15 +237,7 @@ const Chatbot = () => {
 
   return (
     <Popover isChatOpen={isChatOpen}>
-      {isMobile && (
-        <div
-          className="chatbot-overlay"
-          onClick={(e) => {
-            e.stopPropagation();
-            dispatch(openChat());
-          }}
-        />
-      )}
+      <div className="chatbot-overlay" />
       <PopoverContent className={`chatbot-popover-content ${isMobile ? "mobile" : "desktop"}`}>
         <ClosePopover
           handleChatSetIsOpen={() => {
