@@ -1,11 +1,16 @@
 
 .bubble {
-    background: white;
-    border-radius: 12px;
-    padding: 12px 20px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    color: var(--kzcb-text-gray);
+    padding: 16px;
+    border-radius: 8px 8px 8px 0;
+    max-width: 100%;
+    width: fit-content;
+    font-family: 'Open Sans', sans-serif;
     font-size: 16px;
-    color: #595959;
+    font-weight: 400;
+    text-align: right;
+    direction: rtl;
 }
 
 .bubble span {

@@ -1,4 +1,5 @@
 import { FC } from "react";
+import Stars from "@/assets/purple-stars.svg";
 import "./typingIndicator.css";
 
 
@@ -7,8 +8,11 @@ const TypingIndicator: FC = () => {
   const typingText = slugs.getting_answer || "מאתר תשובה לשאלתך...";
 
   return (
-    <div>
+    <div className="message-bot-container">
       <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
+      <div className="bot-avatar">
+        <img src={Stars} alt="Bot Avatar" />
+      </div>
       <div className="bubble">
         {typingText.split('').map((char, index) => (
           <span key={index}>
