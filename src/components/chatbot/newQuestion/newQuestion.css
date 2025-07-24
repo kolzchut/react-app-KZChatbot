@@ -17,11 +17,20 @@
   gap: 16px;
 }
 
-.new-question-divider {
+.new-question-divider-start {
   flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, #E5E7EB 50%, transparent 100%);
+  height: 2px;
+  opacity: 0.1;
+  background: var(--Purple, #D65CFF);
 }
+
+.new-question-divider-end {
+  flex: 1;
+  height: 2px;
+  opacity: 0.1;
+  background: var(--Cyan, #3284FF);
+}
+
 
 .new-question-disclaimer {
   font-size: 12px;

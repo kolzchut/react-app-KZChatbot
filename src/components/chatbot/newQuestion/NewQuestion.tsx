@@ -12,7 +12,7 @@ const NewQuestionButton = ({ onClick }: NewQuestionButtonProps) => {
   return (
     <div className="new-question-section">
       <div className="new-question-divider-container">
-        <div className="new-question-divider"></div>
+        <div className="new-question-divider-start"></div>
         <div className="new-question-button-border">
           <button
             onClick={onClick}
@@ -24,7 +24,7 @@ const NewQuestionButton = ({ onClick }: NewQuestionButtonProps) => {
             </span>
           </button>
         </div>
-        <div className="new-question-divider"></div>
+        <div className="new-question-divider-end"></div>
       </div>
       <div className="new-question-disclaimer">
         הצ'אט לא זוכר תשובות לשאלות קודמות. יש לנסח שאלה חדשה.
