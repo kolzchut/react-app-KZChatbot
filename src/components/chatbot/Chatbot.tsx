@@ -37,7 +37,7 @@ const Chatbot = () => {
   const isMobile = useMobile();
 
   useEffect(() => {
-    if (isMobile && isChatOpen) {
+    if (isChatOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -46,7 +46,7 @@ const Chatbot = () => {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isMobile, isChatOpen]);
+  }, [isChatOpen]);
 
     useEffect(() => {
     if (globalConfigObject?.autoOpen) {
