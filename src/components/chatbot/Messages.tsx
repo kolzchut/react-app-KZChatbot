@@ -54,10 +54,6 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
         (message) =>
           message.content && (
             <div key={message.id}>
-              {message.isFirstQuestion === false && (
-                <hr className="message-divider" />
-              )}
-
               {message.type === MessageType.User ? (
                 <div className={getMessageClasses(message.type)}>
                   {message.content}

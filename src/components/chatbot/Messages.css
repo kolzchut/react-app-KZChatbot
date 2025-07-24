@@ -3,8 +3,8 @@
 	color: #ffffff;
 	padding: 16px;
 	border-radius: 8px 8px 0 8px;
-	/* max-width: 610px; */
 	max-width: 80%;
+	width: fit-content;
 	align-self: flex-end;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 16px;
@@ -32,6 +32,7 @@
 	padding: 16px;
 	border-radius: 8px 8px 8px 0;
 	max-width: 100%;
+	width: fit-content;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 16px;
 	font-weight: 400;
@@ -49,6 +50,8 @@
 	color: var(--kzcb-alert-foreground);
 	border-radius: 10px 10px 10px 0;
 	margin-right: 1.5rem;
+	width: fit-content;
+	align-self: flex-end;
 }
 
 .message-divider {
