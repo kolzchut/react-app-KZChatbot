@@ -33,104 +33,103 @@
   font-family: "Open Sans", sans-serif;
 }
 
-.new-question-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(94deg, var(--Cyan, #3284FF) 11.95%, var(--Purple, #D65CFF) 83.06%);
-  border-radius: 54.376px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 1rem;
-  font-weight: 500;
-  height: 3.5rem;
-  position: relative;
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
+.new-question-button-border {
+  background: linear-gradient(135deg, #3284FF, #D65CFF);
+  padding: 4px;
+  border-radius: 9999px;
+  display: inline-block;
 }
 
-.new-question-button-data {
-  display: flex;
-  width: 10rem;
-  direction: rtl;
-  justify-content: center;
-  align-items: center;
-  gap: 0.25rem;
-  background: #F2F6FA;
-  border-radius: 70px;
-  padding: 13px 21px;
-}
-
-.new-question-wrapper:hover .new-question-button-data {
-  background: transparent;
-}
-
-.ask-new-question-text {
-  font-family: inherit;
-  font-size: inherit;
+.new-question-gradient-button {
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
   font-weight: 700;
-  white-space: nowrap;
-  direction: rtl;
-  background: linear-gradient(94deg, #3284FF 11.95%, #D65CFF 83.06%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.new-question-wrapper:hover .ask-new-question-text {
-  background: white;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.ask-new-question-icon {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-  transition: filter 0.3s ease;
-}
-
-.new-question-button {
+  background: #FFFFFF !important;
+  border: none;
+  border-radius: 9999px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   padding: 12px 20px;
-  background: transparent;
-  border: 1px solid #E5E7EB;
-  border-radius: 24px;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  font-family: "Open Sans", sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  color: #374151;
+  min-height: 48px;
+  width: 160px;
+  direction: rtl;
+  text-align: right;
+  transition: background 0.3s ease, color 0.3s ease;
   white-space: nowrap;
 }
 
-.new-question-button:hover {
-  background: #F9FAFB;
-  border-color: #D1D5DB;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.new-question-gradient-button:hover {
+  background: linear-gradient(135deg, #3284FF, #D65CFF) !important;
 }
 
-.new-question-button:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+.new-question-gradient-text {
+  background: linear-gradient(135deg, #3284FF, #D65CFF);
+  font-weight: 700;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  unicode-bidi: isolate;
+  transition: color 0.3s ease, -webkit-text-fill-color 0.3s ease;
 }
 
-.new-question-button-text {
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
-  color: #374151;
+.new-question-gradient-button:hover .new-question-gradient-text {
+  background: none;
+  color: white;
+  -webkit-text-fill-color: white;
 }
 
-.new-question-wrapper:hover .ask-new-question-icon {
-  filter: brightness(0) invert(1);
+.new-question-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  transition: fill 0.3s ease;
+}
+
+.new-question-icon path {
+  fill: #D65CFF;
+  transition: fill 0.3s ease;
+}
+
+.new-question-gradient-button:hover .new-question-icon path {
+  fill: white;
+}
+
+.new-question-gradient-button:hover .new-question-icon path:nth-of-type(1) {
+  animation: sparkle 1.8s infinite ease-in-out;
+  animation-delay: 0s;
+}
+
+.new-question-gradient-button:hover .new-question-icon path:nth-of-type(2) {
+  animation: sparkle 1.8s infinite ease-in-out;
+  animation-delay: 0.2s;
+}
+
+.new-question-gradient-button:hover .new-question-icon path:nth-of-type(3) {
+  animation: sparkle 1.8s infinite ease-in-out;
+  animation-delay: 0.4s;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  25% {
+    transform: scale(1.05);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  75% {
+    transform: scale(1.05);
+    opacity: 0;
+  }
 }
 
 @media (max-width: 768px) {
@@ -142,15 +141,5 @@
   .new-question-disclaimer {
     font-size: 11px;
     line-height: 14px;
-  }
-
-  
-  .new-question-button {
-    padding: 10px 16px;
-    font-size: 13px;
-  }
-  
-  .new-question-button-text {
-    font-size: 13px;
   }
 }

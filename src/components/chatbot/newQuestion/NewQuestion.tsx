@@ -1,4 +1,4 @@
-import Stars from "@/assets/no-circle-stars.svg";
+import Stars from "../../Stars";
 import "./newQuestion.css"
 
 interface NewQuestionButtonProps {
@@ -13,17 +13,14 @@ const NewQuestionButton = ({ onClick }: NewQuestionButtonProps) => {
     <div className="new-question-section">
       <div className="new-question-divider-container">
         <div className="new-question-divider"></div>
-        <div className="new-question-wrapper">
+        <div className="new-question-button-border">
           <button
             onClick={onClick}
+            className="new-question-gradient-button"
           >
-            <span className="new-question-button-data">
-              <span className="ask-new-question-icon">
-                <img src={Stars} alt="שאל שאלה חדשה" />
-              </span>
-              <span className="ask-new-question-text">
-                {slugs?.new_question_button || "שאלה חדשה"}
-              </span>
+            <Stars className="new-question-icon" />
+            <span className="new-question-gradient-text">
+              {slugs?.new_question_button || "שאלה חדשה"}
             </span>
           </button>
         </div>
