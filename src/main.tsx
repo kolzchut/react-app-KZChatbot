@@ -33,4 +33,5 @@ const mountComponent = (id: string, Component: JSX.Element) => {
 
 mountComponent("kzchatbot", <Chatbot />);
 mountComponent("chat-button", <ChatButton />);
-mountComponent("chat-section", <ChatArea />)
+mountComponent("chat-section", <ChatArea />);
+mountComponent("chat-section-home", <ChatArea isHomePage />);

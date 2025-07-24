@@ -7,7 +7,11 @@ import './chatArea.css';
 import ChatInput from '../chatbot/chatInput/ChatInput';
 
 
-const ChatArea: React.FC = () => {
+interface ChatAreaProps {
+  isHomePage?: boolean;
+}
+
+const ChatArea: React.FC<ChatAreaProps> = ({ isHomePage }) => {
   const dispatch = useAppDispatch();
   const [localQuestion, setLocalQuestion] = useState('');
   const slugs = window.KZChatbotConfig.slugs;
@@ -27,13 +31,13 @@ const ChatArea: React.FC = () => {
   };
 
   return (
-    <div className={`chat-area-container${isChatOpen ? ' disabled' : ''}`}>
-      <div className={`gradient-border-wrapper${isChatOpen ? ' disabled' : ''}`}>
-        <div className={`chat-area-container${isChatOpen ? ' disabled' : ''}`}>
-          <div className={`chat-area-content${isChatOpen ? ' disabled' : ''}`}>
+    <div className={`chat-area-container${isChatOpen ? ' disabled' : ''}${isHomePage ? ' homepage' : ''}`}>
+      <div className={`gradient-border-wrapper${isChatOpen ? ' disabled' : ''}${isHomePage ? ' homepage' : ''}`}>
+        <div className={`chat-area-container${isChatOpen ? ' disabled' : ''}${isHomePage ? ' homepage' : ''}`}>
+          <div className={`chat-area-content${isChatOpen ? ' disabled' : ''}${isHomePage ? ' homepage' : ''}`}>
             <div className="chat-area-header">
               <img src={Stars} alt="AI Bot" className="ai-icon" />
-              <span>{slugs.chat_description}</span>
+              <span className='chat-description'>{slugs.chat_description}</span>
             </div>
             <ChatInput
               handleSubmit={handleSubmit}

@@ -203,12 +203,16 @@
 
 .header-title {
 	font-family: 'Open Sans', sans-serif;
-	font-size: 20px;
-	font-weight: 700;
-	color: #2d5b85;
-	margin: 0;
 	text-align: right;
 	direction: rtl;
+	background: linear-gradient(135deg, #3284FF, #D65CFF);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	color: transparent;
+	unicode-bidi: isolate;
+	transition: color 0.3s ease, -webkit-text-fill-color 0.3s ease;
+	font-weight: 700 !important;
 }
 
 .ai-icon-container {
@@ -237,4 +241,3 @@
 	flex: 1;
 	min-height: 0;
 }
-
