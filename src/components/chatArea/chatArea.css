@@ -1,7 +1,7 @@
 .gradient-border-wrapper {
   position: relative;
   padding: 2px;
-  border-radius: 10px;
+  border-radius: 20px;
   background: linear-gradient(135deg, rgba(50, 132, 255, 0.6), rgba(203, 224, 255, 0.6), rgba(214, 92, 255, 0.6), rgba(241, 201, 255, 0.6));
   background-size: 200% 200%;
   animation: circularFlow 2s linear infinite;
@@ -46,7 +46,7 @@
   box-sizing: border-box;
   font-family: "Open Sans", sans-serif;
   margin: auto;
-  border-radius: 0.5rem;
+  border-radius: 20px;
   top: 50%;
 }
 .chat-area-container.disabled {
