@@ -17,6 +17,7 @@
   gap: 8px;
   padding: 9px 20px;
   cursor: pointer;
+  height: 42px;
   direction: rtl;
   text-align: right;
   transition: background 0.3s ease, color 0.3s ease;
