@@ -12,9 +12,10 @@ interface ChatInputProps {
     handleOnMessageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     errors?: Errors;
     disabled?: boolean;
+    inputRef?: React.RefObject<HTMLInputElement>;
 }
 
-const ChatInput = ({ handleSubmit, errors, question, handleOnMessageChange, disabled }: ChatInputProps) => {
+const ChatInput = ({ handleSubmit, errors, question, handleOnMessageChange, disabled, inputRef }: ChatInputProps) => {
     const globalConfigObject = window.KZChatbotConfig;
     const slugs = globalConfigObject?.slugs || {};
 
@@ -40,6 +41,7 @@ const ChatInput = ({ handleSubmit, errors, question, handleOnMessageChange, disa
                     maxLength={globalConfigObject?.questionCharacterLimit || 150}
                     errors={errors}
                     disabled={disabled}
+                    ref={inputRef}
                 />
                 <DisclaimerFooter />
             </form>

@@ -50,10 +50,10 @@ const Footer = ({
     }
     if (isMobile && isBotStarted) return;
 
-    if (isChatOpen && showInput && inputRef.current && messages.length) {
+    if (isChatOpen && showInput && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [isMobile, inputRef, showInput, messages, isChatOpen]);
+  }, [isMobile, inputRef, showInput, isChatOpen]);
 
   useEffect(() => {
     if (reduxQuestion === '') {
@@ -120,7 +120,8 @@ const Footer = ({
           question={localQuestion}
           handleSubmit={handleFormSubmit}
           errors={errors}
-          handleOnMessageChange={handleOnMessageChange} />
+          handleOnMessageChange={handleOnMessageChange}
+          inputRef={inputRef} />
       ) : (
         <NewQuestion onClick={() => {
           setShowInput(true);
