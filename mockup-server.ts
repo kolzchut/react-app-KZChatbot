@@ -2,6 +2,8 @@
 import express from 'express';
 import cors from 'cors';
 import http from 'http';
+import path from 'path';
+import fs from 'fs';
 
 interface MockupServer {
   url: string;
@@ -10,8 +12,8 @@ interface MockupServer {
 
 export async function startMockupServer(): Promise<MockupServer> {
   // Sample responses
-  const mockResponses: Record<string, (req: any) => any> = {
-    '/kzchatbot/v0/question': (req) => {
+  const mockResponses: Record<string, (req: unknown) => unknown> = {
+    '/kzchatbot/v0/question': () => {
       return {
         conversationId: 'mock-conv-' + Date.now(),
         llmResult: '"בהסתמך על המידע באתר, הנה טבלת השוואה בין סוגי עוסקים:\n' +
@@ -29,8 +31,8 @@ export async function startMockupServer(): Promise<MockupServer> {
 			'\n' +
 			'אם יש לך שאלות נוספות, אנא שאל.',
         docs: [
-          { url: 'https://example.com/doc1', title: 'Example Document 1' },
-          { url: 'https://example.com/doc2', title: 'Example Document 2' }
+          { url: 'https://example.com/doc1', title: 'כותרת בעברית' },
+          { url: 'https://example.com/doc2', title: 'כותרת בעברית' }
         ]
       };
     },
@@ -70,15 +72,35 @@ export async function startMockupServer(): Promise<MockupServer> {
           const response = mockResponses[endpoint](req.body);
 
           // Add artificial delay to simulate network request
+          let delay = 600;
+          if (endpoint === '/kzchatbot/v0/question') {
+            delay = 1000 + Math.floor(Math.random() * 2000); // 1-3 seconds
+          }
           setTimeout(() => {
             res.status(200).json(response);
-          }, 600);
+          }, delay);
         } catch (err) {
           console.error(`🔶 [Mockup Server] Error:`, err);
           res.status(500).json({ error: 'Server error' });
         }
       });
     });
+  });
+
+  // Serve static files and index.html for frontend routes
+  const publicDir = path.resolve(__dirname);
+
+  app.get('*', (req, res, next) => {
+    // Only handle browser navigation requests (not API calls)
+    if (req.method !== 'GET' || req.url.startsWith('/rest.php')) {
+      return next();
+    }
+    const indexPath = path.join(publicDir, 'index.html');
+    if (fs.existsSync(indexPath)) {
+      res.sendFile(indexPath);
+    } else {
+      res.status(404).send('index.html not found');
+    }
   });
 
   // Create HTTP server

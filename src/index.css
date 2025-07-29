@@ -3,46 +3,51 @@
 @import "./styles/utilities.css";
 
 :root {
-    --kzcb-white: #ffffff;
-    --kzcb-input-background: #ffffff;
-    --kzcb-input-placeholder: #005aab;
-    --kzcb-textarea-placeholder: #ffffff;
-    --kzcb-textarea-border: #ffffff;
-    --kzcb-cta-background: #005aab;
-    --kzcb-cta-foreground: #ffffff;
-    --kzcb-popover: #2d5b85;
-    --kzcb-popover-foreground: 222.2 84% 4.9%;
-    --kzcb-disclaimer-foreground: #f0f7fe;
-    --kzcb-links-foreground: #ffffff;
-    --kzcb-message-bot-background: #ffffff;
-    --kzcb-message-bot-foreground: #192832;
-    --kzcb-message-user-background: #d4dde6;
-    --kzcb-message-user-foreground: #192832;
-    --kzcb-breaking-line: rgba(212, 221, 230, 0.2);
-    --kzcb-button-background: #ffffff;
-    --kzcb-button-foreground: #005aab;
-    --kzcb-alert-background: #FFECEC;
-    --kzcb-alert-foreground: #8D0000;
+	--kzcb-white: #ffffff;
+	--kzcb-input-background: #ffffff;
+	--kzcb-input-placeholder: #005aab;
+	--kzcb-textarea-placeholder: #9CA3AF;
+	--kzcb-textarea-border: #ffffff;
+	--kzcb-cta-background: #005aab;
+	--kzcb-cta-foreground: #ffffff;
+	--kzcb-popover: #f2f6fa;
+	--kzcb-popover-foreground: 222.2 84% 4.9%;
+	--kzcb-disclaimer-foreground: rgba(45, 91, 133, 0.7);
+	--kzcb-links-foreground: #3284ff;
+	--kzcb-message-bot-background: #ffffff;
+	--kzcb-message-bot-foreground: #595959;
+	--kzcb-message-user-background: #2d5b85;
+	--kzcb-message-user-foreground: #ffffff;
+	--kzcb-breaking-line: rgba(212, 221, 230, 0.2);
+	--kzcb-button-background: #ffffff;
+	--kzcb-button-foreground: #005aab;
+	--kzcb-alert-background: #FFECEC;
+	--kzcb-alert-foreground: #8D0000;
 
-    --kzcb-background: #005aab;
-    --kzcb-foreground: 222.2 84% 4.9%;
-    --kzcb-card: 0 0% 100%;
-    --kzcb-card-foreground: 222.2 84% 4.9%;
-    --kzcb-primary: 222.2 47.4% 11.2%;
-    --kzcb-primary-foreground: 210 40% 98%;
-    --kzcb-secondary: 210 40% 96.1%;
-    --kzcb-secondary-foreground: 222.2 47.4% 11.2%;
-    --kzcb-muted: 210 40% 96.1%;
-    --kzcb-muted-foreground: 215.4 16.3% 46.9%;
-    --kzcb-accent: 210 40% 96.1%;
-    --kzcb-accent-foreground: 222.2 47.4% 11.2%;
-    --kzcb-destructive-background: #e80000;
-    --kzcb-destructive-foreground: #ffffff;
-    --destructive-foreground: 210 40% 98%;
-    --kzcb-border: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --kzcb-radius: 0.5rem;
-    --tw-translate-y: 50%;
+	--kzcb-cyan: #3284ff;
+	--kzcb-purple: #d65cff;
+	--kzcb-main-blue: #2d5b85;
+	--kzcb-text-gray: #595959;
+
+	--kzcb-background: #005aab;
+	--kzcb-foreground: 222.2 84% 4.9%;
+	--kzcb-card: 0 0% 100%;
+	--kzcb-card-foreground: 222.2 84% 4.9%;
+	--kzcb-primary: 222.2 47.4% 11.2%;
+	--kzcb-primary-foreground: 210 40% 98%;
+	--kzcb-secondary: 210 40% 96.1%;
+	--kzcb-secondary-foreground: 222.2 47.4% 11.2%;
+	--kzcb-muted: 210 40% 96.1%;
+	--kzcb-muted-foreground: 215.4 16.3% 46.9%;
+	--kzcb-accent: 210 40% 96.1%;
+	--kzcb-accent-foreground: 222.2 47.4% 11.2%;
+	--kzcb-destructive-background: #e80000;
+	--kzcb-destructive-foreground: #ffffff;
+	--destructive-foreground: 210 40% 98%;
+	--kzcb-border: 214.3 31.8% 91.4%;
+	--ring: 222.2 84% 4.9%;
+	--kzcb-radius: 0.5rem;
+	--tw-translate-y: 50%;
 }
 
 #kzchatbot {
@@ -56,19 +61,19 @@
 	.kzcb-chat {
 		display: flex;
 		flex-direction: column;
-		width: 300px;
+		width: 70vh;
+		min-width: 400px;
+		max-width: 500px;
+		height: 96vh;
+		max-height: 800px;
 		border-radius: var(--kzcb-radius);
-		background-color: var(--kzcb-background);
+		background-color: var(--kzcb-popover);
 		color: hsl(var(--kzcb-foreground));
-		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		box-shadow: -4px 0px 12px 0px rgba(0, 0, 0, 0.05);
+		overflow: hidden;
 	}
 
-	/**
-	 * CSS styles for markdown tables.
-	 * @see https://github.com/micromark/micromark-extension-gfm-table#css
-	 */
 	.markdown {
-		/* Light theme. */
 		--color-canvas-default: #ffffff;
 		--color-canvas-subtle: #f6f8fa;
 		--color-border-default: #d0d7de;
@@ -110,10 +115,10 @@
 	}
 }
 
-/* Larger icon on desktop. The @media decleration should be in sync with `useMobile.tsx` */
+
 @media (min-width: 768px) {
 	#kzchatbot-trigger {
-		transform: scaleX( 1.3 ) scaleY( 1.3 );
+		transform: scaleX(1.3) scaleY(1.3);
 	}
 
 	#kzchatbot {
@@ -122,5 +127,117 @@
 	}
 }
 
+@media (max-width: 767px) {
+	.kzcb-chat {
+		width: 100vw;
+		height: 100vh;
+		max-width: none;
+		max-height: none;
+		border-radius: 0;
+	}
 
+	.chat-header {
+		padding: 12px 16px;
+		height: 56px;
+	}
 
+	.header-title {
+		font-size: 18px;
+	}
+
+	.ai-icon,
+	.close-icon {
+		width: 28px;
+		height: 28px;
+	}
+}
+
+.chat-header {
+	background-color: #ffffff;
+	display: flex;
+	flex-direction: row;
+	align-items: initial;
+	justify-content: space-evenly;
+	padding: 16px 24px 16px 16px;
+	border-bottom: 1px solid #bbd2e7;
+	height: 64px;
+	box-sizing: border-box;
+	flex-shrink: 0;
+}
+
+.close-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	width: 32px;
+	height: 32px;
+	border-radius: 4px;
+	transition: background-color 0.2s ease;
+}
+
+.close-button:hover {
+	background-color: rgba(45, 91, 133, 0.1);
+}
+
+.close-button:active {
+	background-color: rgba(45, 91, 133, 0.2);
+}
+
+.close-icon {
+	width: 32px;
+	height: 32px;
+}
+
+.header-title-section {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 12px;
+	flex: 1;
+	justify-content: flex-start;
+}
+
+.header-title {
+	font-family: 'Open Sans', sans-serif;
+	text-align: right;
+	direction: rtl;
+	background: linear-gradient(135deg, #3284FF, #D65CFF);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	color: transparent;
+	unicode-bidi: isolate;
+	transition: color 0.3s ease, -webkit-text-fill-color 0.3s ease;
+	font-weight: 700 !important;
+}
+
+.ai-icon-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.ai-icon {
+	width: 32px;
+	height: 32px;
+}
+
+.chat-container {
+	background-color: #f2f6fa;
+	padding: 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	overflow-y: auto;
+	flex: 1;
+	height: 100%;
+}
+
+.flex-spacer {
+	flex: 1;
+	min-height: 0;
+}

@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <link rel="icon" type="image/svg+xml" href="/vite.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Vite + React + TS</title>
+        <title>KZ Chatbot</title>
         <!-- emulate js config object -->
          <script>
             window.KZChatbotConfig = {
@@ -37,13 +37,17 @@
                     ranking_request: "האם התשובה עזרה לך?",
                     returning_links_title: "כדאי לבדוק את התשובה גם כאן:",
                     tc_link: "תנאי שימוש",
-                    welcome_message_first: "aa",
+                    welcome_message_first: "ברוכים הבאים לצ'אט ה-AI, כאן ניתן לשאול שאלה בכל נושא",
                     welcome_message_second: "bb",
                     welcome_message_third: "cc",
                     questions_daily_limit: "הגעת למספר השאלות המותרות ליום",
                     general_error: "שגיאה כללית",
-                    new_question_hint:
-                        "הצ׳אט לא זוכר את השאלה שלך. תוכל לשאול שוב?",
+                    new_question_hint: "הצ׳אט לא זוכר את השאלה שלך. תוכל לשאול שוב?",
+					chat_disclaimer: "הצ׳אט יכול לטעות. 'כל זכות' לא אחראית לנכונות התשובות וממליצה לבדוק את המידע גם בעמוד המתאים באתר.",
+					chat_description: "שאלו את ה-AI שלנו",
+					"send_button": "שליחה",
+					by: "by",
+					getting_answer: "מאתר תשובה לשאלתך...",
                 },
                 restPath: "/rest.php",
             };
@@ -51,6 +55,7 @@
     </head>
     <body>
 		<div class="dummy-content" style="max-width: 1000px; margin: 0 auto; padding: 20px;">
+			<div id="chat-button"></div>
 			<h1>A corrupti soluta vel magni deserunt et commodi rerum. </h1>
 			<p>Et aperiam galisum et nobis dolorUt explicabo quo recusandae dolorem 33 velit tenetur quo perferendis
 				harum. Sed dolore laborum ut impedit oditSed illum et libero ratione aut nostrum beatae et voluptates
@@ -61,6 +66,7 @@
 				commodi qui voluptates necessitatibus <em>Qui pariatur et velit doloribus</em>! In alias molestiae cum
 				quam vitaeQuo sint ut aliquid accusantium in sunt voluptatem et ratione inventore! </p>
 			<h2>Aut iusto molestiae aut deserunt quis ea iusto consequatur. </h2>
+			<div id="chat-section-home"></div>
 			<p>Est voluptatem nemoEx esse ut sint voluptates et eius sint. Et vero deleniti ut neque temporeAut
 				obcaecati qui cumque dolorem est tempore sint vel dolores possimus est cumque galisum. Et debitis
 				autemSed quia vel iusto amet At officia repellendus ut omnis libero qui voluptatem consequatur. Et
@@ -72,6 +78,7 @@
 				Qui nihil tempore et similique sintet voluptatem et amet ratione. Et enim officiis aut voluptatum essead
 				vitae et delectus maiores eum inventore placeat. Et earum doloribusEt galisum et voluptatum consequatur
 				ut rerum natus qui eius rerum. </p>
+			<div id="chat-section"></div>
 			<h3>33 eaque quasi non labore internos et eius quas. </h3>
 			<p>Vel dolorum itaque et consequatur esseEst omnis et quae velit. In quisquam error et eveniet explicabo
 				<em>A sunt est modi consectetur</em> hic sunt earum et assumenda architecto aut quasi delectus. Cum iure
@@ -157,7 +164,6 @@
 				temporibus ut illum quas. </p>
 
 		</div>
-        <div id="kzchatbot" class="kzchatbot"></div>
         <script type="module" src="/src/main.tsx"></script>
     </body>
 </html>

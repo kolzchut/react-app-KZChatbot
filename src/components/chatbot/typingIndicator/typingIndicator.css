@@ -1,0 +1,42 @@
+
+.bubble {
+    background-color: #ffffff;
+    color: var(--kzcb-text-gray);
+    padding: 16px;
+    border-radius: 8px 8px 8px 0;
+    max-width: 100%;
+    width: fit-content;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    text-align: right;
+    direction: rtl;
+}
+
+.bubble span {
+    display: inline-block;
+    opacity: 0.2;
+    animation: wave 1.5s infinite;
+}
+
+.bubble span:nth-child(1)  { animation-delay: 0s; }
+.bubble span:nth-child(2)  { animation-delay: 0.1s; }
+.bubble span:nth-child(3)  { animation-delay: 0.2s; }
+.bubble span:nth-child(4)  { animation-delay: 0.3s; }
+.bubble span:nth-child(5)  { animation-delay: 0.4s; }
+.bubble span:nth-child(6)  { animation-delay: 0.5s; }
+.bubble span:nth-child(7)  { animation-delay: 0.6s; }
+.bubble span:nth-child(8)  { animation-delay: 0.7s; }
+.bubble span:nth-child(9)  { animation-delay: 0.8s; }
+.bubble span:nth-child(10) { animation-delay: 0.9s; }
+.bubble span:nth-child(11) { animation-delay: 1.0s; }
+.bubble span:nth-child(12) { animation-delay: 1.1s; }
+.bubble span:nth-child(13) { animation-delay: 1.2s; }
+.bubble span:nth-child(14) { animation-delay: 1.3s; }
+.bubble span:nth-child(15) { animation-delay: 1.4s; }
+.bubble span:nth-child(16) { animation-delay: 1.5s; }
+
+@keyframes wave {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+}

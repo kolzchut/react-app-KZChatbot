@@ -1,0 +1,123 @@
+.gradient-border-wrapper {
+  position: relative;
+  padding: 2px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(50, 132, 255, 0.6), rgba(203, 224, 255, 0.6), rgba(214, 92, 255, 0.6), rgba(241, 201, 255, 0.6));
+  background-size: 200% 200%;
+  animation: circularFlow 2s linear infinite;
+  box-shadow: none;
+  transition: box-shadow 0.3s ease;
+}
+
+.gradient-border-wrapper:hover {
+  box-shadow: 0 0 16px 2px rgba(214, 92, 255, 0.3);
+}
+
+.gradient-border-wrapper.disabled {
+  z-index: -5;
+  opacity: 0.6;
+  animation: none;
+}
+
+.gradient-border-wrapper.homepage {
+  background: none;
+  animation: none;
+  padding: 0;
+}
+
+.gradient-border-wrapper.homepage:hover {
+  box-shadow: none;
+}
+
+@keyframes circularFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  25% {
+    background-position: 50% 100%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  75% {
+    background-position: 50% 0%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.chat-area-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  background: white;
+  box-sizing: border-box;
+  font-family: "Open Sans", sans-serif;
+  margin: auto;
+  border-radius: 20px;
+  top: 50%;
+}
+
+.chat-area-container.disabled {
+  z-index: 5;
+  opacity: 0.9;
+  background-color: white;
+}
+
+.chat-area-container.homepage {
+  background: var(--Bg-blue, #F2F6FA);
+}
+
+.chat-area-content {
+  width: 95%;
+  max-width: 95%;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  padding-top: 1.5rem;
+  background: transparent;
+}
+
+.chat-area-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
+  direction: rtl;
+  gap: 0.5rem;
+  font-family: "Open Sans";
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.chat-description {
+  background: linear-gradient(135deg, #3284FF, #D65CFF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  unicode-bidi: isolate;
+  transition: color 0.3s ease, -webkit-text-fill-color 0.3s ease;
+}
+
+
+@media (max-width: 768px) {
+  .chat-area-content {
+    max-width: 100%;
+    padding: 20px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-area-content {
+    padding: 16px 0;
+  }
+}

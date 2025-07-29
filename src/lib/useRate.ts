@@ -143,10 +143,6 @@ const useRate = ({
 		}
 	};
 
-	const handleCloseRate = () => {
-		setRateIsOpen(false);
-	};
-
 	return {
 		values,
 		errors,
@@ -156,8 +152,7 @@ const useRate = ({
 		rateIsOpen,
 		setRateIsOpen,
 		isFormValid,
-		handleRate,
-		handleCloseRate,
+		handleRate
 	};
 };
 
