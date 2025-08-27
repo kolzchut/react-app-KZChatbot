@@ -6,7 +6,7 @@ import { pushAnalyticsEvent } from "@/lib/analytics";
 import { useMobile } from "@/lib/useMobile";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { openChat, closeChat, selectIsChatOpen } from "@/store/slices/chatSlice";
-import { selectQuestion, resetQuestion } from "@/store/slices/questionSlice";
+import { selectQuestion, selectQuestionSource, resetQuestion } from "@/store/slices/questionSlice";
 import {
   Messages,
   Popover,
@@ -22,6 +22,7 @@ const Chatbot = () => {
   const dispatch = useAppDispatch();
   const isChatOpen = useAppSelector(selectIsChatOpen);
   const question = useAppSelector(selectQuestion);
+  const questionSource = useAppSelector(selectQuestionSource);
 
   const [globalConfigObject, setGlobalConfigObject] = useState<
     typeof window.KZChatbotConfig | null
@@ -33,6 +34,7 @@ const Chatbot = () => {
   };
   const [errors, setErrors] = useState<Errors>(initialErrors);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [hasAskedQuestions, setHasAskedQuestions] = useState(false);
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const isMobile = useMobile();
 
@@ -50,9 +52,25 @@ const Chatbot = () => {
 
     useEffect(() => {
     if (globalConfigObject?.autoOpen) {
+      pushAnalyticsEvent("opened", null, "auto-opened");
       dispatch(openChat());
     }
   }, [globalConfigObject]);
+
+  // Handle questions from embed widget
+  useEffect(() => {
+    if (question && question.trim() && questionSource === "embed") {
+      handleSubmit(new Event('submit') as any);
+    }
+  }, [question, questionSource]);
+
+  const handleCloseChat = () => {
+    if (!hasAskedQuestions) {
+      pushAnalyticsEvent("closed_unused");
+    }
+    dispatch(closeChat());
+    setHasAskedQuestions(false); // Reset for next session
+  };
 
   const getAnswer = async (question: string): Promise<Answer | void> => {
     const isProduction = import.meta.env.MODE === "production";
@@ -106,7 +124,8 @@ const Chatbot = () => {
     }
 
     try {
-      pushAnalyticsEvent("question_asked");
+      pushAnalyticsEvent("question_asked", null, questionSource || "popup");
+      setHasAskedQuestions(true);
       setMessages((prevMessages) => {
         prevMessages.map((item) => {
           if (item.type !== MessageType.StartBot) {
@@ -240,9 +259,7 @@ const Chatbot = () => {
       <div className="chatbot-overlay" />
       <PopoverContent className={`chatbot-popover-content ${isMobile ? "mobile" : "desktop"}`}>
         <ClosePopover
-          handleChatSetIsOpen={() => {
-            dispatch(closeChat());
-          }}
+          handleChatSetIsOpen={handleCloseChat}
           globalConfigObject={globalConfigObject}
         />
         <div className="chatbot-popover-main">

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { openChat, selectIsChatOpen } from '@/store/slices/chatSlice';
 import { setQuestion } from '@/store/slices/questionSlice';
+import { pushAnalyticsEvent } from '@/lib/analytics';
 import Stars from "@/assets/purple-stars.svg";
 import './chatArea.css';
 import ChatInput from '../chatbot/chatInput/ChatInput';
@@ -24,8 +25,9 @@ const ChatArea: React.FC<ChatAreaProps> = ({ isHomePage }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (localQuestion.trim()) {
+      pushAnalyticsEvent("opened", null, "embed");
       dispatch(openChat());
-      dispatch(setQuestion(localQuestion.trim()));
+      dispatch(setQuestion({text: localQuestion.trim(), source: "embed"}));
       setLocalQuestion('');
     }
   };
