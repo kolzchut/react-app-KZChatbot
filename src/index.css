@@ -47,6 +47,10 @@
 	--ring: 222.2 84% 4.9%;
 	--kzcb-radius: 0.5rem;
 	--tw-translate-y: 50%;
+    --Gray: #555555;
+    --MidLightGray: #838D98;
+	--LightGray: #CCCCCC;
+    --Cyan: #3284FF
 }
 
 #kzchatbot {
@@ -68,7 +72,7 @@
 		border-radius: var(--kzcb-radius);
 		background-color: var(--kzcb-popover);
 		color: hsl(var(--kzcb-foreground));
-		box-shadow: -4px 0px 12px 0px rgba(0, 0, 0, 0.05);
+		box-shadow: -4px 0 12px 0 rgba(0, 0, 0, 0.05);
 		overflow: hidden;
 	}
 

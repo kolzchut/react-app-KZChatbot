@@ -1,6 +1,6 @@
 import Stars from "../../Stars";
 import "./newQuestion.css"
-
+import infoIcon from "../../../assets/info.svg"
 interface NewQuestionButtonProps {
   onClick: () => void;
 }
@@ -12,7 +12,10 @@ const NewQuestionButton = ({ onClick }: NewQuestionButtonProps) => {
   return (
     <div className="new-question-section">
       <div className="new-question-divider-container">
-        <div className="new-question-divider-start"></div>
+          <img src={infoIcon} alt={"info icon"}/>
+          <div>
+              <span className={"new-question-info"}>{slugs?.info || "זוהי גרסה נסיונית"}</span>
+          </div>
         <div className="new-question-button-border">
           <button
             onClick={onClick}
@@ -20,14 +23,10 @@ const NewQuestionButton = ({ onClick }: NewQuestionButtonProps) => {
           >
             <Stars className="new-question-icon" />
             <span className="new-question-gradient-text">
-              {slugs?.new_question_button || "שאלה חדשה"}
+              {slugs?.new_question_button || "נסחו שאלה חדשה"}
             </span>
           </button>
         </div>
-        <div className="new-question-divider-end"></div>
-      </div>
-      <div className="new-question-disclaimer">
-        הצ'אט לא זוכר תשובות לשאלות קודמות. יש לנסח שאלה חדשה.
       </div>
     </div>
   )
