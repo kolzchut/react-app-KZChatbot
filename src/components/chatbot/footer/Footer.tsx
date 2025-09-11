@@ -109,7 +109,7 @@ const Footer = ({
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (localQuestion.trim()) {
-      dispatch(setQuestion(localQuestion.trim()));
+      dispatch(setQuestion({text: localQuestion.trim()}));
       dispatch(openChat());
       setLocalQuestion('');
     }
