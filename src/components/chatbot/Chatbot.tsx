@@ -184,8 +184,8 @@ const Chatbot = () => {
     if (question && question.trim() && questionSource === "embed") {
       handleSubmit({
         preventDefault: () => {},
-        currentTarget: null as any,
-        target: null as any,
+        currentTarget: null as HTMLFormElement | null,
+        target: null as HTMLFormElement | null,
         nativeEvent: new Event('submit'),
         isDefaultPrevented: () => false,
         isPropagationStopped: () => false,

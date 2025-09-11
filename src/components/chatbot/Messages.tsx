@@ -13,7 +13,7 @@ import historyIcon from "../../assets/history.svg"
 
 
 interface MessagesProps {
-    messages: Message[];
+    messages?: Message[];
     setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
     isLoading: boolean;
     globalConfigObject: typeof window.KZChatbotConfig | null;
