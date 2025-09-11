@@ -17,7 +17,6 @@ const mountComponent = (id: string, Component: JSX.Element) => {
 			el.className = id;
 			document.body.appendChild(el);
 		} else {
-			// eslint-disable-next-line no-console
 			console.debug(`[KZChatbot] Container element with id '#${id}' not found. Skipping mount.`);
 			return;
 		}

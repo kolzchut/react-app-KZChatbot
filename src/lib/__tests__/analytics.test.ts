@@ -94,9 +94,9 @@ describe('pushAnalyticsEvent', () => {
   })
 
   it('should initialize dataLayer if not exists', () => {
-    // @ts-ignore - Mock undefined dataLayer
+    // @ts-expect-error - Mock undefined dataLayer
     const originalDataLayer = window.dataLayer
-    // @ts-ignore
+    // @ts-expect-error - Testing environment cleanup
     window.dataLayer = undefined
     
     pushAnalyticsEvent('test_event')

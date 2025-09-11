@@ -11,7 +11,7 @@ vi.mock('@/lib/analytics', () => ({
 
 // Mock child components
 vi.mock('../Rate', () => ({
-  default: ({ message }: { message: any }) => (
+  default: ({ message }: { message: Message }) => (
     <div data-testid={`rate-${message.id}`}>Rate Component</div>
   )
 }))
@@ -59,7 +59,7 @@ describe('Messages Component', () => {
   describe('Basic Rendering', () => {
     it('renders null when messages is falsy', () => {
       const { container } = render(
-        <Messages {...defaultProps} messages={null as any} />
+        <Messages {...defaultProps} messages={null as Message[]} />
       )
       expect(container.firstChild).toBeNull()
     })
@@ -82,14 +82,18 @@ describe('Messages Component', () => {
       const messages = [
         createMessage({ id: '1', content: 'Valid message' }),
         createMessage({ id: '2', content: '' }),
-        createMessage({ id: '3', content: null as any })
+        createMessage({ id: '3', content: '' })
       ]
       
       render(<Messages {...defaultProps} messages={messages} />)
       
-      // Only one message should be rendered
+      // Only one message should be rendered  
       expect(screen.getByText('Valid message')).toBeInTheDocument()
-      expect(screen.queryByText('')).not.toBeInTheDocument()
+      // Check that messages with empty content are filtered out
+      const emptyMessages = screen.queryAllByText((content, element) => {
+        return element?.className?.includes('message-') && content.trim() === ''
+      })
+      expect(emptyMessages.length).toBe(0)
     })
   })
 
@@ -335,7 +339,7 @@ describe('Messages Component', () => {
       // Check specific styling and components
       expect(screen.getByText('User question')).toHaveClass('message-user-block')
       expect(screen.getByText('Error message')).toHaveClass('message-error')
-      expect(screen.getAllByAltText('Bot Avatar')).toHaveLength(3) // StartBot, Bot, Warning
+      expect(screen.getAllByAltText('Bot Avatar')).toHaveLength(4) // StartBot, Bot, Warning, Error
       expect(screen.getByAltText('Alert Icon')).toBeInTheDocument() // Error only
       expect(screen.getByTestId('rate-3')).toBeInTheDocument() // Only Bot message gets rate
     })

@@ -248,7 +248,7 @@ describe('useMobile Hook', () => {
       // Simulate gradual resize (like a user dragging browser window)
       const resizeSteps = [1200, 1000, 900, 800, 750, 600]
       
-      resizeSteps.forEach((width, index) => {
+      resizeSteps.forEach((width) => {
         act(() => {
           fireResize(width)
         })

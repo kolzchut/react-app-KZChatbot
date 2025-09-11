@@ -1,4 +1,4 @@
-import { renderHook, act, waitFor } from '@testing-library/react'
+import { renderHook, act } from '@testing-library/react'
 import { useRate } from '../useRate'
 import { pushAnalyticsEvent } from '../analytics'
 import { Message, MessageType } from '@/types'
@@ -27,7 +27,7 @@ const defaultProps = {
     slugs: {
       feedback_character_limit: 'Feedback character limit exceeded'
     }
-  } as any,
+  },
   textareaRef: { current: null } as React.RefObject<HTMLTextAreaElement>,
   errors: { description: '' },
   setErrors: vi.fn(),

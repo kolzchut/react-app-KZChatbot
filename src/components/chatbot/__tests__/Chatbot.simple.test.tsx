@@ -19,7 +19,7 @@ vi.mock('@/lib/useMobile', () => ({
 
 // Mock all the complex child components with simpler versions
 vi.mock('@/components', () => ({
-  Messages: React.forwardRef<HTMLDivElement, { messages: any[] }>(({ messages }, ref) => {
+  Messages: React.forwardRef<HTMLDivElement, { messages: unknown[] }>(({ messages }, ref) => {
     const divRef = React.useRef<HTMLDivElement>(null)
     
     React.useEffect(() => {
@@ -55,7 +55,7 @@ vi.mock('@/components', () => ({
   PopoverContent: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="popover-content">{children}</div>
   ),
-  Footer: ({ handleSubmit, showInput }: any) => (
+  Footer: ({ handleSubmit, showInput }: { handleSubmit: (e: React.FormEvent) => void; showInput: boolean }) => (
     <div data-testid="footer">
       {showInput && (
         <form onSubmit={handleSubmit} data-testid="chat-form">
@@ -77,7 +77,7 @@ vi.mock('../webiksFooter/WebiksFooter', () => ({
 const mockPushAnalyticsEvent = vi.mocked(pushAnalyticsEvent)
 const mockFetch = vi.mocked(global.fetch)
 
-const createTestStore = (initialState?: any) => configureStore({
+const createTestStore = (initialState?: Record<string, unknown>) => configureStore({
   reducer: {
     chat: chatSlice,
     question: questionSlice

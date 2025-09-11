@@ -14,7 +14,12 @@ vi.mock('@/lib/analytics', () => ({
 
 // Mock ChatInput component
 vi.mock('../../chatbot/chatInput/ChatInput', () => ({
-  default: ({ handleSubmit, question, handleOnMessageChange, disabled }: any) => (
+  default: ({ handleSubmit, question, handleOnMessageChange, disabled }: { 
+    handleSubmit: (e: React.FormEvent) => void
+    question: string
+    handleOnMessageChange: (e: React.ChangeEvent<HTMLInputElement>) => void 
+    disabled?: boolean
+  }) => (
     <form onSubmit={handleSubmit} data-testid="chat-input-form">
       <input
         type="text"

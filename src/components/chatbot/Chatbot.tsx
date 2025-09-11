@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Errors, Message, MessageType, Answer } from "@/types";
 import { HttpError } from "../../lib/HttpError";
@@ -29,9 +29,9 @@ const Chatbot = () => {
   >(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showInput, setShowInput] = useState(true);
-  const initialErrors: Errors = {
+  const initialErrors: Errors = useMemo(() => ({
     description: "",
-  };
+  }), []);
   const [errors, setErrors] = useState<Errors>(initialErrors);
   const [messages, setMessages] = useState<Message[]>([]);
   const [hasAskedQuestions, setHasAskedQuestions] = useState(false);
@@ -55,14 +55,7 @@ const Chatbot = () => {
       pushAnalyticsEvent("opened", null, "auto-opened");
       dispatch(openChat());
     }
-  }, [globalConfigObject]);
-
-  // Handle questions from embed widget
-  useEffect(() => {
-    if (question && question.trim() && questionSource === "embed") {
-      handleSubmit(new Event('submit') as any);
-    }
-  }, [question, questionSource]);
+  }, [globalConfigObject, dispatch]);
 
   const handleCloseChat = () => {
     if (!hasAskedQuestions) {
@@ -72,7 +65,7 @@ const Chatbot = () => {
     setHasAskedQuestions(false); // Reset for next session
   };
 
-  const getAnswer = async (question: string): Promise<Answer | void> => {
+  const getAnswer = useCallback(async (question: string): Promise<Answer | void> => {
     const isProduction = import.meta.env.MODE === "production";
 
     const url = isProduction
@@ -101,9 +94,9 @@ const Chatbot = () => {
       throw new HttpError(data.message, response.status);
     }
     return data;
-  };
+  }, [globalConfigObject]);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = useCallback(async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (question === "" || !question.trim()) {
@@ -184,7 +177,14 @@ const Chatbot = () => {
       setIsLoading(false);
       setErrors(initialErrors);
     }
-  };
+  }, [question, globalConfigObject, questionSource, dispatch, initialErrors, getAnswer]);
+
+  // Handle questions from embed widget
+  useEffect(() => {
+    if (question && question.trim() && questionSource === "embed") {
+      handleSubmit(new Event('submit') as React.FormEvent<HTMLFormElement>);
+    }
+  }, [question, questionSource, handleSubmit]);
 
   const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
     if (messageContainerRef.current) {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
 import Footer from '../Footer'
@@ -19,7 +19,7 @@ vi.mock('@/lib/useMobile', () => ({
 }))
 
 // Mock child components
-vi.mock('../newQuestion/NewQuestion.tsx', () => ({
+vi.mock('@/components/chatbot/newQuestion/NewQuestion.tsx', () => ({
   default: ({ onClick }: { onClick: () => void }) => (
     <button data-testid="new-question" onClick={onClick}>
       Ask New Question
@@ -27,7 +27,7 @@ vi.mock('../newQuestion/NewQuestion.tsx', () => ({
   )
 }))
 
-vi.mock('../chatInput/ChatInput.tsx', () => ({
+vi.mock('@/components/chatbot/chatInput/ChatInput.tsx', () => ({
   default: ({ 
     question, 
     handleSubmit, 
@@ -38,7 +38,7 @@ vi.mock('../chatInput/ChatInput.tsx', () => ({
     question: string
     handleSubmit: (e: React.FormEvent) => void
     handleOnMessageChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-    errors: any
+    errors: { question?: string; description?: string }
     inputRef: React.RefObject<HTMLInputElement>
   }) => (
     <form data-testid="chat-input-form" onSubmit={handleSubmit}>
@@ -58,7 +58,7 @@ const mockPushAnalyticsEvent = vi.mocked(pushAnalyticsEvent)
 const { useMobile } = await import('@/lib/useMobile')
 const mockUseMobile = vi.mocked(useMobile)
 
-const createTestStore = (initialState?: any) => configureStore({
+const createTestStore = (initialState?: Record<string, unknown>) => configureStore({
   reducer: {
     chat: chatSlice,
     question: questionSlice
@@ -77,7 +77,7 @@ const defaultProps = {
     slugs: {
       question_character_limit: 'Character limit exceeded'
     }
-  } as any,
+  },
   errors: { description: '', question: '' },
   setErrors: vi.fn(),
   messages: [] as Message[],
@@ -91,7 +91,7 @@ const createMessage = (overrides: Partial<Message> = {}): Message => ({
   ...overrides
 })
 
-const renderWithStore = (props: any = {}, storeState: any = {}) => {
+const renderWithStore = (props: Partial<typeof defaultProps> = {}, storeState: Record<string, unknown> = {}) => {
   const store = createTestStore(storeState)
   return {
     ...render(
@@ -185,7 +185,10 @@ describe('Footer Component', () => {
       renderWithStore()
       
       const input = screen.getByTestId('chat-input')
-      fireEvent.change(input, { target: { value: 'Test question' } })
+      
+      act(() => {
+        fireEvent.change(input, { target: { value: 'Test question' } })
+      })
       
       expect(input).toHaveValue('Test question')
     })
@@ -199,7 +202,9 @@ describe('Footer Component', () => {
       expect(input).toHaveValue('Initial question')
       
       // Clear redux question
-      store.dispatch({ type: 'question/resetQuestion' })
+      act(() => {
+        store.dispatch({ type: 'question/resetQuestion' })
+      })
       
       expect(input).toHaveValue('')
     })
@@ -261,8 +266,13 @@ describe('Footer Component', () => {
       const input = screen.getByTestId('chat-input')
       const form = screen.getByTestId('chat-input-form')
       
-      fireEvent.change(input, { target: { value: 'Test question' } })
-      fireEvent.submit(form)
+      act(() => {
+        fireEvent.change(input, { target: { value: 'Test question' } })
+      })
+      
+      act(() => {
+        fireEvent.submit(form)
+      })
       
       const state = store.getState()
       expect(state.question.question).toBe('Test question')
@@ -275,8 +285,13 @@ describe('Footer Component', () => {
       const input = screen.getByTestId('chat-input')
       const form = screen.getByTestId('chat-input-form')
       
-      fireEvent.change(input, { target: { value: '  Test question  ' } })
-      fireEvent.submit(form)
+      act(() => {
+        fireEvent.change(input, { target: { value: '  Test question  ' } })
+      })
+      
+      act(() => {
+        fireEvent.submit(form)
+      })
       
       const state = store.getState()
       expect(state.question.question).toBe('Test question')
@@ -309,12 +324,14 @@ describe('Footer Component', () => {
   })
 
   describe('Redux Question Handling', () => {
-    it('handles redux question submission automatically', () => {
+    it('handles redux question submission automatically', async () => {
       const handleSubmit = vi.fn()
       const { store } = renderWithStore({ handleSubmit })
       
       // Set question in redux
-      store.dispatch({ type: 'question/setQuestion', payload: 'Redux question' })
+      await act(async () => {
+        store.dispatch({ type: 'question/setQuestion', payload: 'Redux question' })
+      })
       
       expect(handleSubmit).toHaveBeenCalled()
       

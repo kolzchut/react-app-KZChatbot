@@ -9,7 +9,7 @@ import questionSlice from '@/store/slices/questionSlice'
 
 // Mock complex components for integration testing
 vi.mock('@/components', () => ({
-  Messages: React.forwardRef<HTMLDivElement, { messages: any[] }>(({ messages }, ref) => {
+  Messages: React.forwardRef<HTMLDivElement, { messages: unknown[] }>(({ messages }, ref) => {
     const divRef = React.useRef<HTMLDivElement>(null)
     
     React.useEffect(() => {
@@ -47,7 +47,11 @@ vi.mock('@/components', () => ({
       {children}
     </div>
   ),
-  Footer: ({ handleSubmit, isLoading, showInput }: any) => (
+  Footer: ({ handleSubmit, isLoading, showInput }: { 
+    handleSubmit: (e: React.FormEvent) => void
+    isLoading: boolean
+    showInput: boolean
+  }) => (
     <div data-testid="footer">
       {showInput && (
         <form onSubmit={handleSubmit} data-testid="chat-form">

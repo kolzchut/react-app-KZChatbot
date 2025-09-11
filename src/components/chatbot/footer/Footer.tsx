@@ -53,14 +53,16 @@ const Footer = ({
     if (isChatOpen && showInput && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [isMobile, inputRef, showInput, isChatOpen]);
+  }, [isMobile, inputRef, showInput, isChatOpen, messages]);
 
   useEffect(() => {
     if (reduxQuestion === '') {
       setLocalQuestion('');
       sessionStorage.removeItem(submittedKey);
+    } else if (reduxQuestion && localQuestion !== reduxQuestion) {
+      setLocalQuestion(reduxQuestion);
     }
-  }, [reduxQuestion]);
+  }, [reduxQuestion, localQuestion]);
 
   useEffect(() => {
     const submitted = sessionStorage.getItem(submittedKey);
@@ -81,7 +83,7 @@ const Footer = ({
       handleSubmit(fakeEvent);
       sessionStorage.setItem(submittedKey, reduxQuestion);
     }
-  }, [reduxQuestion]);
+  }, [reduxQuestion, handleSubmit]);
 
   if (
     isLoading ||
