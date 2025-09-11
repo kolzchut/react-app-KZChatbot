@@ -129,16 +129,16 @@ describe('Messages Component', () => {
         type: MessageType.Bot,
         content: '**Bold** response with markdown'
       })
-      
+
       render(<Messages {...defaultProps} messages={[message]} />)
-      
+
       // Check bot avatar
-      expect(screen.getByAltText('Bot Avatar')).toBeInTheDocument()
-      expect(screen.getByAltText('Bot Avatar')).toHaveAttribute('src', 'stars-icon.svg')
-      
+		expect(document.querySelector('.bot-avatar')).toBeInTheDocument()
+		expect(document.querySelector('.bot-avatar img')).toHaveAttribute('src', 'stars-icon.svg')
+
       // Check markdown content
       expect(screen.getByTestId('markdown-content')).toHaveTextContent('**Bold** response with markdown')
-      
+
       // Check styling - the markdown content is inside the message-bot-block div
       const markdownContent = screen.getByTestId('markdown-content')
       expect(markdownContent.parentElement).toHaveClass('message-bot-block')
@@ -167,15 +167,15 @@ describe('Messages Component', () => {
         type: MessageType.StartBot,
         content: 'Welcome message'
       })
-      
+
       render(<Messages {...defaultProps} messages={[message]} />)
-      
+
       // Should have bot avatar and styling
-      expect(screen.getByAltText('Bot Avatar')).toBeInTheDocument()
+      expect(document.querySelector('.bot-avatar')).toBeInTheDocument()
       // For non-Bot messages, content is rendered as plain text, not markdown
       const messageContent = screen.getByText('Welcome message')
       expect(messageContent).toHaveClass('message-bot-block')
-      
+
       // Should NOT have disclaimer or rate
       expect(screen.queryByText(/התשובה מבוססת AI/)).not.toBeInTheDocument()
       expect(screen.queryByTestId(/rate-/)).not.toBeInTheDocument()
@@ -188,14 +188,14 @@ describe('Messages Component', () => {
         type: MessageType.Warning,
         content: 'Warning message'
       })
-      
+
       render(<Messages {...defaultProps} messages={[message]} />)
-      
+
       // Should have bot avatar and styling
-      expect(screen.getByAltText('Bot Avatar')).toBeInTheDocument()
-      const messageContent = screen.getByText('Warning message')
+		expect(document.querySelector('.bot-avatar')).toBeInTheDocument()
+		const messageContent = screen.getByText('Warning message')
       expect(messageContent).toHaveClass('message-bot-block')
-      
+
       // Should NOT have disclaimer or rate
       expect(screen.queryByText(/התשובה מבוססת AI/)).not.toBeInTheDocument()
       expect(screen.queryByTestId(/rate-/)).not.toBeInTheDocument()
@@ -326,20 +326,20 @@ describe('Messages Component', () => {
         createMessage({ id: '4', type: MessageType.Warning, content: 'Warning message' }),
         createMessage({ id: '5', type: MessageType.Error, content: 'Error message' })
       ]
-      
+
       render(<Messages {...defaultProps} messages={messages} />)
-      
+
       // All messages should be present
       expect(screen.getByText('Welcome!')).toBeInTheDocument()
       expect(screen.getByText('User question')).toBeInTheDocument()
       expect(screen.getByText('Bot response')).toBeInTheDocument()
       expect(screen.getByText('Warning message')).toBeInTheDocument()
       expect(screen.getByText('Error message')).toBeInTheDocument()
-      
+
       // Check specific styling and components
       expect(screen.getByText('User question')).toHaveClass('message-user-block')
       expect(screen.getByText('Error message')).toHaveClass('message-error')
-      expect(screen.getAllByAltText('Bot Avatar')).toHaveLength(4) // StartBot, Bot, Warning, Error
+      expect(document.querySelectorAll('.bot-avatar')).toHaveLength(4) // StartBot, Bot, Warning, Error
       expect(screen.getByAltText('Alert Icon')).toBeInTheDocument() // Error only
       expect(screen.getByTestId('rate-3')).toBeInTheDocument() // Only Bot message gets rate
     })

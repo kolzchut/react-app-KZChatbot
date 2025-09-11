@@ -82,7 +82,7 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
                                     </div>
                                 ) : (<div className="message-bot-container">
                                         <div className="bot-avatar">
-                                            <img src={Stars} alt="Bot Avatar"/>
+                                            <img src={Stars} alt=""/>
                                         </div>
 
                                         <div className={getMessageClasses(message.type)}>
