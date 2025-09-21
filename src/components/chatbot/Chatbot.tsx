@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Errors, Message, MessageType, Answer } from "@/types";
 import { HttpError } from "../../lib/HttpError";
@@ -6,7 +6,7 @@ import { pushAnalyticsEvent } from "@/lib/analytics";
 import { useMobile } from "@/lib/useMobile";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { openChat, closeChat, selectIsChatOpen } from "@/store/slices/chatSlice";
-import { selectQuestion, resetQuestion } from "@/store/slices/questionSlice";
+import { selectQuestion, selectQuestionSource, resetQuestion } from "@/store/slices/questionSlice";
 import {
   Messages,
   Popover,
@@ -22,17 +22,19 @@ const Chatbot = () => {
   const dispatch = useAppDispatch();
   const isChatOpen = useAppSelector(selectIsChatOpen);
   const question = useAppSelector(selectQuestion);
+  const questionSource = useAppSelector(selectQuestionSource);
 
   const [globalConfigObject, setGlobalConfigObject] = useState<
     typeof window.KZChatbotConfig | null
   >(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showInput, setShowInput] = useState(true);
-  const initialErrors: Errors = {
+  const initialErrors: Errors = useMemo(() => ({
     description: "",
-  };
+  }), []);
   const [errors, setErrors] = useState<Errors>(initialErrors);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [hasAskedQuestions, setHasAskedQuestions] = useState(false);
   const messageContainerRef = useRef<HTMLDivElement>(null);
   const isMobile = useMobile();
 
@@ -50,11 +52,20 @@ const Chatbot = () => {
 
     useEffect(() => {
     if (globalConfigObject?.autoOpen) {
+      pushAnalyticsEvent("opened", null, "auto-opened");
       dispatch(openChat());
     }
-  }, [globalConfigObject]);
+  }, [globalConfigObject, dispatch]);
 
-  const getAnswer = async (question: string): Promise<Answer | void> => {
+  const handleCloseChat = () => {
+    if (!hasAskedQuestions) {
+      pushAnalyticsEvent("closed_unused");
+    }
+    dispatch(closeChat());
+    setHasAskedQuestions(false); // Reset for next session
+  };
+
+  const getAnswer = useCallback(async (question: string): Promise<Answer | void> => {
     const isProduction = import.meta.env.MODE === "production";
 
     const url = isProduction
@@ -83,9 +94,9 @@ const Chatbot = () => {
       throw new HttpError(data.message, response.status);
     }
     return data;
-  };
+  }, [globalConfigObject]);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = useCallback(async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (question === "" || !question.trim()) {
@@ -106,7 +117,8 @@ const Chatbot = () => {
     }
 
     try {
-      pushAnalyticsEvent("question_asked");
+      pushAnalyticsEvent("question_asked", null, questionSource || "popup");
+      setHasAskedQuestions(true);
       setMessages((prevMessages) => {
         prevMessages.map((item) => {
           if (item.type !== MessageType.StartBot) {
@@ -165,7 +177,14 @@ const Chatbot = () => {
       setIsLoading(false);
       setErrors(initialErrors);
     }
-  };
+  }, [question, globalConfigObject, questionSource, dispatch, initialErrors, getAnswer]);
+
+  // Handle questions from embed widget
+  useEffect(() => {
+    if (question && question.trim() && questionSource === "embed") {
+      handleSubmit(new Event('submit') as React.FormEvent<HTMLFormElement>);
+    }
+  }, [question, questionSource, handleSubmit]);
 
   const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
     if (messageContainerRef.current) {
@@ -240,9 +259,7 @@ const Chatbot = () => {
       <div className="chatbot-overlay" />
       <PopoverContent className={`chatbot-popover-content ${isMobile ? "mobile" : "desktop"}`}>
         <ClosePopover
-          handleChatSetIsOpen={() => {
-            dispatch(closeChat());
-          }}
+          handleChatSetIsOpen={handleCloseChat}
           globalConfigObject={globalConfigObject}
         />
         <div className="chatbot-popover-main">

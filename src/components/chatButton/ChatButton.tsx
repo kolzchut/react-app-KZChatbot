@@ -2,6 +2,7 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectIsChatOpen, openChat } from '../../store/slices/chatSlice';
 import { useMobile } from '../../lib/useMobile';
+import { pushAnalyticsEvent } from '../../lib/analytics';
 import Stars from '../Stars';
 import './chatButton.css';
 
@@ -26,6 +27,7 @@ const ChatButton: React.FC = () => {
     const isMobile = useMobile();
 
     const handleToggleChat = () => {
+        pushAnalyticsEvent("opened", null, "button");
         dispatch(openChat());
     };
 

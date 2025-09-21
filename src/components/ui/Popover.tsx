@@ -23,7 +23,7 @@ const PopoverContent = React.forwardRef<
     align?: "start" | "center" | "end";
     sideOffset?: number;
   }
->(({ className, align = "center", sideOffset = 4, children, style, ...props }, ref) => {
+>(({ className, children, style, ...props }, ref) => {
   return (
     <div
       ref={ref}

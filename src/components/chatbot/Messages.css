@@ -136,7 +136,7 @@
 .rating-text {
 	color: rgba(45, 91, 133, 0.70);
 	text-align: center;
-    font-family: "Open Sans", serif;
+    font-family: "Open Sans", sans-serif;
 	font-size: 0.875rem;
 	font-weight: 600;
 }
@@ -151,7 +151,7 @@
 	transform: rotate(180deg);
 }
 
-.old-questions-divider-div{
+.old-questions-divider-div {
     display: flex;
     align-items: center;
     width: 100%;
@@ -181,4 +181,34 @@
     border-width: 2px;
     border-style: solid;
     border-color: var(--LightGray, #CCCCCC);
+}
+
+.markdown {
+	> * {
+		overflow-wrap: break-word;
+		max-width: 100%;
+	}
+
+	ol {
+		list-style-type: decimal;
+		list-style-position: inside;
+	}
+
+	ul {
+		list-style-type: disc;
+		list-style-position: inside;
+	}
+
+	li > p {
+		display: inline-block;
+	}
+
+	a {
+		color: var(--kzcb-input-placeholder);
+	}
+
+	p,
+	li {
+		margin-bottom: 0.5rem;
+	}
 }
