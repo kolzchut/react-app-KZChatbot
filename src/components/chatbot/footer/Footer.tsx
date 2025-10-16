@@ -62,7 +62,7 @@ const Footer = ({
     } else if (reduxQuestion && localQuestion !== reduxQuestion) {
       setLocalQuestion(reduxQuestion);
     }
-  }, [reduxQuestion, localQuestion]);
+  }, [reduxQuestion]);
 
   useEffect(() => {
     const submitted = sessionStorage.getItem(submittedKey);
