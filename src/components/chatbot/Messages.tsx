@@ -13,7 +13,7 @@ import historyIcon from "../../assets/history.svg"
 
 
 interface MessagesProps {
-    messages: Message[];
+    messages?: Message[];
     setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
     isLoading: boolean;
     globalConfigObject: typeof window.KZChatbotConfig | null;
@@ -82,7 +82,7 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
                                     </div>
                                 ) : (<div className="message-bot-container">
                                         <div className="bot-avatar">
-                                            <img src={Stars} alt="Bot Avatar"/>
+                                            <img src={Stars} alt=""/>
                                         </div>
 
                                         <div className={getMessageClasses(message.type)}>

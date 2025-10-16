@@ -1,6 +1,6 @@
 import Stars from "../../Stars";
 import "./newQuestion.css"
-import infoIcon from "../../../assets/info.svg"
+import infoIcon from "../../../assets/Info.svg"
 interface NewQuestionButtonProps {
   onClick: () => void;
 }

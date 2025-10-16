@@ -11,7 +11,7 @@ const TypingIndicator: FC = () => {
     <div className="message-bot-container">
       <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
       <div className="bot-avatar">
-        <img src={Stars} alt="Bot Avatar" />
+        <img src={Stars} alt="" />
       </div>
       <div className="bubble">
         {typingText.split('').map((char, index) => (
