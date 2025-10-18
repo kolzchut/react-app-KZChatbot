@@ -1,6 +1,5 @@
 import CloseHeaderIcon from "@/assets/close-header.svg";
 import Stars from "@/assets/purple-stars.svg";
-import "../../index.css"
 
 interface ClosePopoverProps {
   globalConfigObject: typeof window.KZChatbotConfig | null;
