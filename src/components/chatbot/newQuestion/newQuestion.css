@@ -27,7 +27,7 @@
     border: 1px solid #3284FF66;
 }
 
-.new-question-info{
+.new-question-hint{
     display: flex;
     white-space: pre-line;
     color: var(--Cyan, #3284FF);

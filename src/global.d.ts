@@ -11,7 +11,6 @@ declare global {
       usageHelpUrl: string;
       referrer: string;
       slugs: {
-          info:string
 		chat_description: string
         chat_icon: string;
         chat_tip_link: string;
@@ -24,21 +23,19 @@ declare global {
         feedback_free_text_disclaimer: string;
         new_question_button: string;
         new_question_filed: string;
-        question_disclaimer: string;
+		new_question_hint: string;
+		question_disclaimer: string;
         question_field: string;
         ranking_request: string;
         returning_links_title: string;
         tc_link: string;
-        welcome_message_first: string;
-        welcome_message_second: string;
-        welcome_message_third: string;
+        welcome_message: string;
         feedback_character_limit: string;
         questions_daily_limit: string;
         question_character_limit: string;
         banned_word_found: string;
         general_error: string;
         send_button: string;
-        new_question_hint: string;
         chat_disclaimer: string;
         by: string;
         getting_answer: string;

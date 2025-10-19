@@ -234,7 +234,7 @@ const Chatbot = () => {
             {
               id: uuidv4(),
               content:
-                window.KZChatbotConfig?.slugs.welcome_message_first || "",
+                window.KZChatbotConfig?.slugs.welcome_message || "",
               type: MessageType.StartBot,
             },
           ]

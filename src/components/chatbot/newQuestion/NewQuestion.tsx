@@ -14,7 +14,7 @@ const NewQuestionButton = ({ onClick }: NewQuestionButtonProps) => {
       <div className="new-question-divider-container">
           <img src={infoIcon} alt={"info icon"}/>
           <div>
-              <span className={"new-question-info"}>{slugs?.info || "זוהי גרסה נסיונית"}</span>
+              <span className={"new-question-hint"}>{slugs?.new_question_hint || "זוהי גרסה ניסיונית שאינה תומכת בשיחה מתמשכת"}</span>
           </div>
         <div className="new-question-button-border">
           <button
