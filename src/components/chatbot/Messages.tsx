@@ -36,10 +36,15 @@ const getMessageClasses = (messageType: MessageType) => {
     }
 };
 
-const getLastUserMessageId = (messages: Message[]): string => {
+const getLastAnsweredUserMessageId = (messages: Message[]): string => {
+    // Find the last user message that has a bot response after it
     for (let i = messages.length - 1; i >= 0; i--) {
         if (messages[i].type === MessageType.User) {
-            return messages[i].id;
+            // Check if there's a bot/error/warning message after this user message
+            if (i < messages.length - 1 &&
+                [MessageType.Bot, MessageType.Error, MessageType.Warning].includes(messages[i + 1].type)) {
+                return messages[i].id;
+            }
         }
     }
     return "";
@@ -58,7 +63,7 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
             return null;
         }
 
-        const lastUserMessageId = getLastUserMessageId(messages);
+        const lastAnsweredUserMessageId = getLastAnsweredUserMessageId(messages);
         return (
             <div className="chat-container" ref={ref}>
                 <div className="flex-spacer"></div>
@@ -66,7 +71,7 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
                     (message) =>
                         message.content && (
                             <div key={message.id}>
-                                {messages.length > 3 && message.id === lastUserMessageId && (
+                                {messages.length > 3 && message.id === lastAnsweredUserMessageId && (
                                     <div className="old-questions-divider-div">
                                         <div className="old-questions-divider"/>
                                         <div className="old-questions-div-holder">
