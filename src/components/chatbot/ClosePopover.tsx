@@ -1,6 +1,5 @@
 import CloseHeaderIcon from "@/assets/close-header.svg";
 import Stars from "@/assets/purple-stars.svg";
-import "../../index.css"
 
 interface ClosePopoverProps {
   globalConfigObject: typeof window.KZChatbotConfig | null;
@@ -14,7 +13,7 @@ const ClosePopover = ({ globalConfigObject, handleChatSetIsOpen }: ClosePopoverP
     <div className="chat-header">
       <div className="header-title-section">
         <div className="ai-icon-container">
-          <img src={Stars} alt="AI Bot" className="ai-icon" />
+          <img src={Stars} alt="" className="ai-icon" />
         </div>
         <h1 className="header-title">
           {slugs?.chat_description}

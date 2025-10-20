@@ -38,7 +38,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({ isHomePage }) => {
         <div className={`chat-area-container${isChatOpen ? ' disabled' : ''}${isHomePage ? ' homepage' : ''}`}>
           <div className={`chat-area-content${isChatOpen ? ' disabled' : ''}${isHomePage ? ' homepage' : ''}`}>
             <div className="chat-area-header">
-              <img src={Stars} alt="AI Bot" className="ai-icon" />
+              <img src={Stars} alt="" className="ai-icon" />
               <span className='chat-description'>{slugs.chat_description}</span>
             </div>
             <ChatInput
