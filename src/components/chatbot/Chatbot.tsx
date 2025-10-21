@@ -182,7 +182,15 @@ const Chatbot = () => {
   // Handle questions from embed widget
   useEffect(() => {
     if (question && question.trim() && questionSource === "embed") {
-      handleSubmit(new Event('submit') as React.FormEvent<HTMLFormElement>);
+		handleSubmit({
+			preventDefault: () => {},
+			currentTarget: null as any,
+			target: null as any,
+			nativeEvent: new Event('submit'),
+			isDefaultPrevented: () => false,
+			isPropagationStopped: () => false,
+			persist: () => {}
+		} as React.FormEvent<HTMLFormElement>);
     }
   }, [question, questionSource, handleSubmit]);
 
