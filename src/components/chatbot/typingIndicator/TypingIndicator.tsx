@@ -9,8 +9,9 @@ const TypingIndicator: FC = () => {
 
   return (
     <div className="message-bot-container">
+      <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
       <div className="bot-avatar">
-        <img src={Stars} alt="" />
+        <img src={Stars} alt="Bot Avatar" />
       </div>
       <div className="bubble">
         {typingText.split('').map((char, index) => (

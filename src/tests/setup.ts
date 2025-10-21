@@ -11,7 +11,7 @@ Object.defineProperty(window, 'KZChatbotConfig', {
   value: {
     slugs: {
       chat_description: 'Test description',
-      welcome_message: 'Welcome',
+      welcome_message_first: 'Welcome',
       general_error: 'Error occurred',
       close_chat_icon: 'Close chat',
       questions_daily_limit: 'Daily limit reached'

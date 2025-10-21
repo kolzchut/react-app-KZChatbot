@@ -136,7 +136,7 @@
 .rating-text {
 	color: rgba(45, 91, 133, 0.70);
 	text-align: center;
-    font-family: "Open Sans", sans-serif;
+	font-family: "Open Sans";
 	font-size: 0.875rem;
 	font-weight: 600;
 }
@@ -149,38 +149,6 @@
 
 .rating-icon-rotated {
 	transform: rotate(180deg);
-}
-
-.old-questions-divider-div {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    gap: 16px;
-    padding-bottom: 20px;
-    padding-top: 20px;
-}
-.old-questions-divider {
-    flex: 1;
-    height: 2px;
-    opacity: 0.1;
-    background: var(--Gray, #555555);
-}
-.old-questions-div-holder{
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    height: 20px;
-    align-items: center;
-    padding: 15px;
-    border-radius: 25px;
-    color: var(--MidLightGray, #838D98);
-    font-weight: 400;
-}
-
-.kzchatbot .old-questions-div-holder {
-    border-width: 2px;
-    border-style: solid;
-    border-color: var(--LightGray, #CCCCCC);
 }
 
 .markdown {

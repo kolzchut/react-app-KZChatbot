@@ -96,7 +96,9 @@ const Chatbot = () => {
     return data;
   }, [globalConfigObject]);
 
-  const submitQuestion = useCallback(async () => {
+  const handleSubmit = useCallback(async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
     if (question === "" || !question.trim()) {
       return false;
     }
@@ -177,12 +179,12 @@ const Chatbot = () => {
     }
   }, [question, globalConfigObject, questionSource, dispatch, initialErrors, getAnswer]);
 
-  // Handle all question submissions from Redux (embed widget and chat input)
+  // Handle questions from embed widget
   useEffect(() => {
-    if (question && question.trim()) {
-      submitQuestion();
+    if (question && question.trim() && questionSource === "embed") {
+      handleSubmit(new Event('submit') as React.FormEvent<HTMLFormElement>);
     }
-  }, [question, submitQuestion]);
+  }, [question, questionSource, handleSubmit]);
 
   const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
     if (messageContainerRef.current) {
@@ -234,7 +236,7 @@ const Chatbot = () => {
             {
               id: uuidv4(),
               content:
-                window.KZChatbotConfig?.slugs.welcome_message || "",
+                window.KZChatbotConfig?.slugs.welcome_message_first || "",
               type: MessageType.StartBot,
             },
           ]
@@ -274,6 +276,7 @@ const Chatbot = () => {
           <Footer
             isLoading={isLoading}
             showInput={showInput}
+            handleSubmit={handleSubmit}
             setShowInput={setShowInput}
             globalConfigObject={globalConfigObject}
             errors={errors}
