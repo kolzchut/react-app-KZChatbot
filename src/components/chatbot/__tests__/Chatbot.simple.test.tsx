@@ -98,7 +98,7 @@ describe('Chatbot Analytics - Simple Tests', () => {
       uuid: 'test-uuid',
       slugs: {
         ...window.KZChatbotConfig.slugs,
-        welcome_message: 'Welcome message',
+        welcome_message_first: 'Welcome message',
         questions_daily_limit: 'Daily limit reached'
       }
     }

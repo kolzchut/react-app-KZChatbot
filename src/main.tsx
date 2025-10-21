@@ -7,24 +7,6 @@ import "./index.css";
 import ChatButton from "./components/chatButton/ChatButton.tsx";
 import ChatArea from "./components/chatArea/ChatArea.tsx";
 
-// Load Open Sans font once at initialization
-// Check if we've already loaded it or if it exists in the document
-if (!document.getElementById('kzchatbot-font')) {
-	// Check if any link tag already loads Open Sans
-	const existingFontLink = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).find(
-		link => link.getAttribute('href')?.includes('Open+Sans')
-	);
-
-	// Only add our font link if Open Sans isn't already being loaded
-	if (!existingFontLink) {
-		const link = document.createElement('link');
-		link.id = 'kzchatbot-font';
-		link.rel = 'stylesheet';
-		link.href = 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap';
-		document.head.appendChild(link);
-	}
-}
-
 
 const mountComponent = (id: string, Component: JSX.Element) => {
 	let el = document.getElementById(id);

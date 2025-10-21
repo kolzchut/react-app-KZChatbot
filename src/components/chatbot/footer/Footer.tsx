@@ -12,6 +12,7 @@ import "./footer.css"
 interface FooterProps {
   isLoading: boolean;
   showInput: boolean;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   setShowInput: React.Dispatch<React.SetStateAction<boolean>>;
   globalConfigObject: typeof window.KZChatbotConfig | null;
   errors: Errors;
@@ -23,6 +24,7 @@ interface FooterProps {
 const Footer = ({
   isLoading,
   showInput,
+  handleSubmit,
   setShowInput,
   globalConfigObject,
   errors,
@@ -35,6 +37,8 @@ const Footer = ({
   const [localQuestion, setLocalQuestion] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const isMobile = useMobile();
+
+  const submittedKey = 'chatbot_submitted_question';
 
   useEffect(() => {
     let isBotStarted = true;
@@ -54,14 +58,32 @@ const Footer = ({
   useEffect(() => {
     if (reduxQuestion === '') {
       setLocalQuestion('');
-    } else if (reduxQuestion) {
+      sessionStorage.removeItem(submittedKey);
+    } else if (reduxQuestion && localQuestion !== reduxQuestion) {
       setLocalQuestion(reduxQuestion);
     }
-  }, [reduxQuestion]);
+  }, [reduxQuestion, localQuestion]);
 
-  // This useEffect is removed to prevent duplicate submissions.
-  // The question submission is now handled exclusively by the useEffect in Chatbot.tsx
-  // that watches for question changes from Redux.
+  useEffect(() => {
+    const submitted = sessionStorage.getItem(submittedKey);
+    if (
+      reduxQuestion &&
+      reduxQuestion.trim() &&
+      submitted !== reduxQuestion
+    ) {
+      const fakeEvent = {
+        preventDefault: () => { },
+        target: {
+          elements: {
+            namedItem: () => ({ value: reduxQuestion })
+          }
+        }
+      } as unknown as React.FormEvent<HTMLFormElement>;
+
+      handleSubmit(fakeEvent);
+      sessionStorage.setItem(submittedKey, reduxQuestion);
+    }
+  }, [reduxQuestion, handleSubmit]);
 
   if (
     isLoading ||
@@ -87,7 +109,7 @@ const Footer = ({
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (localQuestion.trim()) {
-      dispatch(setQuestion({text: localQuestion.trim(), source: "popup"}));
+      dispatch(setQuestion(localQuestion.trim()));
       dispatch(openChat());
       setLocalQuestion('');
     }

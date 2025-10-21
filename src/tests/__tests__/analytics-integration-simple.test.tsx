@@ -99,7 +99,7 @@ describe('Analytics Integration - Simple', () => {
       slugs: {
         ...window.KZChatbotConfig.slugs,
         chat_description: 'Ask our AI',
-        welcome_message: 'Welcome!',
+        welcome_message_first: 'Welcome!',
         questions_daily_limit: 'Daily limit reached'
       }
     }
