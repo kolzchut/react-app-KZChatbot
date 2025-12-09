@@ -6,6 +6,7 @@ import Chatbot from "./components/chatbot/Chatbot.tsx";
 import "./index.css";
 import ChatButton from "./components/chatButton/ChatButton.tsx";
 import ChatArea from "./components/chatArea/ChatArea.tsx";
+import { TranslationProvider } from "./contexts/TranslationContext.tsx";
 
 
 const mountComponent = (id: string, Component: JSX.Element) => {
@@ -24,7 +25,9 @@ const mountComponent = (id: string, Component: JSX.Element) => {
 	ReactDOM.createRoot(el).render(
 		<React.StrictMode>
 			<Provider store={store}>
-				{Component}
+				<TranslationProvider>
+					{Component}
+				</TranslationProvider>
 			</Provider>
 		</React.StrictMode>,
 	);

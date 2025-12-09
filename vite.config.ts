@@ -89,6 +89,7 @@ export default defineConfig(async ({ mode, command }: ConfigEnv): Promise<UserCo
 	return {
 		define: {
 			// We don't expose the mockup mode to client code
+			'import.meta.env.VITE_LOCALE': JSON.stringify(env.VITE_LOCALE || 'he'),
 		},
 		build: {
 			assetsInlineLimit: 8096,

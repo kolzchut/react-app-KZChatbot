@@ -4,6 +4,7 @@ import { Errors, Message, MessageType, Answer } from "@/types";
 import { HttpError } from "../../lib/HttpError";
 import { pushAnalyticsEvent } from "@/lib/analytics";
 import { useMobile } from "@/lib/useMobile";
+import { useTranslation } from "@/hooks/useTranslation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { openChat, closeChat, selectIsChatOpen } from "@/store/slices/chatSlice";
 import { selectQuestion, selectQuestionSource, resetQuestion } from "@/store/slices/questionSlice";
@@ -19,6 +20,7 @@ import "./chatbot.css";
 
 
 const Chatbot = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const isChatOpen = useAppSelector(selectIsChatOpen);
   const question = useAppSelector(selectQuestion);
@@ -158,7 +160,7 @@ const Chatbot = () => {
         content = error.message;
         type = error.httpCode === 403 ? MessageType.Warning : MessageType.Error;
       } else {
-        content = globalConfigObject?.slugs.general_error;
+        content = t('general_error');
         type = MessageType.Error;
       }
       setMessages((prevMessages) => [
@@ -234,7 +236,7 @@ const Chatbot = () => {
             {
               id: uuidv4(),
               content:
-                window.KZChatbotConfig?.slugs.welcome_message_first || "",
+                t('welcome_message_first'),
               type: MessageType.StartBot,
             },
           ]
@@ -242,7 +244,7 @@ const Chatbot = () => {
             {
               id: uuidv4(),
               content:
-                window.KZChatbotConfig?.slugs.questions_daily_limit || "",
+                t('questions_daily_limit'),
               type: MessageType.StartBot,
             },
           ];
@@ -258,7 +260,6 @@ const Chatbot = () => {
       <PopoverContent className={`chatbot-popover-content ${isMobile ? "mobile" : "desktop"}`}>
         <ClosePopover
           handleChatSetIsOpen={handleCloseChat}
-          globalConfigObject={globalConfigObject}
         />
         <div className="chatbot-popover-main">
           <Messages

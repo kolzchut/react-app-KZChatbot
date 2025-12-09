@@ -6,6 +6,7 @@ import Chatbot from '../Chatbot'
 import chatSlice from '@/store/slices/chatSlice'
 import questionSlice from '@/store/slices/questionSlice'
 import { pushAnalyticsEvent } from '@/lib/analytics'
+import { TranslationProvider } from '@/contexts/TranslationContext'
 
 // Mock analytics
 vi.mock('@/lib/analytics', () => ({
@@ -85,6 +86,16 @@ const createTestStore = (initialState?: Record<string, unknown>) => configureSto
   preloadedState: initialState
 })
 
+const renderWithProviders = (component: React.ReactElement, store: ReturnType<typeof createTestStore>) => {
+  return render(
+    <Provider store={store}>
+      <TranslationProvider>
+        {component}
+      </TranslationProvider>
+    </Provider>
+  )
+}
+
 describe('Chatbot Analytics - Simple Tests', () => {
   beforeEach(() => {
     mockPushAnalyticsEvent.mockClear()
@@ -107,12 +118,8 @@ describe('Chatbot Analytics - Simple Tests', () => {
   it('should track auto-opened event when autoOpen is true', () => {
     window.KZChatbotConfig.autoOpen = true
     const store = createTestStore()
-    
-    render(
-      <Provider store={store}>
-        <Chatbot />
-      </Provider>
-    )
+
+    renderWithProviders(<Chatbot />, store)
 
     expect(mockPushAnalyticsEvent).toHaveBeenCalledWith('opened', null, 'auto-opened')
   })
@@ -120,12 +127,8 @@ describe('Chatbot Analytics - Simple Tests', () => {
   it('should not track auto-opened event when autoOpen is false', () => {
     window.KZChatbotConfig.autoOpen = false
     const store = createTestStore()
-    
-    render(
-      <Provider store={store}>
-        <Chatbot />
-      </Provider>
-    )
+
+    renderWithProviders(<Chatbot />, store)
 
     expect(mockPushAnalyticsEvent).not.toHaveBeenCalledWith('opened', null, 'auto-opened')
   })
@@ -135,12 +138,8 @@ describe('Chatbot Analytics - Simple Tests', () => {
       chat: { isChatOpen: true },
       question: { question: '', source: undefined }
     })
-    
-    render(
-      <Provider store={store}>
-        <Chatbot />
-      </Provider>
-    )
+
+    renderWithProviders(<Chatbot />, store)
 
     const closeButton = screen.getByTestId('close-button')
     fireEvent.click(closeButton)
@@ -153,20 +152,16 @@ describe('Chatbot Analytics - Simple Tests', () => {
       chat: { isChatOpen: true },
       question: { question: 'Test question', source: 'embed' }
     })
-    
+
     mockFetch.mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve({ 
+      json: () => Promise.resolve({
         llmResult: 'Test answer',
         conversationId: 'test-id'
       })
     } as Response)
-    
-    render(
-      <Provider store={store}>
-        <Chatbot />
-      </Provider>
-    )
+
+    renderWithProviders(<Chatbot />, store)
 
     const form = screen.getByTestId('chat-form')
     fireEvent.submit(form)
@@ -181,20 +176,16 @@ describe('Chatbot Analytics - Simple Tests', () => {
       chat: { isChatOpen: true },
       question: { question: 'Test question', source: undefined }
     })
-    
+
     mockFetch.mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve({ 
+      json: () => Promise.resolve({
         llmResult: 'Test answer',
         conversationId: 'test-id'
       })
     } as Response)
-    
-    render(
-      <Provider store={store}>
-        <Chatbot />
-      </Provider>
-    )
+
+    renderWithProviders(<Chatbot />, store)
 
     const form = screen.getByTestId('chat-form')
     fireEvent.submit(form)
@@ -209,20 +200,16 @@ describe('Chatbot Analytics - Simple Tests', () => {
       chat: { isChatOpen: true },
       question: { question: 'Test question', source: undefined }
     })
-    
+
     mockFetch.mockResolvedValue({
       ok: false,
       status: 500,
-      json: () => Promise.resolve({ 
+      json: () => Promise.resolve({
         message: 'Internal server error'
       })
     } as Response)
-    
-    render(
-      <Provider store={store}>
-        <Chatbot />
-      </Provider>
-    )
+
+    renderWithProviders(<Chatbot />, store)
 
     const form = screen.getByTestId('chat-form')
     fireEvent.submit(form)
@@ -237,12 +224,8 @@ describe('Chatbot Analytics - Simple Tests', () => {
       chat: { isChatOpen: true },
       question: { question: '', source: undefined }
     })
-    
-    render(
-      <Provider store={store}>
-        <Chatbot />
-      </Provider>
-    )
+
+    renderWithProviders(<Chatbot />, store)
 
     const closeButton = screen.getByTestId('close-button')
     fireEvent.click(closeButton)

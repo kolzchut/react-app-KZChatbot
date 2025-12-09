@@ -5,6 +5,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import Footer from '../Footer'
 import { MessageType, Message } from '@/types'
 import { pushAnalyticsEvent } from '@/lib/analytics'
+import { TranslationProvider } from '@/contexts/TranslationContext'
 import chatSlice from '@/store/slices/chatSlice'
 import questionSlice from '@/store/slices/questionSlice'
 
@@ -102,7 +103,9 @@ const renderWithStore = (props: Partial<typeof defaultProps> = {}, storeState: R
   return {
     ...render(
       <Provider store={store}>
-        <Footer {...defaultProps} {...props} />
+        <TranslationProvider>
+          <Footer {...defaultProps} {...props} />
+        </TranslationProvider>
       </Provider>
     ),
     store
@@ -115,6 +118,16 @@ describe('Footer Component', () => {
     mockUseMobile.mockReturnValue(false)
     // Clear sessionStorage
     sessionStorage.clear()
+    // Setup window.KZChatbotConfig for tests
+    window.KZChatbotConfig = {
+      ...window.KZChatbotConfig,
+      questionsPermitted: 5,
+      questionCharacterLimit: 150,
+      slugs: {
+        ...window.KZChatbotConfig?.slugs,
+        question_character_limit: 'Character limit exceeded'
+      }
+    } as typeof window.KZChatbotConfig
   })
 
   describe('Rendering Conditions', () => {
@@ -150,7 +163,9 @@ describe('Footer Component', () => {
       // Re-render with chat open
       rerender(
         <Provider store={createTestStore()}>
-          <Footer {...defaultProps} isChatOpen={true} showInput={true} />
+          <TranslationProvider>
+            <Footer {...defaultProps} isChatOpen={true} showInput={true} />
+          </TranslationProvider>
         </Provider>
       )
 

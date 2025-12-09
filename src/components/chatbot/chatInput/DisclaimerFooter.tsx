@@ -1,14 +1,15 @@
 import { pushAnalyticsEvent } from "@/lib/analytics";
+import { useTranslation } from "@/hooks/useTranslation";
 import "./disclaimerFooter.css";
 
 const DisclaimerFooter = () => {
+    const { t } = useTranslation();
     const globalConfigObject = window.KZChatbotConfig;
-    const slugs = globalConfigObject?.slugs || {};
 
     return (
         <div className="chat-input-footer-info">
             <span className="chat-input-disclaimer">
-                {slugs?.question_disclaimer}
+                {t('question_disclaimer')}
             </span>
             <span className="chat-input-disclaimer underline">
                 {globalConfigObject?.termsofServiceUrl && (
@@ -17,7 +18,7 @@ const DisclaimerFooter = () => {
                         target="_blank"
                         onClick={() => pushAnalyticsEvent("tos_clicked")}
                     >
-                        {slugs?.tc_link}
+                        {t('tc_link')}
                     </a>
                 )}
             </span>

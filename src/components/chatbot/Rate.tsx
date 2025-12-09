@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Errors, Message } from "@/types";
 import { useRate } from "@/lib/useRate";
+import { useTranslation } from "@/hooks/useTranslation";
 import LikeIcon from "@/assets/like.svg"
 import PressedLikeIcon from "@/assets/pressed-like.svg"
 import "./footer/footer.css"
@@ -22,6 +23,7 @@ const Rate = ({
 	setErrors,
 	initialErrors,
 }: RateProps) => {
+	const { t } = useTranslation();
 	const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 	const {
 		values,
@@ -42,7 +44,6 @@ const Rate = ({
 		initialErrors,
 	});
 
-	const slugs = globalConfigObject?.slugs;
 	const ref = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
@@ -64,7 +65,7 @@ const Rate = ({
 		<div ref={ref} className="rating-container">
 			<div className="rating-visible">
 				<div className="rating-text">
-				{slugs?.ranking_request || "האם התשובה עזרה לך?"}
+				{t('ranking_request')}
 				</div>
 
 				<button
@@ -91,8 +92,8 @@ const Rate = ({
 					<div className="rate-form-header">
 						<span className="rate-form-header-text">
 							{message.liked
-								? slugs?.like_follow_up_question
-								: slugs?.dislike_follow_up_question}
+								? t('like_follow_up_question')
+								: t('dislike_follow_up_question')}
 						</span>
 					</div>
 					<div className="rate-textarea-container">
@@ -108,8 +109,8 @@ const Rate = ({
 							rows={3}
 							placeholder={
 								message.liked
-									? slugs?.like_free_text
-									: slugs?.dislike_free_text
+									? t('like_free_text')
+									: t('dislike_free_text')
 							}
 							maxLength={globalConfigObject?.feedbackCharacterLimit || 150}
 						/>
@@ -124,12 +125,12 @@ const Rate = ({
 					</div>
 					<div className="rate-form-footer">
 						<span className="rate-disclaimer">
-							{slugs?.feedback_free_text_disclaimer}
+							{t('feedback_free_text_disclaimer')}
 						</span>
 						<button disabled={!isFormValid} type="submit">
 							<div className={`button-layout ${isFormValid ? "" : "disabled"}`}>
 								<span className={`send-button ${isFormValid ? "" : "disabled"}`}>
-									<span className={`button-text ${isFormValid ? "" : "disabled"}`}>{slugs?.send_button || "שליחה"}</span>
+									<span className={`button-text ${isFormValid ? "" : "disabled"}`}>{t('send_button')}</span>
 								</span>
 							</div>
 						</button>

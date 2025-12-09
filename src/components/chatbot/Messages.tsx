@@ -3,6 +3,7 @@ import Markdown from "react-markdown";
 import remarkGfm from 'remark-gfm';
 import { Message, MessageType, Errors } from "@/types";
 import { pushAnalyticsEvent } from "@/lib/analytics";
+import { useTranslation } from "@/hooks/useTranslation";
 import Rate from "./Rate";
 import TypingIndicator from "@/components/chatbot/typingIndicator/TypingIndicator.tsx";
 import Link from "@/assets/link.svg"
@@ -43,6 +44,8 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
   setErrors,
   initialErrors,
 }, ref,) => {
+  const { t } = useTranslation();
+
   if (!messages) {
     return null;
   }
@@ -86,8 +89,8 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
                 <>
                   <div className="ai-disclaimer">
                     {message.links && message.links.length > 0
-                      ? globalConfigObject?.slugs.returning_links_title
-                      : globalConfigObject?.slugs.returning_links_no_links}
+                      ? t('returning_links_title')
+                      : t('returning_links_no_links')}
                   </div>
 
                   {message.links && message.links.length > 0 && (

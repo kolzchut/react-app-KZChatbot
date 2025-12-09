@@ -1,11 +1,12 @@
 import { FC } from "react";
+import { useTranslation } from "@/hooks/useTranslation";
 import Stars from "@/assets/purple-stars.svg";
 import "./typingIndicator.css";
 
 
 const TypingIndicator: FC = () => {
-  const slugs = window.KZChatbotConfig?.slugs || {};
-  const typingText = slugs.getting_answer || "מאתר תשובה לשאלתך...";
+  const { t } = useTranslation();
+  const typingText = t('getting_answer');
 
   return (
     <div className="message-bot-container">

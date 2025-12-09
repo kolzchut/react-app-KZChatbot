@@ -2,6 +2,7 @@ import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
+import { TranslationProvider } from '@/contexts/TranslationContext'
 import ChatButton from '@/components/chatButton/ChatButton'
 import Chatbot from '@/components/chatbot/Chatbot'
 import chatSlice from '@/store/slices/chatSlice'
@@ -121,7 +122,9 @@ describe('Analytics Integration - Simple', () => {
 
     render(
       <Provider store={store}>
+        <TranslationProvider>
         <ChatButton />
+      </TranslationProvider>
       </Provider>
     )
 
@@ -151,7 +154,9 @@ describe('Analytics Integration - Simple', () => {
 
     render(
       <Provider store={store}>
+        <TranslationProvider>
         <Chatbot />
+      </TranslationProvider>
       </Provider>
     )
 
@@ -182,7 +187,9 @@ describe('Analytics Integration - Simple', () => {
 
     render(
       <Provider store={store}>
+        <TranslationProvider>
         <Chatbot />
+      </TranslationProvider>
       </Provider>
     )
 
@@ -209,8 +216,10 @@ describe('Analytics Integration - Simple', () => {
 
     render(
       <Provider store={store}>
+        <TranslationProvider>
         <ChatButton />
         <Chatbot />
+      </TranslationProvider>
       </Provider>
     )
 
@@ -258,8 +267,10 @@ describe('Analytics Integration - Simple', () => {
 
     render(
       <Provider store={store}>
+        <TranslationProvider>
         <ChatButton />
         <Chatbot />
+      </TranslationProvider>
       </Provider>
     )
 

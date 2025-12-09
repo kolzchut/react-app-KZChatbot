@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
+import { TranslationProvider } from '@/contexts/TranslationContext'
 import ChatButton from '../ChatButton'
 import chatSlice from '@/store/slices/chatSlice'
 import questionSlice from '@/store/slices/questionSlice'
@@ -47,7 +48,9 @@ describe('ChatButton', () => {
     
     render(
       <Provider store={store}>
+        <TranslationProvider>
         <ChatButton />
+      </TranslationProvider>
       </Provider>
     )
 
@@ -63,7 +66,9 @@ describe('ChatButton', () => {
     
     render(
       <Provider store={store}>
+        <TranslationProvider>
         <ChatButton />
+      </TranslationProvider>
       </Provider>
     )
 
@@ -76,7 +81,9 @@ describe('ChatButton', () => {
     
     render(
       <Provider store={store}>
+        <TranslationProvider>
         <ChatButton />
+      </TranslationProvider>
       </Provider>
     )
 
@@ -92,7 +99,9 @@ describe('ChatButton', () => {
     
     render(
       <Provider store={store}>
+        <TranslationProvider>
         <ChatButton />
+      </TranslationProvider>
       </Provider>
     )
 
@@ -110,7 +119,9 @@ describe('ChatButton', () => {
     
     render(
       <Provider store={store}>
+        <TranslationProvider>
         <ChatButton />
+      </TranslationProvider>
       </Provider>
     )
 
@@ -125,7 +136,9 @@ describe('ChatButton', () => {
     
     render(
       <Provider store={store}>
+        <TranslationProvider>
         <ChatButton />
+      </TranslationProvider>
       </Provider>
     )
 
@@ -141,7 +154,9 @@ describe('ChatButton', () => {
     
     render(
       <Provider store={store}>
+        <TranslationProvider>
         <ChatButton />
+      </TranslationProvider>
       </Provider>
     )
 
@@ -154,7 +169,9 @@ describe('ChatButton', () => {
     
     render(
       <Provider store={store}>
+        <TranslationProvider>
         <ChatButton />
+      </TranslationProvider>
       </Provider>
     )
 

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Errors, Message } from "@/types.ts";
 import { useMobile } from "@/lib/useMobile.ts";
 import { pushAnalyticsEvent } from "@/lib/analytics.ts";
+import { useTranslation } from "@/hooks/useTranslation.ts";
 import { useAppDispatch, useAppSelector } from '@/store/hooks.ts';
 import { setQuestion, selectQuestion } from '@/store/slices/questionSlice.ts';
 import { openChat } from '@/store/slices/chatSlice.ts';
@@ -30,6 +31,7 @@ const Footer = ({
   messages,
   isChatOpen,
 }: FooterProps) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const reduxQuestion = useAppSelector(selectQuestion);
   const [localQuestion, setLocalQuestion] = useState('');
@@ -73,8 +75,7 @@ const Footer = ({
   const handleOnMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLocalQuestion(e.target.value);
 
-    const charLimitSlug =
-      globalConfigObject?.slugs.question_character_limit || "";
+    const charLimitSlug = t('question_character_limit');
     const reachedCharLimit =
       e.target.value.length >=
       (globalConfigObject?.questionCharacterLimit || 150);

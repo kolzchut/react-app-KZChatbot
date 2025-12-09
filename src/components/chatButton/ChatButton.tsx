@@ -3,18 +3,19 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectIsChatOpen, openChat } from '../../store/slices/chatSlice';
 import { useMobile } from '../../lib/useMobile';
 import { pushAnalyticsEvent } from '../../lib/analytics';
+import { useTranslation } from '@/hooks/useTranslation';
 import Stars from '../Stars';
 import './chatButton.css';
 
 const MobileComponent = () => <Stars className="chat-button-icon" />;
 
 const DesktopComponent = () => {
-    const chat_description = window.KZChatbotConfig?.slugs.chat_description || 'שאלו את ה-AI שלנו';
+    const { t } = useTranslation();
     return (
         <>
             <Stars className="chat-button-icon" />
             <span className="gradient-text">
-                {chat_description}
+                {t('chat_description')}
             </span>
         </>
     );

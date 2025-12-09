@@ -1,4 +1,5 @@
 import { Errors } from "@/types.ts";
+import { useTranslation } from "@/hooks/useTranslation";
 import Input from "../../ui/input/Input.tsx";
 import DisclaimerFooter from "./DisclaimerFooter.tsx";
 import SendEnabled from "@/assets/send-enabled.svg";
@@ -16,8 +17,8 @@ interface ChatInputProps {
 }
 
 const ChatInput = ({ handleSubmit, errors, question, handleOnMessageChange, disabled, inputRef }: ChatInputProps) => {
+    const { t } = useTranslation();
     const globalConfigObject = window.KZChatbotConfig;
-    const slugs = globalConfigObject?.slugs || {};
 
     return (
         <div className="chat-input-container">
@@ -30,11 +31,11 @@ const ChatInput = ({ handleSubmit, errors, question, handleOnMessageChange, disa
                     name="question"
                     value={question}
                     onChange={handleOnMessageChange}
-                    placeholder={slugs?.question_field}
-                    title={slugs?.send_button}
+                    placeholder={t('question_field')}
+                    title={t('send_button')}
                     submitElement={
                         <div className="chat-input-texts-section">
-                            <span className="sr-only">{slugs?.send_button}</span>
+                            <span className="sr-only">{t('send_button')}</span>
                             <img src={question ? SendEnabled : SendDisabled} className="chat-input-icon" alt="send"  />
                         </div>
                     }

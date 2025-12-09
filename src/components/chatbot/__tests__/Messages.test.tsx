@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import Messages from '../Messages'
 import { MessageType, Message } from '@/types'
 import { pushAnalyticsEvent } from '@/lib/analytics'
+import { TranslationProvider } from '@/contexts/TranslationContext'
 
 // Mock analytics
 vi.mock('@/lib/analytics', () => ({
@@ -58,6 +59,10 @@ const createMessage = (overrides: Partial<Message> = {}): Message => ({
   ...overrides
 })
 
+const renderWithProviders = (component: React.ReactElement) => {
+  return render(<TranslationProvider>{component}</TranslationProvider>)
+}
+
 describe('Messages Component', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -65,7 +70,7 @@ describe('Messages Component', () => {
 
   describe('Basic Rendering', () => {
     it('renders null when messages is falsy', () => {
-      const { container } = render(
+      const { container } = renderWithProviders(
         <Messages {...defaultProps} messages={null as Message[]} />
       )
       expect(container.firstChild).toBeNull()
@@ -73,7 +78,7 @@ describe('Messages Component', () => {
 
     it('renders chat container with ref', () => {
       const ref = React.createRef<HTMLDivElement>()
-      render(<Messages {...defaultProps} ref={ref} />)
+      renderWithProviders(<Messages {...defaultProps} ref={ref} />)
       
       expect(document.querySelector('.chat-container')).toBeInTheDocument()
       expect(ref.current).toBeTruthy()
@@ -81,7 +86,7 @@ describe('Messages Component', () => {
     })
 
     it('renders flex spacer', () => {
-      render(<Messages {...defaultProps} />)
+      renderWithProviders(<Messages {...defaultProps} />)
       expect(document.querySelector('.flex-spacer')).toBeInTheDocument()
     })
 
@@ -92,7 +97,7 @@ describe('Messages Component', () => {
         createMessage({ id: '3', content: '' })
       ]
       
-      render(<Messages {...defaultProps} messages={messages} />)
+      renderWithProviders(<Messages {...defaultProps} messages={messages} />)
       
       // Only one message should be rendered  
       expect(screen.getByText('Valid message')).toBeInTheDocument()
@@ -111,7 +116,7 @@ describe('Messages Component', () => {
         content: 'User question' 
       })
       
-      render(<Messages {...defaultProps} messages={[message]} />)
+      renderWithProviders(<Messages {...defaultProps} messages={[message]} />)
       
       const messageElement = screen.getByText('User question')
       expect(messageElement).toHaveClass('message-user-block')
@@ -123,7 +128,7 @@ describe('Messages Component', () => {
         createMessage({ id: '2', content: 'Second question', type: MessageType.User })
       ]
       
-      render(<Messages {...defaultProps} messages={messages} />)
+      renderWithProviders(<Messages {...defaultProps} messages={messages} />)
       
       expect(screen.getByText('First question')).toBeInTheDocument()
       expect(screen.getByText('Second question')).toBeInTheDocument()
@@ -137,7 +142,7 @@ describe('Messages Component', () => {
         content: '**Bold** response with markdown'
       })
       
-      render(<Messages {...defaultProps} messages={[message]} />)
+      renderWithProviders(<Messages {...defaultProps} messages={[message]} />)
       
       // Check bot avatar
       expect(screen.getByAltText('Bot Avatar')).toBeInTheDocument()
@@ -157,7 +162,7 @@ describe('Messages Component', () => {
         links: [{ url: 'https://example.com', title: 'Test Link' }]
       })
 
-      render(<Messages {...defaultProps} messages={[message]} />)
+      renderWithProviders(<Messages {...defaultProps} messages={[message]} />)
 
       expect(screen.getByText('התשובה מבוססת AI. יש לבדוק את המידע המלא בדפים הבאים:')).toBeInTheDocument()
     })
@@ -165,7 +170,7 @@ describe('Messages Component', () => {
     it('renders AI disclaimer with no-links text when no links', () => {
       const message = createMessage({ type: MessageType.Bot, links: [] })
 
-      render(<Messages {...defaultProps} messages={[message]} />)
+      renderWithProviders(<Messages {...defaultProps} messages={[message]} />)
 
       expect(screen.getByText('התשובה מבוססת AI. יש לבדוק את המידע המלא באתר.')).toBeInTheDocument()
       expect(screen.queryByText('התשובה מבוססת AI. יש לבדוק את המידע המלא בדפים הבאים:')).not.toBeInTheDocument()
@@ -174,7 +179,7 @@ describe('Messages Component', () => {
     it('renders Rate component for bot messages', () => {
       const message = createMessage({ type: MessageType.Bot, id: 'bot-123' })
       
-      render(<Messages {...defaultProps} messages={[message]} />)
+      renderWithProviders(<Messages {...defaultProps} messages={[message]} />)
       
       expect(screen.getByTestId('rate-bot-123')).toBeInTheDocument()
     })
@@ -187,7 +192,7 @@ describe('Messages Component', () => {
         content: 'Welcome message'
       })
       
-      render(<Messages {...defaultProps} messages={[message]} />)
+      renderWithProviders(<Messages {...defaultProps} messages={[message]} />)
       
       // Should have bot avatar and styling
       expect(screen.getByAltText('Bot Avatar')).toBeInTheDocument()
@@ -208,7 +213,7 @@ describe('Messages Component', () => {
         content: 'Warning message'
       })
       
-      render(<Messages {...defaultProps} messages={[message]} />)
+      renderWithProviders(<Messages {...defaultProps} messages={[message]} />)
       
       // Should have bot avatar and styling
       expect(screen.getByAltText('Bot Avatar')).toBeInTheDocument()
@@ -228,7 +233,7 @@ describe('Messages Component', () => {
         content: 'Something went wrong'
       })
       
-      render(<Messages {...defaultProps} messages={[message]} />)
+      renderWithProviders(<Messages {...defaultProps} messages={[message]} />)
       
       // Check error styling
       const messageContent = screen.getByText('Something went wrong')
@@ -255,7 +260,7 @@ describe('Messages Component', () => {
         ]
       })
       
-      render(<Messages {...defaultProps} messages={[message]} />)
+      renderWithProviders(<Messages {...defaultProps} messages={[message]} />)
       
       // Check links container
       expect(screen.getByText('First Link')).toBeInTheDocument()
@@ -282,7 +287,7 @@ describe('Messages Component', () => {
         links: [{ url: 'https://example.com', title: 'Test Link' }]
       })
       
-      render(<Messages {...defaultProps} messages={[message]} />)
+      renderWithProviders(<Messages {...defaultProps} messages={[message]} />)
       
       const link = screen.getByText('Test Link')
       fireEvent.click(link)
@@ -296,7 +301,7 @@ describe('Messages Component', () => {
         links: []
       })
       
-      render(<Messages {...defaultProps} messages={[message]} />)
+      renderWithProviders(<Messages {...defaultProps} messages={[message]} />)
       
       expect(screen.queryByText('Link Icon')).not.toBeInTheDocument()
     })
@@ -307,7 +312,7 @@ describe('Messages Component', () => {
         links: undefined
       })
       
-      render(<Messages {...defaultProps} messages={[message]} />)
+      renderWithProviders(<Messages {...defaultProps} messages={[message]} />)
       
       expect(screen.queryByText('Link Icon')).not.toBeInTheDocument()
     })
@@ -315,13 +320,13 @@ describe('Messages Component', () => {
 
   describe('Loading State', () => {
     it('shows typing indicator when loading', () => {
-      render(<Messages {...defaultProps} isLoading={true} />)
+      renderWithProviders(<Messages {...defaultProps} isLoading={true} />)
       
       expect(screen.getByTestId('typing-indicator')).toBeInTheDocument()
     })
 
     it('does not show typing indicator when not loading', () => {
-      render(<Messages {...defaultProps} isLoading={false} />)
+      renderWithProviders(<Messages {...defaultProps} isLoading={false} />)
       
       expect(screen.queryByTestId('typing-indicator')).not.toBeInTheDocument()
     })
@@ -329,7 +334,7 @@ describe('Messages Component', () => {
     it('shows typing indicator with existing messages', () => {
       const messages = [createMessage({ content: 'Existing message' })]
       
-      render(<Messages {...defaultProps} messages={messages} isLoading={true} />)
+      renderWithProviders(<Messages {...defaultProps} messages={messages} isLoading={true} />)
       
       expect(screen.getByText('Existing message')).toBeInTheDocument()
       expect(screen.getByTestId('typing-indicator')).toBeInTheDocument()
@@ -346,7 +351,7 @@ describe('Messages Component', () => {
         createMessage({ id: '5', type: MessageType.Error, content: 'Error message' })
       ]
       
-      render(<Messages {...defaultProps} messages={messages} />)
+      renderWithProviders(<Messages {...defaultProps} messages={messages} />)
       
       // All messages should be present
       expect(screen.getByText('Welcome!')).toBeInTheDocument()
@@ -374,7 +379,7 @@ describe('Messages Component', () => {
         createMessage({ id: 'error-1', type: MessageType.Error })
       ]
       
-      render(<Messages {...defaultProps} messages={messages} />)
+      renderWithProviders(<Messages {...defaultProps} messages={messages} />)
       
       // Find elements by their content and check classes
       const botMessages = document.querySelectorAll('.message-bot-block')

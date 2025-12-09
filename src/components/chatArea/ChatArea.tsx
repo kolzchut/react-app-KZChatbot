@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { openChat, selectIsChatOpen } from '@/store/slices/chatSlice';
 import { setQuestion } from '@/store/slices/questionSlice';
 import { pushAnalyticsEvent } from '@/lib/analytics';
+import { useTranslation } from '@/hooks/useTranslation';
 import Stars from "@/assets/purple-stars.svg";
 import './chatArea.css';
 import ChatInput from '../chatbot/chatInput/ChatInput';
@@ -15,7 +16,7 @@ interface ChatAreaProps {
 const ChatArea: React.FC<ChatAreaProps> = ({ isHomePage }) => {
   const dispatch = useAppDispatch();
   const [localQuestion, setLocalQuestion] = useState('');
-  const slugs = window.KZChatbotConfig.slugs;
+  const { t } = useTranslation();
   const isChatOpen = useAppSelector(selectIsChatOpen);
 
   const handleOnMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +40,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({ isHomePage }) => {
           <div className={`chat-area-content${isChatOpen ? ' disabled' : ''}${isHomePage ? ' homepage' : ''}`}>
             <div className="chat-area-header">
               <img src={Stars} alt="AI Bot" className="ai-icon" />
-              <span className='chat-description'>{slugs.chat_description}</span>
+              <span className='chat-description'>{t('chat_description')}</span>
             </div>
             <ChatInput
               handleSubmit={handleSubmit}

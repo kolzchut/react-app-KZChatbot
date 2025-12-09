@@ -7,6 +7,8 @@
 		"dev": "vite",
 		"dev:mock": "cross-env VITE_MODE=mockup vite",
 		"build": "tsc -b && vite build",
+		"build:he": "cross-env VITE_LOCALE=he tsc -b && vite build",
+		"build:en": "cross-env VITE_LOCALE=en tsc -b && vite build",
 		"build:mock": "cross-env VITE_MODE=mockup tsc -b && vite build",
 		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
 		"preview": "vite preview",
