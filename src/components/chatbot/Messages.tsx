@@ -85,7 +85,9 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
               {message.type === MessageType.Bot && (
                 <>
                   <div className="ai-disclaimer">
-                    התשובה מבוססת AI. יש לבדוק את המידע המלא בדפים הבאים:
+                    {message.links && message.links.length > 0
+                      ? globalConfigObject?.slugs.returning_links_title
+                      : globalConfigObject?.slugs.returning_links_no_links}
                   </div>
 
                   {message.links && message.links.length > 0 && (

@@ -34,11 +34,18 @@ vi.mock('@/assets/purple-stars.svg', () => ({ default: 'stars-icon.svg' }))
 
 const mockPushAnalyticsEvent = vi.mocked(pushAnalyticsEvent)
 
+const mockGlobalConfig = {
+  slugs: {
+    returning_links_title: 'התשובה מבוססת AI. יש לבדוק את המידע המלא בדפים הבאים:',
+    returning_links_no_links: 'התשובה מבוססת AI. יש לבדוק את המידע המלא באתר.'
+  }
+} as typeof window.KZChatbotConfig
+
 const defaultProps = {
   messages: [],
   setMessages: vi.fn(),
   isLoading: false,
-  globalConfigObject: null,
+  globalConfigObject: mockGlobalConfig,
   errors: { description: '' },
   setErrors: vi.fn(),
   initialErrors: { description: '' }
@@ -144,12 +151,24 @@ describe('Messages Component', () => {
       expect(markdownContent.parentElement).toHaveClass('message-bot-block')
     })
 
-    it('renders AI disclaimer for bot messages', () => {
-      const message = createMessage({ type: MessageType.Bot })
-      
+    it('renders AI disclaimer with links text when links are present', () => {
+      const message = createMessage({
+        type: MessageType.Bot,
+        links: [{ url: 'https://example.com', title: 'Test Link' }]
+      })
+
       render(<Messages {...defaultProps} messages={[message]} />)
-      
+
       expect(screen.getByText('התשובה מבוססת AI. יש לבדוק את המידע המלא בדפים הבאים:')).toBeInTheDocument()
+    })
+
+    it('renders AI disclaimer with no-links text when no links', () => {
+      const message = createMessage({ type: MessageType.Bot, links: [] })
+
+      render(<Messages {...defaultProps} messages={[message]} />)
+
+      expect(screen.getByText('התשובה מבוססת AI. יש לבדוק את המידע המלא באתר.')).toBeInTheDocument()
+      expect(screen.queryByText('התשובה מבוססת AI. יש לבדוק את המידע המלא בדפים הבאים:')).not.toBeInTheDocument()
     })
 
     it('renders Rate component for bot messages', () => {

@@ -27,6 +27,7 @@ declare global {
         question_field: string;
         ranking_request: string;
         returning_links_title: string;
+        returning_links_no_links: string;
         tc_link: string;
         welcome_message_first: string;
         welcome_message_second: string;
