@@ -7,7 +7,10 @@ import "./index.css";
 import ChatButton from "./components/chatButton/ChatButton.tsx";
 import ChatArea from "./components/chatArea/ChatArea.tsx";
 import { TranslationProvider } from "./contexts/TranslationContext.tsx";
+import { loadOpenSansFont } from "./utils/loadFont.ts";
 
+// Load Open Sans font only if not already available
+loadOpenSansFont();
 
 const mountComponent = (id: string, Component: JSX.Element) => {
 	let el = document.getElementById(id);
