@@ -20,9 +20,7 @@ export interface ChatbotStrings {
   returning_links_no_links: string;
   returning_links_empty: string;
   tc_link: string;
-  welcome_message_first: string;
-  welcome_message_second: string;
-  welcome_message_third: string;
+  welcome_message: string;
   feedback_character_limit: string;
   questions_daily_limit: string;
   question_character_limit: string;

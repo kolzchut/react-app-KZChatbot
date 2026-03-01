@@ -5,6 +5,7 @@ import { HttpError } from "../../lib/HttpError";
 import { pushAnalyticsEvent } from "@/lib/analytics";
 import { useMobile } from "@/lib/useMobile";
 import { useTranslation } from "@/hooks/useTranslation";
+import { FORMATTED_SLUGS } from "@/i18n";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { openChat, closeChat, selectIsChatOpen } from "@/store/slices/chatSlice";
 import { selectQuestion, selectQuestionSource, resetQuestion } from "@/store/slices/questionSlice";
@@ -235,9 +236,9 @@ const Chatbot = () => {
           ? [
             {
               id: uuidv4(),
-              content:
-                t('welcome_message_first'),
+              content: t('welcome_message'),
               type: MessageType.StartBot,
+              formattedContent: FORMATTED_SLUGS.has('welcome_message'),
             },
           ]
           : [

@@ -13,6 +13,7 @@ export interface Message {
   links?: { title: string; url: string }[];
   isFirstQuestion?: boolean;
   liked?: boolean | null;
+  formattedContent?: boolean;
 }
 
 export enum ButtonType {

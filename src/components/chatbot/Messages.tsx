@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from 'remark-gfm';
 import { Message, MessageType, Errors } from "@/types";
+import { formatAdminString } from "@/lib/utils";
 import { pushAnalyticsEvent } from "@/lib/analytics";
 import { useTranslation } from "@/hooks/useTranslation";
 import Rate from "./Rate";
@@ -71,6 +72,8 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
                     <Markdown
                       remarkPlugins={[remarkGfm]}
                       className="markdown">{message.content}</Markdown>
+                  ) : message.formattedContent ? (
+                    <span dangerouslySetInnerHTML={{ __html: formatAdminString(message.content) }} />
                   ) : (
                     message.content
                   )}

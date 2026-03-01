@@ -1,6 +1,12 @@
-import { ChatbotStrings } from './types';
+import { ChatbotStrings, StringKey } from './types';
 import { hebrewStrings } from './strings.he';
 import { englishStrings } from './strings.en';
+
+/**
+ * Slug keys whose content supports limited formatting (bold and line breaks).
+ * Keep in sync with Slugs::getFormattedSlugs() in src/Slugs.php
+ */
+export const FORMATTED_SLUGS: ReadonlySet<StringKey> = new Set<StringKey>(['welcome_message']);
 
 // Build-time locale selection via Vite environment variable
 const LOCALE = import.meta.env.VITE_LOCALE || 'he';
