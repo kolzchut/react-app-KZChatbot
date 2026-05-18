@@ -121,7 +121,7 @@ describe('Chatbot Analytics - Simple Tests', () => {
 
     renderWithProviders(<Chatbot />, store)
 
-    expect(mockPushAnalyticsEvent).toHaveBeenCalledWith('opened', null, 'auto-opened')
+    expect(mockPushAnalyticsEvent).toHaveBeenCalledWith('opened', 'auto-opened')
   })
 
   it('should not track auto-opened event when autoOpen is false', () => {
@@ -130,7 +130,7 @@ describe('Chatbot Analytics - Simple Tests', () => {
 
     renderWithProviders(<Chatbot />, store)
 
-    expect(mockPushAnalyticsEvent).not.toHaveBeenCalledWith('opened', null, 'auto-opened')
+    expect(mockPushAnalyticsEvent).not.toHaveBeenCalledWith('opened', 'auto-opened')
   })
 
   it('should track closed_unused when closed without asking questions', () => {
@@ -167,7 +167,7 @@ describe('Chatbot Analytics - Simple Tests', () => {
     fireEvent.submit(form)
 
     await waitFor(() => {
-      expect(mockPushAnalyticsEvent).toHaveBeenCalledWith('question_asked', null, 'embed')
+      expect(mockPushAnalyticsEvent).toHaveBeenCalledWith('question_asked', 'embed')
     })
   })
 

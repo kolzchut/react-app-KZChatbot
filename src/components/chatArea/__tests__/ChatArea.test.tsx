@@ -91,7 +91,7 @@ describe('ChatArea', () => {
     const form = screen.getByTestId('chat-input-form')
     fireEvent.submit(form)
 
-    expect(mockPushAnalyticsEvent).toHaveBeenCalledWith('opened', null, 'embed')
+    expect(mockPushAnalyticsEvent).toHaveBeenCalledWith('opened', 'embed')
     expect(mockPushAnalyticsEvent).toHaveBeenCalledTimes(1)
   })
 

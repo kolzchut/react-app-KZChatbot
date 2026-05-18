@@ -26,7 +26,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({ isHomePage }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (localQuestion.trim()) {
-      pushAnalyticsEvent("opened", null, "embed");
+      pushAnalyticsEvent("opened", "embed");
       dispatch(openChat());
       dispatch(setQuestion({text: localQuestion.trim(), source: "embed"}));
       setLocalQuestion('');

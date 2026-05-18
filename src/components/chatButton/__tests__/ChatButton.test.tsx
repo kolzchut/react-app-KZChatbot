@@ -90,7 +90,7 @@ describe('ChatButton', () => {
     const button = screen.getByRole('button')
     fireEvent.click(button)
 
-    expect(mockPushAnalyticsEvent).toHaveBeenCalledWith('opened', null, 'button')
+    expect(mockPushAnalyticsEvent).toHaveBeenCalledWith('opened', 'button')
     expect(mockPushAnalyticsEvent).toHaveBeenCalledTimes(1)
   })
 
@@ -180,7 +180,7 @@ describe('ChatButton', () => {
     // First click
     fireEvent.click(button)
     expect(mockPushAnalyticsEvent).toHaveBeenCalledTimes(1)
-    expect(mockPushAnalyticsEvent).toHaveBeenLastCalledWith('opened', null, 'button')
+    expect(mockPushAnalyticsEvent).toHaveBeenLastCalledWith('opened', 'button')
     
     // Button should be disabled after first click
     expect(button).toBeDisabled()

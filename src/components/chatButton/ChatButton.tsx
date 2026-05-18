@@ -28,7 +28,7 @@ const ChatButton: React.FC = () => {
     const isMobile = useMobile();
 
     const handleToggleChat = () => {
-        pushAnalyticsEvent("opened", null, "button");
+        pushAnalyticsEvent("opened", "button");
         dispatch(openChat());
     };
 

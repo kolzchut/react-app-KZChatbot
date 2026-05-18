@@ -134,10 +134,9 @@ describe('Analytics Integration - Simple', () => {
 
     // Check that opened event with button source was tracked
     expect(window.dataLayer).toContainEqual({
-      event: 'chatbot',
+      event: 'chatbot_opened',
       event_action: 'opened',
-      event_label: null,
-      source: 'button'
+      event_label: 'button'
     })
 
     // Verify chat is opened
@@ -162,10 +161,9 @@ describe('Analytics Integration - Simple', () => {
 
     // Check that opened event with auto-opened source was tracked
     expect(window.dataLayer).toContainEqual({
-      event: 'chatbot',
+      event: 'chatbot_opened',
       event_action: 'opened',
-      event_label: null,
-      source: 'auto-opened'
+      event_label: 'auto-opened'
     })
 
     // Check that chat is open
@@ -199,7 +197,7 @@ describe('Analytics Integration - Simple', () => {
 
     // Check that closed_unused event was tracked
     expect(window.dataLayer).toContainEqual({
-      event: 'chatbot',
+      event: 'chatbot_closed_unused',
       event_action: 'closed_unused',
       event_label: null
     })
@@ -229,10 +227,9 @@ describe('Analytics Integration - Simple', () => {
 
     // Verify opened event
     expect(window.dataLayer).toContainEqual({
-      event: 'chatbot',
+      event: 'chatbot_opened',
       event_action: 'opened',
-      event_label: null,
-      source: 'button'
+      event_label: 'button'
     })
 
     // 2. Close the chat without asking questions
@@ -241,7 +238,7 @@ describe('Analytics Integration - Simple', () => {
 
     // Verify closed_unused event
     expect(window.dataLayer).toContainEqual({
-      event: 'chatbot',
+      event: 'chatbot_closed_unused',
       event_action: 'closed_unused',
       event_label: null
     })
@@ -253,10 +250,9 @@ describe('Analytics Integration - Simple', () => {
     const openedEvents = window.dataLayer.filter(e => e.event_action === 'opened')
     expect(openedEvents).toHaveLength(2)
     expect(openedEvents[1]).toEqual({
-      event: 'chatbot',
+      event: 'chatbot_opened',
       event_action: 'opened',
-      event_label: null,
-      source: 'button'
+      event_label: 'button'
     })
   })
 
@@ -281,9 +277,9 @@ describe('Analytics Integration - Simple', () => {
     // Verify analytics tracking
     expect(window.dataLayer).toHaveLength(1)
     expect(window.dataLayer[0]).toMatchObject({
-      event: 'chatbot',
+      event: 'chatbot_opened',
       event_action: 'opened',
-      source: 'button'
+      event_label: 'button'
     })
 
     // Verify state changes

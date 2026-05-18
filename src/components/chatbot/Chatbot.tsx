@@ -55,7 +55,7 @@ const Chatbot = () => {
 
     useEffect(() => {
     if (globalConfigObject?.autoOpen) {
-      pushAnalyticsEvent("opened", null, "auto-opened");
+      pushAnalyticsEvent("opened", "auto-opened");
       dispatch(openChat());
     }
   }, [globalConfigObject, dispatch]);
@@ -118,7 +118,7 @@ const Chatbot = () => {
     }
 
     try {
-      pushAnalyticsEvent("question_asked", null, questionSource || "popup");
+      pushAnalyticsEvent("question_asked", questionSource || "popup");
       setHasAskedQuestions(true);
       setMessages((prevMessages) => {
         prevMessages.map((item) => {
