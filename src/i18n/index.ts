@@ -1,6 +1,7 @@
 import { ChatbotStrings, StringKey } from './types';
-import { hebrewStrings } from './strings.he';
-import { englishStrings } from './strings.en';
+import appConfig from '@/config/config.json';
+import hebrewStrings from '@/config/strings.he.json';
+import englishStrings from '@/config/strings.en.json';
 
 /**
  * Slug keys whose content supports limited formatting (bold and line breaks).
@@ -9,7 +10,7 @@ import { englishStrings } from './strings.en';
 export const FORMATTED_SLUGS: ReadonlySet<StringKey> = new Set<StringKey>(['welcome_message']);
 
 // Build-time locale selection via Vite environment variable
-const LOCALE = import.meta.env.VITE_LOCALE || 'he';
+const LOCALE = import.meta.env.VITE_LOCALE || appConfig.defaultLocale;
 
 const localeStrings: Record<string, ChatbotStrings> = {
   he: hebrewStrings,

@@ -1,35 +1,39 @@
 import { useEffect, useRef, useState } from "react";
-import { Errors, Message } from "@/types.ts";
+import { Errors, Message, MessageType } from "@/types.ts";
 import { useMobile } from "@/lib/useMobile.ts";
-import { pushAnalyticsEvent } from "@/lib/analytics.ts";
 import { useTranslation } from "@/hooks/useTranslation.ts";
+import { pushAnalyticsEvent } from "@/lib/analytics.ts";
 import { useAppDispatch, useAppSelector } from '@/store/hooks.ts';
 import { setQuestion, selectQuestion } from '@/store/slices/questionSlice.ts';
 import { openChat } from '@/store/slices/chatSlice.ts';
-import NewQuestion from "../newQuestion/NewQuestion.tsx";
 import ChatInput from "../chatInput/ChatInput.tsx";
+import NewQuestion from "../newQuestion/NewQuestion.tsx";
 import "./footer.css"
 
 interface FooterProps {
   isLoading: boolean;
-  showInput: boolean;
-  setShowInput: React.Dispatch<React.SetStateAction<boolean>>;
   globalConfigObject: typeof window.KZChatbotConfig | null;
   errors: Errors;
   setErrors: React.Dispatch<React.SetStateAction<Errors>>;
-  messages: Message[];
   isChatOpen: boolean;
+  isQuotaReached?: boolean;
+  onDeleteHistoryClick?: () => void;
+  showInput?: boolean;
+  setShowInput?: (showInput: boolean) => void;
+  messages?: Message[];
 }
 
 const Footer = ({
   isLoading,
-  showInput,
-  setShowInput,
   globalConfigObject,
   errors,
   setErrors,
-  messages,
   isChatOpen,
+  isQuotaReached,
+  onDeleteHistoryClick,
+  showInput = true,
+  setShowInput,
+  messages = [],
 }: FooterProps) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -38,21 +42,13 @@ const Footer = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const isMobile = useMobile();
 
-
   useEffect(() => {
-    let isBotStarted = true;
-    for (let i = 0; i < messages.length; i++) {
-      if (messages[i].type === undefined || messages[i].type !== "startBot") {
-        isBotStarted = false;
-        break;
-      }
-    }
-    if (isMobile && isBotStarted) return;
-
-    if (isChatOpen && showInput && inputRef.current) {
+    const hasConversationMessages = messages.some((message) => message.type !== MessageType.StartBot);
+    if (isMobile && !hasConversationMessages) return;
+    if (isChatOpen && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [isMobile, inputRef, showInput, isChatOpen, messages]);
+  }, [isMobile, inputRef, isChatOpen, messages]);
 
   useEffect(() => {
     if (reduxQuestion === '') {
@@ -95,22 +91,27 @@ const Footer = ({
     }
   };
 
+  if (!showInput) {
+    return (
+      <NewQuestion
+        onClick={() => {
+          setShowInput?.(true);
+          pushAnalyticsEvent('restart_clicked');
+        }}
+      />
+    );
+  }
+
   return (
-    <>
-      {showInput ? (
-        <ChatInput
-          question={localQuestion}
-          handleSubmit={handleFormSubmit}
-          errors={errors}
-          handleOnMessageChange={handleOnMessageChange}
-          inputRef={inputRef} />
-      ) : (
-        <NewQuestion onClick={() => {
-          setShowInput(true);
-          pushAnalyticsEvent("restart_clicked");
-        }} />
-      )}
-    </>
+    <ChatInput
+      question={localQuestion}
+      handleSubmit={handleFormSubmit}
+      errors={errors}
+      disabled={isQuotaReached}
+      handleOnMessageChange={handleOnMessageChange}
+      onDeleteHistoryClick={onDeleteHistoryClick}
+      inputRef={inputRef}
+    />
   );
 };
 

@@ -167,7 +167,14 @@ describe('Chatbot Analytics - Simple Tests', () => {
     fireEvent.submit(form)
 
     await waitFor(() => {
-      expect(mockPushAnalyticsEvent).toHaveBeenCalledWith('question_asked', 'embed')
+      expect(mockPushAnalyticsEvent).toHaveBeenCalledWith(
+        'question_asked',
+        'embed',
+        expect.objectContaining({
+          source: 'embed',
+          question_index_in_conversation: 1
+        })
+      )
     })
   })
 
@@ -191,7 +198,14 @@ describe('Chatbot Analytics - Simple Tests', () => {
     fireEvent.submit(form)
 
     await waitFor(() => {
-      expect(mockPushAnalyticsEvent).toHaveBeenCalledWith('answer_received')
+      expect(mockPushAnalyticsEvent).toHaveBeenCalledWith(
+        'answer_received',
+        null,
+        expect.objectContaining({
+          source: 'popup',
+          question_index_in_conversation: 1
+        })
+      )
     })
   })
 

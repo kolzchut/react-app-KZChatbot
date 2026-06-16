@@ -2,7 +2,12 @@ import { pushAnalyticsEvent } from "@/lib/analytics";
 import { useTranslation } from "@/hooks/useTranslation";
 import "./disclaimerFooter.css";
 
-const DisclaimerFooter = () => {
+interface DisclaimerFooterProps {
+    onDeleteHistoryClick?: () => void;
+    showHistoryActions?: boolean;
+}
+
+const DisclaimerFooter = ({ onDeleteHistoryClick, showHistoryActions = true }: DisclaimerFooterProps) => {
     const { t } = useTranslation();
     const globalConfigObject = window.KZChatbotConfig;
 
@@ -11,17 +16,7 @@ const DisclaimerFooter = () => {
             <span className="chat-input-disclaimer">
                 {t('question_disclaimer')}
             </span>
-            <span className="chat-input-disclaimer underline">
-                {globalConfigObject?.termsofServiceUrl && (
-                    <a
-                        href={globalConfigObject.termsofServiceUrl}
-                        target="_blank"
-                        onClick={() => pushAnalyticsEvent("tos_clicked")}
-                    >
-                        {t('tc_link')}
-                    </a>
-                )}
-            </span>
+            {showHistoryActions && <span className="chat-input-disclaimer-actions">{globalConfigObject?.termsofServiceUrl && <a href={globalConfigObject.termsofServiceUrl} className="chat-input-disclaimer-link" onClick={() => pushAnalyticsEvent("tos_clicked")}>{t('tc_link')}</a>}{onDeleteHistoryClick && <button className="chat-input-disclaimer-button" onClick={onDeleteHistoryClick}>{t('delete_history_button')}</button>}</span>}
         </div>
     )
 }

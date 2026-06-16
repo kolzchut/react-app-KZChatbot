@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectIsChatOpen, openChat } from '../../store/slices/chatSlice';
+import { selectActiveConversation } from '@/store/slices/conversationSlice';
 import { useMobile } from '../../lib/useMobile';
 import { pushAnalyticsEvent } from '../../lib/analytics';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -25,9 +26,13 @@ const DesktopComponent = () => {
 const ChatButton: React.FC = () => {
     const dispatch = useAppDispatch();
     const isChatOpen = useAppSelector(selectIsChatOpen);
+    const activeConversation = useAppSelector(selectActiveConversation);
     const isMobile = useMobile();
 
     const handleToggleChat = () => {
+        if (activeConversation?.messages.some((item) => item.type === 'user')) {
+            pushAnalyticsEvent('conversation_resumed');
+        }
         pushAnalyticsEvent("opened", "button");
         dispatch(openChat());
     };

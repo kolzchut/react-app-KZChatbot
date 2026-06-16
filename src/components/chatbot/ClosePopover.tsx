@@ -1,13 +1,17 @@
 import { useTranslation } from "@/hooks/useTranslation";
 import CloseHeaderIcon from "@/assets/close-header.svg";
 import Stars from "@/assets/purple-stars.svg";
+import NewConversationButton from "./NewConversationButton";
 import "../../index.css"
+import "./closePopover.css"
 
 interface ClosePopoverProps {
   handleChatSetIsOpen: (isOpen: boolean) => void;
+  onStartNewConversation: () => void;
+  disableNewConversation: boolean;
 }
 
-const ClosePopover = ({ handleChatSetIsOpen }: ClosePopoverProps) => {
+const ClosePopover = ({ handleChatSetIsOpen, onStartNewConversation, disableNewConversation }: ClosePopoverProps) => {
 	const { t } = useTranslation();
 
 	return (
@@ -20,6 +24,11 @@ const ClosePopover = ({ handleChatSetIsOpen }: ClosePopoverProps) => {
           {t('chat_description')}
         </h1>
       </div>
+
+      <NewConversationButton
+        onClick={onStartNewConversation}
+        disabled={disableNewConversation}
+      />
 
       <button
         onClick={() => handleChatSetIsOpen(false)}

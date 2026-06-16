@@ -1,34 +1,4 @@
 import { ChatbotStrings } from './types';
+import strings from '@/config/strings.he.json';
 
-export const hebrewStrings: ChatbotStrings = {
-  chat_icon: 'כל שאלה',
-  chat_tip_link: 'טיפים לניסוח שאלה טובה',
-  close_chat_icon: 'סגירה',
-  open_chat_icon: 'פתיחת הצ\'אטבוט',
-  dislike_follow_up_question: 'תודה! נשמח לדעת למה',
-  dislike_free_text: 'רוצה לפרט? זה יעזור לנו להשתפר',
-  like_follow_up_question: 'תודה!',
-  like_free_text: 'רוצה לפרט?',
-  feedback_free_text_disclaimer: 'אין לשתף פרטים מזהים או מידע רגיש',
-  new_question_button: 'שאלה חדשה',
-  new_question_filed: 'שאלה חדשה',
-  new_question_hint: 'הצ\'אט לא זוכר תשובות לשאלות קודמות. צריך לשאול מחדש.',
-  question_disclaimer: 'אין לשתף פרטים מזהים או מידע רגיש',
-  question_field: 'מה רצית לדעת?',
-  ranking_request: 'האם התשובה עזרה לך?',
-  returning_links_title: 'התשובה מבוססת AI. יש לבדוק את המידע המלא בדפים הבאים:',
-  returning_links_no_links: 'התשובה מבוססת AI. יש לבדוק את המידע המלא באתר.',
-  returning_links_empty: 'לא נמצאה תשובה לשאלה. אפשר לחפש את המידע באתר או לשאול שאלה חדשה.',
-  tc_link: 'תנאי שימוש',
-  welcome_message: 'שלום! הצ\'אט, שנמצא כרגע בהרצה, יעזור לך למצוא תשובות מתוך אתר \'כל זכות\' מהר ובקלות בעזרת בינה מלאכותית. אפשר לשאול כל שאלה על זכויות בשפה חופשית. כדאי לציין מאפיינים רלוונטיים כמו גיל ומצב משפחתי.',
-  feedback_character_limit: 'ניתן להזין עד $1 תווים',
-  questions_daily_limit: 'הגעת למכסת השאלות היומית. נשמח לראותך מחר.',
-  question_character_limit: 'ניתן להזין עד $1 תווים',
-  banned_word_found: 'אנא נסחו את השאלה מחדש.',
-  general_error: 'אירעה שגיאה במערכת. אנא נסו שנית מאוחר יותר.',
-  send_button: 'שליחה',
-  chat_description: 'שאלו את ה-AI שלנו',
-  by: 'by',
-  getting_answer: 'מחפש תשובה...',
-  chat_disclaimer: 'הצ\'אט יכול לטעות. \'כל זכות\' לא אחראית לנכונות התשובות.'
-};
+export const hebrewStrings: ChatbotStrings = strings;

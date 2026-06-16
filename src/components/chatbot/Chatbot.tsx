@@ -1,293 +1,78 @@
-import { useEffect, useState, useRef, useCallback, useMemo } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { Errors, Message, MessageType, Answer } from "@/types";
-import { HttpError } from "../../lib/HttpError";
-import { pushAnalyticsEvent } from "@/lib/analytics";
-import { useMobile } from "@/lib/useMobile";
-import { useTranslation } from "@/hooks/useTranslation";
-import { FORMATTED_SLUGS } from "@/i18n";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { openChat, closeChat, selectIsChatOpen } from "@/store/slices/chatSlice";
-import { selectQuestion, selectQuestionSource, resetQuestion } from "@/store/slices/questionSlice";
-import {
-  Messages,
-  Popover,
-  PopoverContent,
-  Footer,
-  ClosePopover,
-} from "@/components";
-import WebiksFooter from "./webiksFooter/WebiksFooter";
-import "./chatbot.css";
-
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Errors, Message, MessageType } from '@/types';
+import { pushAnalyticsEvent } from '@/lib/analytics';
+import { useMobile } from '@/lib/useMobile';
+import { useTranslation } from '@/hooks/useTranslation';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { closeChat, openChat, selectIsChatOpen } from '@/store/slices/chatSlice';
+import { resetQuestion, selectQuestion, selectQuestionSource } from '@/store/slices/questionSlice';
+import { replaceActiveMessages, selectActiveConversation, selectArchivedConversations, selectConversationState } from '@/store/slices/conversationSlice';
+import { ClosePopover, Footer, Messages, Popover, PopoverContent } from '@/components';
+import DeleteHistoryModal from './DeleteHistoryModal';
+import { useConversationSession } from './hooks/useConversationSession';
+import { useConversationSubmit } from './hooks/useConversationSubmit';
+import WebiksFooter from './webiksFooter/WebiksFooter';
+import './chatbot.css';
 
 const Chatbot = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const isMobile = useMobile();
   const isChatOpen = useAppSelector(selectIsChatOpen);
   const question = useAppSelector(selectQuestion);
-  const questionSource = useAppSelector(selectQuestionSource);
-
-  const [globalConfigObject, setGlobalConfigObject] = useState<
-    typeof window.KZChatbotConfig | null
-  >(null);
+  const questionSource = useAppSelector(selectQuestionSource) || 'popup';
+  const conversationState = useAppSelector(selectConversationState);
+  const activeConversation = useAppSelector(selectActiveConversation);
+  const archivedConversations = useAppSelector(selectArchivedConversations);
+  const [globalConfigObject, setGlobalConfigObject] = useState<typeof window.KZChatbotConfig | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [showInput, setShowInput] = useState(true);
-  const initialErrors: Errors = useMemo(() => ({
-    description: "",
-  }), []);
-  const [errors, setErrors] = useState<Errors>(initialErrors);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [hasAskedQuestions, setHasAskedQuestions] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const messageContainerRef = useRef<HTMLDivElement>(null);
-  const isMobile = useMobile();
+  const separatorRef = useRef<HTMLDivElement>(null);
+  const initialErrors = useMemo<Errors>(() => ({ description: '' }), []);
+  const [errors, setErrors] = useState<Errors>(initialErrors);
+  const activeMessages = useMemo(() => activeConversation?.messages || [], [activeConversation?.messages]);
+  const isQuotaReached = Boolean(activeConversation?.quotaReached);
+  const hasAskedQuestion = activeMessages.some((item) => item.type === MessageType.User);
 
-  useEffect(() => {
-    if (isChatOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isChatOpen]);
-
-    useEffect(() => {
-    if (globalConfigObject?.autoOpen) {
-      pushAnalyticsEvent("opened", "auto-opened");
-      dispatch(openChat());
-    }
-  }, [globalConfigObject, dispatch]);
-
-  const handleCloseChat = () => {
-    if (!hasAskedQuestions) {
-      pushAnalyticsEvent("closed_unused");
-    }
-    dispatch(closeChat());
-    setHasAskedQuestions(false); // Reset for next session
+  const setMessages: React.Dispatch<React.SetStateAction<Message[]>> = (updater) => {
+    const next = typeof updater === 'function' ? updater(activeMessages) : updater;
+    dispatch(replaceActiveMessages(next));
   };
 
-  const getAnswer = useCallback(async (question: string): Promise<Answer | void> => {
-    const isProduction = import.meta.env.MODE === "production";
+  const handleCloseChat = () => {
+    if (!hasAskedQuestion) pushAnalyticsEvent('closed_unused');
+    dispatch(closeChat());
+  };
 
-    const url = isProduction
-      ? `${globalConfigObject?.restPath}/kzchatbot/v0/question`
-      : "/api/kzchatbot/v0/question";
+  const { handleStartNewConversation, handleClearAllHistory } = useConversationSession({ config: globalConfigObject, state: conversationState, activeConversation, t, dispatch });
+  useConversationSubmit({ config: globalConfigObject, question, source: questionSource, conversationState, activeQuestionCount: activeConversation?.questionCount || 0, quotaReached: isQuotaReached, dispatch, resetQuestion: () => dispatch(resetQuestion()), onLoading: setIsLoading, t });
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        text: question,
-        uuid: globalConfigObject?.uuid || "",
-        referrer: globalConfigObject?.referrer || ""
-      }),
-    });
-
-
-    const data = await response.json();
-    if (!response.ok) {
-      pushAnalyticsEvent(
-        "error_received",
-        response.status + ": " + data.message,
-      );
-      throw new HttpError(data.message, response.status);
-    }
-    return data;
-  }, [globalConfigObject]);
-
-  const submitQuestion = useCallback(async () => {
-    if (question === "" || !question.trim()) {
-      return false;
-    }
-
-    setIsLoading(true);
-    let isFirstQuestion = true;
-
-    if (
-      !question ||
-      !globalConfigObject ||
-      !globalConfigObject?.uuid ||
-      globalConfigObject.chatbotIsShown !== true ||
-      !globalConfigObject.slugs
-    ) {
-      return null;
-    }
-
-    try {
-      pushAnalyticsEvent("question_asked", questionSource || "popup");
-      setHasAskedQuestions(true);
-      setMessages((prevMessages) => {
-        prevMessages.map((item) => {
-          if (item.type !== MessageType.StartBot) {
-            isFirstQuestion = false;
-          }
-        });
-
-        const newMessages: Message[] = [
-          ...prevMessages,
-          {
-            id: uuidv4(),
-            content: question,
-            type: MessageType.User,
-            isFirstQuestion,
-          },
-        ];
-
-        return newMessages;
-      });
-
-      const answer = await getAnswer(question);
-      if (!answer?.llmResult) throw new Error();
-
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          id: answer.conversationId,
-          content: answer.llmResult,
-          type: MessageType.Bot,
-          links: answer.docs,
-        },
-      ]);
-      setShowInput(false);
-      pushAnalyticsEvent("answer_received");
-    } catch (error) {
-      let content: string;
-      let type: MessageType;
-      if (error instanceof HttpError) {
-        content = error.message;
-        type = error.httpCode === 403 ? MessageType.Warning : MessageType.Error;
-      } else {
-        content = t('general_error');
-        type = MessageType.Error;
-      }
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          id: uuidv4(),
-          content,
-          type,
-        },
-      ]);
-      console.error(error);
-    } finally {
-      dispatch(resetQuestion());
-      setIsLoading(false);
-      setErrors(initialErrors);
-    }
-  }, [question, globalConfigObject, questionSource, dispatch, initialErrors, getAnswer]);
-
-  // Handle all question submissions from Redux (embed widget and chat input)
+  useEffect(() => setGlobalConfigObject(window.KZChatbotConfig || null), []);
   useEffect(() => {
-    if (question && question.trim()) {
-      submitQuestion();
-    }
-  }, [question, submitQuestion]);
-
-  const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
-    if (messageContainerRef.current) {
-      messageContainerRef.current.scrollTo({
-        top: messageContainerRef.current.scrollHeight,
-        behavior,
-      });
-    }
-  }, []);
-
-  const scrollToAnswer = useCallback(() => {
-    if (messageContainerRef.current) {
-      const lastMessage = messageContainerRef.current.lastElementChild;
-      if (lastMessage) {
-        lastMessage.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  }, []);
-
+    if (!globalConfigObject?.autoOpen) return;
+    pushAnalyticsEvent('opened', 'auto-opened');
+    dispatch(openChat());
+  }, [dispatch, globalConfigObject]);
 
   useEffect(() => {
-    if (
-      errors.description ||
-      (messages.length &&
-        messages[messages.length - 1].type === MessageType.User)
-    ) {
-      scrollToBottom("instant");
-    }
-  }, [scrollToBottom, errors, messages]);
+    document.body.style.overflow = isChatOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isChatOpen]);
 
   useEffect(() => {
-    const lastMessage = messages[messages.length - 1];
-    if (
-      messages.length &&
-      lastMessage.liked === undefined &&
-      [MessageType.Bot, MessageType.Warning, MessageType.Error].includes(
-        lastMessage.type,
-      )
-    ) {
-      scrollToAnswer();
-    }
-  }, [messages, scrollToAnswer]);
+    if (!messageContainerRef.current) return;
+    messageContainerRef.current.scrollTo({ top: messageContainerRef.current.scrollHeight, behavior: 'smooth' });
+  }, [activeMessages, isLoading]);
 
   useEffect(() => {
-    if (window.KZChatbotConfig) {
-      const initMessages =
-        window.KZChatbotConfig.questionsPermitted > 0
-          ? [
-            {
-              id: uuidv4(),
-              content: t('welcome_message'),
-              type: MessageType.StartBot,
-              formattedContent: FORMATTED_SLUGS.has('welcome_message'),
-            },
-          ]
-          : [
-            {
-              id: uuidv4(),
-              content:
-                t('questions_daily_limit'),
-              type: MessageType.StartBot,
-            },
-          ];
-      setMessages(initMessages);
-      setGlobalConfigObject(window.KZChatbotConfig);
-    }
-  }, [setMessages, globalConfigObject]);
-
+    if (archivedConversations.length === 0 || !separatorRef.current) return;
+    separatorRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [archivedConversations.length]);
 
   return (
-    <Popover isChatOpen={isChatOpen}>
-      <div className="chatbot-overlay" />
-      <PopoverContent className={`chatbot-popover-content ${isMobile ? "mobile" : "desktop"}`}>
-        <ClosePopover
-          handleChatSetIsOpen={handleCloseChat}
-        />
-        <div className="chatbot-popover-main">
-          <Messages
-            setMessages={setMessages}
-            messages={messages}
-            isLoading={isLoading}
-            ref={messageContainerRef}
-            globalConfigObject={globalConfigObject}
-            errors={errors}
-            setErrors={setErrors}
-            initialErrors={initialErrors}
-          />
-          <Footer
-            isLoading={isLoading}
-            showInput={showInput}
-            setShowInput={setShowInput}
-            globalConfigObject={globalConfigObject}
-            errors={errors}
-            setErrors={setErrors}
-            messages={messages}
-            isChatOpen={isChatOpen}
-          />
-          <WebiksFooter />
-        </div>
-      </PopoverContent>
-    </Popover>
+    <Popover isChatOpen={isChatOpen}><div className="chatbot-overlay" /><PopoverContent className={`chatbot-popover-content ${isMobile ? 'mobile' : 'desktop'}`}><DeleteHistoryModal isOpen={showDeleteModal} onCancel={() => setShowDeleteModal(false)} onConfirm={() => { setShowDeleteModal(false); handleClearAllHistory(); }} /><ClosePopover handleChatSetIsOpen={handleCloseChat} onStartNewConversation={() => handleStartNewConversation('header-button')} disableNewConversation={!hasAskedQuestion} /><div className="chatbot-popover-main"><Messages messages={activeMessages} activeMessages={activeMessages} archivedConversations={archivedConversations} onStartNewConversation={() => handleStartNewConversation('inline-limit-cta')} setMessages={setMessages} isLoading={isLoading} ref={messageContainerRef} separatorRef={separatorRef} globalConfigObject={globalConfigObject} errors={errors} setErrors={setErrors} initialErrors={initialErrors} /><Footer showInput={true} messages={activeMessages} isLoading={isLoading} globalConfigObject={globalConfigObject} errors={errors} setErrors={setErrors} isChatOpen={isChatOpen} isQuotaReached={isQuotaReached} onDeleteHistoryClick={() => { pushAnalyticsEvent('history_deleted_requested'); setShowDeleteModal(true); }} /><WebiksFooter /></div></PopoverContent></Popover>
   );
-}
+};
 
 export default Chatbot;

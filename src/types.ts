@@ -4,12 +4,18 @@ export enum MessageType {
   User = "user",
   Warning = "warning",
   Error = "error",
+  System = "system",
 }
+
+export type SystemAction = "quota_reached" | "new_conversation";
 
 export interface Message {
   id: string;
   content: string;
   type: MessageType;
+  conversationId?: string;
+  timestamp?: number;
+  systemAction?: SystemAction;
   links?: { title: string; url: string }[];
   isFirstQuestion?: boolean;
   liked?: boolean | null;

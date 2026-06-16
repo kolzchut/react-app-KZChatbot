@@ -15,6 +15,10 @@ declare global {
       slugs: Partial<ChatbotStrings>;
       restPath: string;
       autoOpen: boolean;
+      maxQuestionsPerConversation?: number;
+      conversationSessionTtlHours?: number;
+      enableCrossTabSync?: boolean;
+      historyStorageMode?: 'local' | 'redis' | 'hybrid';
     };
   }
 }
