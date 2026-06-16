@@ -108,7 +108,87 @@
   transition: color 0.3s ease, -webkit-text-fill-color 0.3s ease;
 }
 
+/* Container for the buttons */
+.conversation-actions {
+  display: flex;
+  gap: 16px;
+  /* Assuming the parent container handles the RTL direction (dir="rtl") */
+}
 
+/* Base styles shared by both buttons */
+.btn-return-conversation,
+.btn-new-conversation {
+  direction: rtl;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 999px; /* Creates the perfect pill shape */
+  font-size: 14px;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Ensure the icons fit properly inside the buttons */
+.btn-return-conversation img,
+.btn-new-conversation img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+/* Filled Blue Button (Return to Conversation) */
+.btn-return-conversation {
+  background-color: #305C85;
+  color: #FFFFFF;
+  border: 2px solid #305C85;
+}
+
+.btn-return-conversation:hover {
+  background-color: #264a6b;
+  border-color: #264a6b;
+}
+
+/* Outlined White Button (New Conversation) */
+.btn-new-conversation {
+  background-color: #FFFFFF;
+  color: #305C85;
+  border: 2px solid #305C85;
+}
+
+.btn-new-conversation:hover {
+  background-color: #f0f4f8;
+}
+
+
+.chat-area-top{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  direction: rtl;
+}
+
+.chat-area-mode-hint-div {
+  direction: rtl;
+  display: flex;
+  justify-content: flex-start; /* Aligns content to the right in RTL mode */
+  width: 100%;
+  margin-top: 8px;   /* Space between the top header and this hint */
+  margin-bottom: 20px; /* Space between the hint and the chat input */
+}
+
+.chat-area-mode-hint-span {
+  color: #6b7280; /* A standard secondary gray color */
+  font-size: 14px;
+  font-weight: 400;
+  font-family: inherit;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .chat-area-content {
     max-width: 100%;

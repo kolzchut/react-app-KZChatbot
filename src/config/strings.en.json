@@ -38,6 +38,7 @@
   "general_error": "A system error occurred. Please try again later.",
   "send_button": "Send",
   "chat_description": "Ask our AI",
+  "chat_description_when_active_conversation": "Continue the conversation",
   "by": "by",
   "getting_answer": "Finding answer...",
   "chat_disclaimer": "The chatbot can make mistakes. Kol Zchut is not responsible for answer accuracy."

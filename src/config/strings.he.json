@@ -38,6 +38,7 @@
   "general_error": "אירעה שגיאה במערכת. אנא נסו שנית מאוחר יותר.",
   "send_button": "שליחה",
   "chat_description": "שאלו את ה-AI שלנו",
+  "chat_description_when_active_conversation": "המשיכו את השיחה",
   "by": "by",
   "getting_answer": "מחפש תשובה...",
   "chat_disclaimer": "הצ'אט יכול לטעות. 'כל זכות' לא אחראית לנכונות התשובות."

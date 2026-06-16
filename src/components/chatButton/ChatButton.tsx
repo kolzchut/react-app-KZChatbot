@@ -1,22 +1,24 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectIsChatOpen, openChat } from '../../store/slices/chatSlice';
-import { selectActiveConversation } from '@/store/slices/conversationSlice';
 import { useMobile } from '../../lib/useMobile';
 import { pushAnalyticsEvent } from '../../lib/analytics';
-import { useTranslation } from '@/hooks/useTranslation';
+import { useChatDescription } from '@/hooks/useChatDescription';
 import Stars from '../Stars';
 import './chatButton.css';
 
 const MobileComponent = () => <Stars className="chat-button-icon" />;
 
-const DesktopComponent = () => {
-    const { t } = useTranslation();
+interface DesktopComponentProps {
+    chatDescription: string;
+}
+
+const DesktopComponent: React.FC<DesktopComponentProps> = ({ chatDescription }) => {
     return (
         <>
             <Stars className="chat-button-icon" />
             <span className="gradient-text">
-                {t('chat_description')}
+                {chatDescription}
             </span>
         </>
     );
@@ -26,11 +28,11 @@ const DesktopComponent = () => {
 const ChatButton: React.FC = () => {
     const dispatch = useAppDispatch();
     const isChatOpen = useAppSelector(selectIsChatOpen);
-    const activeConversation = useAppSelector(selectActiveConversation);
+    const { hasConversation, chatDescription } = useChatDescription();
     const isMobile = useMobile();
 
     const handleToggleChat = () => {
-        if (activeConversation?.messages.some((item) => item.type === 'user')) {
+        if (hasConversation) {
             pushAnalyticsEvent('conversation_resumed');
         }
         pushAnalyticsEvent("opened", "button");
@@ -56,7 +58,7 @@ const ChatButton: React.FC = () => {
                 className={`gradient-button ${isChatOpen ? 'chat-button-disabled' : ''}`}
                 disabled={isChatOpen}
             >
-                <DesktopComponent />
+                <DesktopComponent chatDescription={chatDescription} />
             </button>
         </div>
     );

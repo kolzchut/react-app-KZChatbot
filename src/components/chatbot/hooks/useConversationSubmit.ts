@@ -57,12 +57,17 @@ export const useConversationSubmit = ({ config, question, source, conversationSt
 
     try {
       const answer = await askQuestion(config, {
-        text: nextQuestion,
-        uuid: config.uuid,
-        referrer: config.referrer || '',
-        sessionId: conversationState.sessionId,
-        conversationId: conversationState.activeConversationId,
-        questionIndex: activeQuestionCount + 1,
+        query: nextQuestion,
+        asked_from: source,
+        send_complete_pages_to_llm: false,
+        page_id: null,
+        include_debug_data: false,
+        thread_id: conversationState.activeConversationId,
+        execution_flags: {
+          llm_judge: true,
+          retrieval: true,
+          llm_answer: true,
+        },
       });
 
       dispatch(appendBotMessage({ id: answer.conversationId || uuidv4(), type: MessageType.Bot, content: answer.llmResult, links: answer.docs }));

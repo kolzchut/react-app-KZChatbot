@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import {forwardRef} from "react";
 import { Message, Errors } from "@/types";
 import TypingIndicator from "@/components/chatbot/typingIndicator/TypingIndicator.tsx";
 import { ConversationItem } from '@/store/slices/conversationTypes';
@@ -18,6 +18,7 @@ interface MessagesProps {
   setErrors: React.Dispatch<React.SetStateAction<Errors>>;
   initialErrors: Errors;
   separatorRef?: React.RefObject<HTMLDivElement>;
+  messagesBoxRef?: React.RefObject<HTMLDivElement>;
 }
 
 const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
@@ -32,7 +33,8 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
   setErrors,
   initialErrors,
   separatorRef,
-}, ref,) => {
+    messagesBoxRef,
+}, ref) => {
   const { t } = useTranslation();
   const currentMessages = activeMessages ?? messages;
 
@@ -44,8 +46,17 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
   const archivedMessages = archivedConversations.flatMap((item) => item.messages);
   const hasActiveMessages = currentMessages.filter((item) => item.content).length > 0;
 
+  const setContainerRef = (node: HTMLDivElement | null) => {
+    if (typeof ref === 'function') ref(node);
+    else if (ref) ref.current = node;
+    if (messagesBoxRef) {
+      (messagesBoxRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+    }
+  };
+
+
   return (
-    <div className="chat-container" ref={ref}>
+    <div className="chat-container" ref={setContainerRef}>
       {(!hasHistory || hasActiveMessages) && <div className="flex-spacer" />}
       {archivedMessages.filter((item) => item.content).map((message) => (
         <MessageBlock
