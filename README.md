@@ -7,6 +7,11 @@ Therefore, you can't just start adding more classes - nothing will scan to add t
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
+## Local dev backends
+
+- **Mockup mode** (`npm run dev:mock`) — canned responses, no backend needed. See [README-mockup-mode.md](README-mockup-mode.md).
+- **Shim mode** (`npm run dev:shim`) — a middleware shim that talks to a real RAG backend without MediaWiki. See [README-shim-mode.md](README-shim-mode.md).
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
