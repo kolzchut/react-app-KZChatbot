@@ -47,7 +47,7 @@ const Chatbot = () => {
   };
 
   const { handleStartNewConversation, handleClearAllHistory } = useConversationSession({ config: globalConfigObject, state: conversationState, activeConversation, t, dispatch });
-  useConversationSubmit({ config: globalConfigObject, question, source: questionSource, conversationState, activeQuestionCount: activeConversation?.questionCount || 0, quotaReached: isQuotaReached, dispatch, resetQuestion: () => dispatch(resetQuestion()), onLoading: setIsLoading, t });
+  useConversationSubmit({ config: globalConfigObject, question, source: questionSource, conversationState, activeThreadId: activeConversation?.threadId, activeQuestionCount: activeConversation?.questionCount || 0, quotaReached: isQuotaReached, dispatch, resetQuestion: () => dispatch(resetQuestion()), onLoading: setIsLoading, t });
 
   useEffect(() => setGlobalConfigObject(window.KZChatbotConfig || null), []);
   useEffect(() => {
