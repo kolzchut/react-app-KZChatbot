@@ -21,14 +21,14 @@
   flex: 1;
   height: 2px;
   opacity: 0.1;
-  background: var(--Purple, #D65CFF);
+  background: var(--Purple, #FF43E0);
 }
 
 .new-question-divider-end {
   flex: 1;
   height: 2px;
   opacity: 0.1;
-  background: var(--Cyan, #3284FF);
+  background: var(--Cyan, #2B16F5);
 }
 
 
@@ -43,7 +43,7 @@
 }
 
 .new-question-button-border {
-  background: linear-gradient(135deg, #3284FF, #D65CFF);
+  background: linear-gradient(135deg, #2B16F5, #FF43E0);
   padding: 4px;
   border-radius: 9999px;
   display: inline-block;
@@ -71,11 +71,11 @@
 }
 
 .new-question-gradient-button:hover {
-  background: linear-gradient(135deg, #3284FF, #D65CFF) !important;
+  background: linear-gradient(135deg, #2B16F5, #FF43E0) !important;
 }
 
 .new-question-gradient-text {
-  background: linear-gradient(135deg, #3284FF, #D65CFF);
+  background: linear-gradient(135deg, #2B16F5, #FF43E0);
   font-weight: 700;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -99,7 +99,7 @@
 }
 
 .new-question-icon path {
-  fill: #D65CFF;
+  fill: #FF43E0;
   transition: fill 0.3s ease;
 }
 
