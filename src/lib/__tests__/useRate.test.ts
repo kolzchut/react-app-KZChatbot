@@ -238,6 +238,8 @@ describe('useRate Hook', () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          thread_id: '',
+          conversation_id: 'test-message-id',
           answerId: 'test-message-id',
           like: null,
           text: 'Test feedback'
@@ -257,6 +259,8 @@ describe('useRate Hook', () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          thread_id: '',
+          conversation_id: 'test-message-id',
           answerId: 'test-message-id',
           like: null,
           text: ''
@@ -388,8 +392,10 @@ describe('useRate Hook', () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          like: true,
-          answerId: 'test-message-id'
+          thread_id: '',
+          conversation_id: 'test-message-id',
+          answerId: 'test-message-id',
+          like: true
         })
       })
     })

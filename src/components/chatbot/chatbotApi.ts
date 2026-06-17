@@ -22,7 +22,7 @@ const normalizeDocs = (docs: unknown): Answer['docs'] => {
 
 const normalizeAnswer = (data: unknown, fallbackConversationId: string): Answer => {
   if (!isRecord(data)) {
-    return { llmResult: '', docs: [], conversationId: fallbackConversationId };
+    return { llmResult: '', docs: [], conversationId: fallbackConversationId, threadId: '' };
   }
 
   const nestedData = isRecord(data.data) ? data.data : null;
@@ -44,10 +44,18 @@ const normalizeAnswer = (data: unknown, fallbackConversationId: string): Answer 
     (typeof data.conversationId === 'string' && data.conversationId) ||
     fallbackConversationId;
 
+  const threadId =
+    (typeof response.thread_id === 'string' && response.thread_id) ||
+    (typeof response.threadId === 'string' && response.threadId) ||
+    (typeof data.thread_id === 'string' && data.thread_id) ||
+    (typeof data.threadId === 'string' && data.threadId) ||
+    '';
+
   return {
     llmResult: answerText,
     docs: normalizeDocs(response.docs || data.docs),
     conversationId,
+    threadId,
   };
 };
 

@@ -34,6 +34,10 @@ const useRate = ({
 	const [like, setLike] = useState<boolean | null>(null);
 	const isFormValid = errors.description === "" && values.description.length > 0;
 
+	// The thread this answer belongs to — carried on the message so the rating
+	// reaches the correct RAG thread (message.id is the per-turn conversation_id).
+	const threadId = message.threadId || "";
+
 	const autoExpandingTextarea = () => {
 		if (!textareaRef.current) return;
 		textareaRef.current.style.height = "auto";
@@ -80,6 +84,8 @@ const useRate = ({
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
+					thread_id: threadId,
+					conversation_id: message.id,
 					answerId: message.id,
 					like: like,
 					text: description,
@@ -116,8 +122,10 @@ const useRate = ({
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					like: liked,
+					thread_id: threadId,
+					conversation_id: message.id,
 					answerId: message.id,
+					like: liked,
 				}),
 			});
 

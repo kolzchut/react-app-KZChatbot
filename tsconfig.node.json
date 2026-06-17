@@ -5,7 +5,11 @@
 		"module": "ESNext",
 		"moduleResolution": "bundler",
 		"allowSyntheticDefaultImports": true,
-		"types": ["node", "express"]
+		"types": ["node", "express"],
+		// Emit the composite-build output to a temp dir instead of beside the
+		// sources, so the generated vite.config.js can't shadow vite.config.ts
+		// during `vite dev` config resolution.
+		"outDir": "./.node-tsbuild"
 	},
-	"include": ["vite.config.ts", "mockup-server.ts"]
+	"include": ["vite.config.ts", "mockup-server.ts", "shim-server.ts", "shim-standalone.ts"]
 }

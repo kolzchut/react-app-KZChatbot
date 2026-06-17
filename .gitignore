@@ -26,3 +26,7 @@ dist-ssr
 
 # Coverage reports
 coverage/
+
+# tsc -b (node-side configs/servers) build output
+*.tsbuildinfo
+.node-tsbuild/

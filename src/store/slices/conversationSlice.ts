@@ -74,11 +74,16 @@ const conversationSlice = createSlice({
       const active = findConversation(state, state.activeConversationId);
       if (active) active.quotaReached = true;
     },
+    setConversationThreadId: (state, action: PayloadAction<{ conversationId: string; threadId: string }>) => {
+      const conversation = findConversation(state, action.payload.conversationId);
+      // Only the first turn mints a thread; never overwrite an established one.
+      if (conversation && !conversation.threadId) conversation.threadId = action.payload.threadId;
+    },
     clearAllHistory: () => initialState,
   },
 });
 
-export const { initSession, hydrateFromStorage, appendUserMessage, appendBotMessage, appendSystemMessage, replaceActiveMessages, startNewConversation, archiveActiveConversation, setViewingArchive, markQuotaReached, clearAllHistory } = conversationSlice.actions;
+export const { initSession, hydrateFromStorage, appendUserMessage, appendBotMessage, appendSystemMessage, replaceActiveMessages, startNewConversation, archiveActiveConversation, setViewingArchive, markQuotaReached, setConversationThreadId, clearAllHistory } = conversationSlice.actions;
 const getConversationState = (state: RootState) => state.conversation || initialState;
 
 export const selectConversationState = (state: RootState) => getConversationState(state);

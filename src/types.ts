@@ -14,6 +14,8 @@ export interface Message {
   content: string;
   type: MessageType;
   conversationId?: string;
+  /** RAG thread id this message belongs to; set on bot answers for rating. */
+  threadId?: string;
   timestamp?: number;
   systemAction?: SystemAction;
   links?: { title: string; url: string }[];
@@ -36,6 +38,8 @@ export interface Answer {
   llmResult: string;
   docs: Document[];
   conversationId: string;
+  /** RAG thread id echoed by the backend; used to carry continuous-conversation state. */
+  threadId: string;
 }
 
 export type Errors = {
