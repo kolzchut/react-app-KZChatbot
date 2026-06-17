@@ -77,6 +77,7 @@
 .header-new-conversation-button:hover .icon-white { opacity: 1; }
 
 .header-new-conversation-button:disabled {
-  opacity: 0.55;
+  opacity: 0.5;
+  filter: blur(0.5px);
   cursor: not-allowed;
 }

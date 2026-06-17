@@ -18,6 +18,7 @@ interface MessageBlockProps {
     errors: Errors;
     setErrors: React.Dispatch<React.SetStateAction<Errors>>;
     initialErrors: Errors;
+    isLoading: boolean;
 }
 
 const getMessageClass = (type: MessageType): string => {
@@ -26,7 +27,7 @@ const getMessageClass = (type: MessageType): string => {
     return 'message-error';
 };
 
-export const MessageBlock = ({ message, isReadonly, onStartNewConversation, setMessages, globalConfigObject, errors, setErrors, initialErrors }: MessageBlockProps) => {
+export const MessageBlock = ({ message, isReadonly, onStartNewConversation, setMessages, globalConfigObject, errors, setErrors, initialErrors, isLoading }: MessageBlockProps) => {
     const { t } = useTranslation();
     const isBotAnswer = message.type === MessageType.Bot;
     const isQuotaMessage = message.type === MessageType.System && message.systemAction === 'quota_reached';
@@ -38,7 +39,7 @@ export const MessageBlock = ({ message, isReadonly, onStartNewConversation, setM
             return (
                 <>
                     {message.content}{' '}
-                    <button type="button" onClick={onStartNewConversation} className="quota-new-conversation-link">
+                    <button type="button" onClick={onStartNewConversation} className="quota-new-conversation-link" disabled={isLoading}>
                         {newConversationText}
                     </button>
                 </>
@@ -48,7 +49,7 @@ export const MessageBlock = ({ message, isReadonly, onStartNewConversation, setM
         return (
             <>
                 {message.content.slice(0, linkIndex)}
-                <button type="button" onClick={onStartNewConversation} className="quota-new-conversation-link">
+                <button type="button" onClick={onStartNewConversation} className="quota-new-conversation-link" disabled={isLoading}>
                     {newConversationText}
                 </button>
                 {message.content.slice(linkIndex + newConversationText.length)}

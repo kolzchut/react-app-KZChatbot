@@ -69,6 +69,7 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
           errors={errors}
           setErrors={setErrors}
           initialErrors={initialErrors}
+          isLoading={isLoading}
         />
       ))}
       {hasHistory && <div className="conversation-separator" ref={separatorRef}><span>{t('previous_conversations_button')}</span></div>}
@@ -84,6 +85,7 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
           errors={errors}
           setErrors={setErrors}
           initialErrors={initialErrors}
+          isLoading={isLoading}
         />
       ))}
       {isLoading && <TypingIndicator />}

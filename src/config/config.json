@@ -1,8 +1,7 @@
 {
   "defaultLocale": "he",
   "storageKeys": {
-    "conversationState": "kzchatbot-conversation-state",
-    "crossTabSync": "kzchatbot-conversation-sync"
+    "conversationState": "kzchatbot-conversation-state"
   },
   "defaults": {
     "conversationSessionTtlHours": 8,

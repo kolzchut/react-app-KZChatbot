@@ -98,6 +98,13 @@ const useRate = ({
 			}
 
 			setIsFeedbackSubmitted(true);
+			setMessages((prevMessages) =>
+				prevMessages.map((prevMessage) =>
+					prevMessage.id === message.id
+						? { ...prevMessage, feedbackSubmitted: true }
+						: prevMessage,
+				),
+			);
 			setValues(initialValues);
 			setErrors(initialErrors);
 			setRateIsOpen(false);

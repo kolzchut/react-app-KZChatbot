@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useAppDispatch, useAppSelector} from '@/store/hooks';
-import {openChat, selectIsChatOpen} from '@/store/slices/chatSlice';
+import {openChat, selectIsChatOpen, selectIsLoading} from '@/store/slices/chatSlice';
 import {setQuestion} from '@/store/slices/questionSlice';
 import {startNewConversation} from '@/store/slices/conversationSlice';
 import {pushAnalyticsEvent} from '@/lib/analytics';
@@ -22,6 +22,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({isHomePage}) => {
     const [localQuestion, setLocalQuestion] = useState('');
     const {t} = useTranslation();
     const isChatOpen = useAppSelector(selectIsChatOpen);
+    const isLoading = useAppSelector(selectIsLoading);
     const {hasConversation, chatDescription} = useChatDescription();
 
     const handleOnMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,22 +63,18 @@ const ChatArea: React.FC<ChatAreaProps> = ({isHomePage}) => {
                                 <img src={returnIcon} alt="Return Icon"/>
                                 <span>{t('return_to_conversation_button')}</span>
                             </button>
-                            <button className="btn-new-conversation" onClick={() => handleNewConversation()}>
+                            <button className="btn-new-conversation" onClick={() => handleNewConversation()} disabled={isLoading}>
                                 <img src={staticChatIcon} alt="Static Chat Icon"/>
                                 <span>{t('new_conversation_button')}</span>
                             </button>
-
                         </div>}
                         </div>
-                        {hasConversation && <div className="chat-area-mode-hint-div">
-                        <span className={'chat-area-mode-hint-span'}>{t('continue_conversation_mode_hint')}</span>
-                        </div>}
                         <ChatInput
                             handleSubmit={handleSubmit}
                             question={localQuestion}
                             handleOnMessageChange={handleOnMessageChange}
                             showHistoryActions={false}
-                            disabled={isChatOpen}
+                            disabled={isChatOpen || isLoading}
                         />
                     </div>
                 </div>

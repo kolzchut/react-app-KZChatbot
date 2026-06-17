@@ -8,9 +8,14 @@ import ChatButton from "./components/chatButton/ChatButton.tsx";
 import ChatArea from "./components/chatArea/ChatArea.tsx";
 import { TranslationProvider } from "./contexts/TranslationContext.tsx";
 import { loadOpenSansFont } from "./utils/loadFont.ts";
+import { crossTabSyncService } from "./lib/crossTabSyncService.ts";
 
 // Load Open Sans font only if not already available
 loadOpenSansFont();
+
+// Initialise cross-tab sync listener — pushes remote localStorage changes into Redux
+crossTabSyncService.init(store.dispatch);
+window.addEventListener('beforeunload', () => crossTabSyncService.destroy());
 
 const mountComponent = (id: string, Component: JSX.Element) => {
 	let el = document.getElementById(id);

@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { pushAnalyticsEvent } from '@/lib/analytics';
 import { askQuestion } from '../chatbotApi';
 import { appendBotMessage, appendSystemMessage, appendUserMessage, markQuotaReached, setConversationThreadId } from '@/store/slices/conversationSlice';
+import { setLoading } from '@/store/slices/chatSlice';
 import { createConversationPayload } from '../chatbotAnalytics';
 import { MessageType } from '@/types';
 import { getConversationSessionConfig } from '@/lib/sessionStorage';
@@ -17,11 +18,10 @@ interface UseConversationSubmitProps {
   quotaReached: boolean;
   dispatch: (action: unknown) => void;
   resetQuestion: () => void;
-  onLoading: (isLoading: boolean) => void;
   t: (key: never) => string;
 }
 
-export const useConversationSubmit = ({ config, question, source, conversationState, activeThreadId, activeQuestionCount, quotaReached, dispatch, resetQuestion, onLoading, t }: UseConversationSubmitProps) => {
+export const useConversationSubmit = ({ config, question, source, conversationState, activeThreadId, activeQuestionCount, quotaReached, dispatch, resetQuestion, t }: UseConversationSubmitProps) => {
   const inFlightRef = useRef(false);
   const pendingQuestionRef = useRef('');
 
@@ -51,7 +51,7 @@ export const useConversationSubmit = ({ config, question, source, conversationSt
 
     inFlightRef.current = true;
     pendingQuestionRef.current = nextQuestion;
-    onLoading(true);
+    dispatch(setLoading(true));
     dispatch(appendUserMessage({ id: uuidv4(), type: MessageType.User, content: nextQuestion }));
     pushAnalyticsEvent('question_asked', source, conversationPayload(activeQuestionCount + 1));
     resetQuestion();
@@ -95,9 +95,9 @@ export const useConversationSubmit = ({ config, question, source, conversationSt
     } finally {
       inFlightRef.current = false;
       pendingQuestionRef.current = '';
-      onLoading(false);
+      dispatch(setLoading(false));
     }
-  }, [question, config, quotaReached, activeQuestionCount, conversationState, activeThreadId, source, appendQuotaMessage, dispatch, resetQuestion, onLoading, t]);
+  }, [question, config, quotaReached, activeQuestionCount, conversationState, activeThreadId, source, appendQuotaMessage, dispatch, resetQuestion, t]);
 
   useEffect(() => {
     if (question.trim()) submitQuestion();

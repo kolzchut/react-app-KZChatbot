@@ -1,7 +1,7 @@
 import { Errors } from "@/types.ts";
 import { useTranslation } from "@/hooks/useTranslation";
 import Input from "../../ui/input/Input.tsx";
-import DisclaimerFooter from "./DisclaimerFooter.tsx";
+import DisclaimerFooter from "./DisclaimerFooter/DisclaimerFooter.tsx";
 import SendEnabled from "@/assets/send-enabled.svg";
 import SendDisabled from "@/assets/send-disabled.svg";
 import "./chatInput.css";

@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { pushAnalyticsEvent } from '@/lib/analytics';
-import { clearConversationState, getConversationSessionConfig, loadConversationState, pruneExpiredConversations, saveConversationState } from '@/lib/sessionStorage';
-import { createCrossTabSync } from '@/lib/crossTabSync';
+import { clearConversationState, getConversationSessionConfig, loadConversationState, pruneExpiredConversations, saveConversationSnapshot } from '@/lib/sessionStorage';
+import { crossTabSyncService } from '@/lib/crossTabSyncService';
 import { appendBotMessage, clearAllHistory, hydrateFromStorage, initSession, startNewConversation } from '@/store/slices/conversationSlice';
 import { ConversationItem, ConversationState } from '@/store/slices/conversationTypes';
 import { createConversationItem } from '@/store/slices/conversationUtils';
@@ -12,6 +12,7 @@ interface UseConversationSessionProps {
   config: typeof window.KZChatbotConfig | null;
   state: ConversationState;
   activeConversation?: ConversationItem;
+  isLoading: boolean;
   t: (key: never) => string;
   dispatch: (action: unknown) => void;
 }
@@ -54,9 +55,7 @@ const prepareStoredConversationState = (
   };
 };
 
-export const useConversationSession = ({ config, state, activeConversation, t, dispatch }: UseConversationSessionProps) => {
-  const syncRef = useRef<ReturnType<typeof createCrossTabSync> | null>(null);
-  const remoteRef = useRef(false);
+export const useConversationSession = ({ config, state, activeConversation, isLoading, t, dispatch }: UseConversationSessionProps) => {
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
@@ -84,40 +83,22 @@ export const useConversationSession = ({ config, state, activeConversation, t, d
     dispatch(appendBotMessage(createInitialMessage(config, t)));
   }, [activeConversation, config, dispatch, isInitialized, t]);
 
-  useEffect(() => {
-    if (!config?.enableCrossTabSync) return;
-    syncRef.current = createCrossTabSync(() => {
-      const stored = loadConversationState();
-      if (!stored) return;
-      const next = prepareStoredConversationState(stored, config);
-      if (!next) {
-        clearConversationState();
-        return;
-      }
-      remoteRef.current = true;
-      dispatch(hydrateFromStorage(next));
-    });
-    return () => syncRef.current?.dispose();
-  }, [config, config?.enableCrossTabSync, dispatch]);
-
+  // Persist conversation state + loading flag to localStorage.
+  // The cross-tab sync service (crossTabSyncService) listens for remote changes.
   useEffect(() => {
     if (!isInitialized || !config) return;
-    saveConversationState(state);
-    if (remoteRef.current) remoteRef.current = false;
-    else syncRef.current?.publish({ name: 'new-message', timestamp: Date.now() });
-  }, [config, isInitialized, state]);
+    saveConversationSnapshot(state, isLoading, crossTabSyncService.getTabId());
+  }, [config, isInitialized, state, isLoading]);
 
   const handleStartNewConversation = (source: string) => {
     dispatch(startNewConversation({ conversationId: createConversationId(), timestamp: Date.now() }));
     pushAnalyticsEvent('new_conversation_clicked', null, createConversationPayload(state, source, 0));
-    syncRef.current?.publish({ name: 'new-conversation', timestamp: Date.now() });
   };
 
   const handleClearAllHistory = () => {
     dispatch(clearAllHistory());
     clearConversationState();
     pushAnalyticsEvent('history_deleted_confirmed', null, createConversationPayload(state, 'popup', 0));
-    syncRef.current?.publish({ name: 'clear-history', timestamp: Date.now() });
   };
 
   return { handleStartNewConversation, handleClearAllHistory };

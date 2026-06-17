@@ -47,7 +47,7 @@ const Rate = ({
 	const ref = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		if (isFeedbackSubmitted) return;
+		if (isFeedbackSubmitted || message.feedbackSubmitted) return;
 
 		if (message.liked === null || message.liked === undefined) {
 			setRateIsOpen(false);

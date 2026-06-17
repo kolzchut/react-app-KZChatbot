@@ -21,6 +21,8 @@ export interface Message {
   links?: { title: string; url: string }[];
   isFirstQuestion?: boolean;
   liked?: boolean | null;
+  /** Whether the user submitted the free-text feedback form (survives remounts). */
+  feedbackSubmitted?: boolean;
   formattedContent?: boolean;
 }
 

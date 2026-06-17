@@ -3,6 +3,14 @@ import { ConversationItem, ConversationState } from '@/store/slices/conversation
 
 const conversationStateKey = appConfig.storageKeys.conversationState;
 
+/** Snapshot persisted to localStorage — includes metadata for cross-tab sync. */
+export interface ConversationSnapshot {
+  conversationState: ConversationState;
+  isLoading: boolean;
+  lastUpdatedBy: string;   // tab UUID — lets us ignore our own writes
+  lastUpdatedAt: number;
+}
+
 export const getConversationSessionConfig = (config: typeof window.KZChatbotConfig) => ({
   maxQuestionsPerConversation:
     config.maxQuestionsPerConversation || appConfig.defaults.maxQuestionsPerConversation,
@@ -10,14 +18,39 @@ export const getConversationSessionConfig = (config: typeof window.KZChatbotConf
     config.conversationSessionTtlHours || appConfig.defaults.conversationSessionTtlHours,
 });
 
-export const saveConversationState = (state: ConversationState): void => {
-  localStorage.setItem(conversationStateKey, JSON.stringify(state));
+export const saveConversationSnapshot = (
+  state: ConversationState,
+  isLoading: boolean,
+  tabId: string,
+): void => {
+  const snapshot: ConversationSnapshot = {
+    conversationState: state,
+    isLoading,
+    lastUpdatedBy: tabId,
+    lastUpdatedAt: Date.now(),
+  };
+  localStorage.setItem(conversationStateKey, JSON.stringify(snapshot));
 };
 
+export const loadConversationSnapshot = (): ConversationSnapshot | null => {
+  const serialized = localStorage.getItem(conversationStateKey);
+  if (!serialized) return null;
+  return JSON.parse(serialized) as ConversationSnapshot;
+};
+
+/** Unwraps the saved snapshot to get the ConversationState. */
 export const loadConversationState = (): ConversationState | null => {
   const serialized = localStorage.getItem(conversationStateKey);
   if (!serialized) return null;
-  return JSON.parse(serialized) as ConversationState;
+  try {
+    const parsed = JSON.parse(serialized);
+    // Snapshot format (current)
+    if (parsed.conversationState) return parsed.conversationState as ConversationState;
+    // Legacy format (plain ConversationState) — shouldn't exist, but be safe
+    return parsed as ConversationState;
+  } catch {
+    return null;
+  }
 };
 
 export const clearConversationState = (): void => {

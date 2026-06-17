@@ -9,9 +9,10 @@ interface ClosePopoverProps {
   handleChatSetIsOpen: (isOpen: boolean) => void;
   onStartNewConversation: () => void;
   disableNewConversation: boolean;
+  isLoading: boolean;
 }
 
-const ClosePopover = ({ handleChatSetIsOpen, onStartNewConversation, disableNewConversation }: ClosePopoverProps) => {
+const ClosePopover = ({ handleChatSetIsOpen, onStartNewConversation, disableNewConversation, isLoading }: ClosePopoverProps) => {
 	const { t } = useTranslation();
 
 	return (
@@ -27,7 +28,7 @@ const ClosePopover = ({ handleChatSetIsOpen, onStartNewConversation, disableNewC
 
       <NewConversationButton
         onClick={onStartNewConversation}
-        disabled={disableNewConversation}
+        disabled={disableNewConversation || isLoading}
       />
 
       <button

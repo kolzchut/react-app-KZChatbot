@@ -5,9 +5,10 @@ interface DeleteHistoryModalProps {
   isOpen: boolean;
   onCancel: () => void;
   onConfirm: () => void;
+  isLoading: boolean;
 }
 
-const DeleteHistoryModal = ({ isOpen, onCancel, onConfirm }: DeleteHistoryModalProps) => {
+const DeleteHistoryModal = ({ isOpen, onCancel, onConfirm, isLoading }: DeleteHistoryModalProps) => {
   const { t } = useTranslation();
   if (!isOpen) return null;
 
@@ -17,7 +18,7 @@ const DeleteHistoryModal = ({ isOpen, onCancel, onConfirm }: DeleteHistoryModalP
         <h2 className="delete-history-modal-title">{t('delete_history_modal_title')}</h2>
         <p className="delete-history-modal-body">{t('delete_history_modal_body')}</p>
         <div className="delete-history-modal-actions">
-          <button className="delete-history-modal-confirm" onClick={onConfirm}>{t('delete_history_confirm')}</button>
+          <button className="delete-history-modal-confirm" onClick={onConfirm} disabled={isLoading}>{t('delete_history_confirm')}</button>
           <button className="delete-history-modal-cancel" onClick={onCancel}>{t('delete_history_cancel')}</button>
         </div>
       </div>

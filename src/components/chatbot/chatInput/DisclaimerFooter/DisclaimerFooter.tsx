@@ -1,5 +1,5 @@
-import { pushAnalyticsEvent } from "@/lib/analytics";
 import { useTranslation } from "@/hooks/useTranslation";
+import DisclaimerActions from "./DisclaimerActions/DisclaimerActions.tsx";
 import "./disclaimerFooter.css";
 
 interface DisclaimerFooterProps {
@@ -16,7 +16,12 @@ const DisclaimerFooter = ({ onDeleteHistoryClick, showHistoryActions = true }: D
             <span className="chat-input-disclaimer">
                 {t('question_disclaimer')}
             </span>
-            {showHistoryActions && <span className="chat-input-disclaimer-actions">{globalConfigObject?.termsofServiceUrl && <a href={globalConfigObject.termsofServiceUrl} className="chat-input-disclaimer-link" onClick={() => pushAnalyticsEvent("tos_clicked")}>{t('tc_link')}</a>}{onDeleteHistoryClick && <button className="chat-input-disclaimer-button" onClick={onDeleteHistoryClick}>{t('delete_history_button')}</button>}</span>}
+            {showHistoryActions && (
+                <DisclaimerActions
+                    termsofServiceUrl={globalConfigObject?.termsofServiceUrl}
+                    onDeleteHistoryClick={onDeleteHistoryClick}
+                />
+            )}
         </div>
     )
 }

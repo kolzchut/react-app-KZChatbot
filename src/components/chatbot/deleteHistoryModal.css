@@ -74,6 +74,13 @@
   background-color: #9f2424 !important;
 }
 
+.delete-history-modal-confirm:disabled {
+  opacity: 0.5;
+  filter: blur(0.5px);
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+
 .delete-history-modal-cancel:hover {
   background-color: #f4f7fa !important;
 }

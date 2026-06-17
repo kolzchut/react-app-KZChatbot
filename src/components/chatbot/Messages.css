@@ -96,6 +96,13 @@
 	text-underline-offset: 3px;
 }
 
+.quota-new-conversation-link:disabled {
+	opacity: 0.5;
+	filter: blur(0.5px);
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
 .conversation-separator::before,
 .conversation-separator::after {
 	content: '';
