@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { pushAnalyticsEvent } from '@/lib/analytics';
-import { clearConversationState, getConversationSessionConfig, loadConversationState, pruneExpiredConversations, saveConversationSnapshot } from '@/lib/sessionStorage';
+import { clearConversationState, getConversationSessionConfig, loadConversationState, pruneExpiredConversations } from '@/lib/sessionStorage';
+import { saveConversationSnapshot } from '@/lib/conversationSnapshot';
 import { crossTabSyncService } from '@/lib/crossTabSyncService';
 import { appendBotMessage, clearAllHistory, hydrateFromStorage, initSession, startNewConversation } from '@/store/slices/conversationSlice';
 import { ConversationItem, ConversationState } from '@/store/slices/conversationTypes';
