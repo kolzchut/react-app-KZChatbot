@@ -35,6 +35,7 @@ const Chatbot = () => {
   const isQuotaReached = Boolean(activeConversation?.quotaReached);
   const hasAskedQuestion = activeMessages.some((item) => item.type === MessageType.User);
   const messagesBoxRef = useRef<HTMLDivElement>(null);
+  const scrollBottomRef = useRef<HTMLDivElement>(null);
 
   const setMessages: React.Dispatch<React.SetStateAction<Message[]>> = (updater) => {
     const next = typeof updater === 'function' ? updater(activeMessages) : updater;
@@ -61,24 +62,26 @@ const Chatbot = () => {
     return () => { document.body.style.overflow = ''; };
   }, [isChatOpen]);
 
+  // Scroll archived-conversations separator into view only when there are no active messages
   useEffect(() => {
     if (archivedConversations.length === 0 || !separatorRef.current) return;
+    const hasActiveMessages = activeMessages.some((item) => item.content);
+    if (hasActiveMessages) return;
     separatorRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, [archivedConversations.length]);
+  }, [archivedConversations.length, activeMessages]);
 
-  // Scroll to bottom when chat opens
+  // Scroll to bottom when chat opens — use a delay to let DOM fully settle
   useEffect(() => {
     if (!isChatOpen) return;
-    requestAnimationFrame(() => {
-      messagesBoxRef.current?.scrollTo({ top: messagesBoxRef.current.scrollHeight, behavior: 'smooth' });
-    });
+    const timer = setTimeout(() => {
+      scrollBottomRef.current?.scrollIntoView({ block: 'end' });
+    }, 100);
+    return () => clearTimeout(timer);
   }, [isChatOpen]);
 
   // Scroll to bottom when a new message arrives (user or bot)
   useEffect(() => {
-    requestAnimationFrame(() => {
-      messagesBoxRef.current?.scrollTo({ top: messagesBoxRef.current.scrollHeight, behavior: 'smooth' });
-    });
+    scrollBottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, [activeMessages.length, isLoading]);
 
   return (
@@ -88,7 +91,7 @@ const Chatbot = () => {
         <DeleteHistoryModal isOpen={showDeleteModal} onCancel={() => setShowDeleteModal(false)} onConfirm={() => { setShowDeleteModal(false); handleClearAllHistory(); }} isLoading={isLoading} />
         <ClosePopover handleChatSetIsOpen={handleCloseChat} onStartNewConversation={() => handleStartNewConversation('header-button')} disableNewConversation={!hasAskedQuestion} isLoading={isLoading} />
         <div className="chatbot-popover-main">
-          <Messages messagesBoxRef={messagesBoxRef} messages={activeMessages} activeMessages={activeMessages} archivedConversations={archivedConversations} onStartNewConversation={() => handleStartNewConversation('inline-limit-cta')} setMessages={setMessages} isLoading={isLoading} ref={messageContainerRef} separatorRef={separatorRef} globalConfigObject={globalConfigObject} errors={errors} setErrors={setErrors} initialErrors={initialErrors} />
+          <Messages messagesBoxRef={messagesBoxRef} messages={activeMessages} activeMessages={activeMessages} archivedConversations={archivedConversations} onStartNewConversation={() => handleStartNewConversation('inline-limit-cta')} setMessages={setMessages} isLoading={isLoading} ref={messageContainerRef} separatorRef={separatorRef} scrollBottomRef={scrollBottomRef} globalConfigObject={globalConfigObject} errors={errors} setErrors={setErrors} initialErrors={initialErrors} />
           <Footer showInput={true} messages={activeMessages} isLoading={isLoading} globalConfigObject={globalConfigObject} errors={errors} setErrors={setErrors} isChatOpen={isChatOpen} isQuotaReached={isQuotaReached} onDeleteHistoryClick={() => { pushAnalyticsEvent('history_deleted_requested'); setShowDeleteModal(true); }} />
           <WebiksFooter />
         </div>

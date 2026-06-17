@@ -48,7 +48,7 @@ const Footer = ({
     if (isChatOpen && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [isMobile, inputRef, isChatOpen, messages]);
+  }, [isMobile, inputRef, isChatOpen, messages.length]);
 
   useEffect(() => {
     if (reduxQuestion === '') {

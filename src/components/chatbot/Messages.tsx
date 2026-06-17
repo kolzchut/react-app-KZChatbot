@@ -19,6 +19,7 @@ interface MessagesProps {
   initialErrors: Errors;
   separatorRef?: React.RefObject<HTMLDivElement>;
   messagesBoxRef?: React.RefObject<HTMLDivElement>;
+  scrollBottomRef?: React.RefObject<HTMLDivElement>;
 }
 
 const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
@@ -34,6 +35,7 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
   initialErrors,
   separatorRef,
     messagesBoxRef,
+    scrollBottomRef,
 }, ref) => {
   const { t } = useTranslation();
   const currentMessages = activeMessages ?? messages;
@@ -89,6 +91,7 @@ const Messages = forwardRef<HTMLDivElement, MessagesProps>(({
         />
       ))}
       {isLoading && <TypingIndicator />}
+      <div ref={scrollBottomRef} />
     </div>
   );
 },
