@@ -29,10 +29,11 @@ const useRate = ({
 		description: "",
 	};
 	const [values, setValues] = useState<FormValues>(initialValues);
-	const [rateIsOpen, setRateIsOpen] = useState(false);
-	const [isFeedbackSubmitted, setIsFeedbackSubmitted] = useState<boolean>(false);
 	const [like, setLike] = useState<boolean | null>(null);
 	const isFormValid = errors.description === "" && values.description.length > 0;
+	/** Derived from message so it stays in sync across tabs and survives refresh. */
+	const rateIsOpen = message.liked !== null && message.liked !== undefined && !message.feedbackSubmitted;
+	const isFeedbackSubmitted = Boolean(message.feedbackSubmitted);
 
 	// The thread this answer belongs to — carried on the message so the rating
 	// reaches the correct RAG thread (message.id is the per-turn conversation_id).
@@ -97,7 +98,6 @@ const useRate = ({
 				throw new Error(data.messageTranslations.he); // TODO: add type for data
 			}
 
-			setIsFeedbackSubmitted(true);
 			setMessages((prevMessages) =>
 				prevMessages.map((prevMessage) =>
 					prevMessage.id === message.id
@@ -107,16 +107,30 @@ const useRate = ({
 			);
 			setValues(initialValues);
 			setErrors(initialErrors);
-			setRateIsOpen(false);
 		} catch (error) {
 			console.error(error);
-			setIsFeedbackSubmitted(false);
 		}
 	};
 
 	const handleRate = async (liked: boolean | null) => {
 		setLike(liked); // Set the like value in state
 		pushAnalyticsEvent(liked ? "positive_feedback" : "negative_feedback");
+
+		// Optimistic Redux update — UI responds instantly
+		const previousLiked = message.liked;
+		setMessages((prevMessages) =>
+			prevMessages.map((prevMessage) =>
+				prevMessage.id === message.id
+					? {
+						...prevMessage,
+						liked: prevMessage.liked === liked ? null : liked,
+					}
+					: prevMessage,
+			),
+		);
+		setValues(initialValues);
+		setErrors(initialErrors);
+
 		const isProduction = import.meta.env.MODE === "production";
 		const url = isProduction
 			? `${globalConfigObject?.restPath}/kzchatbot/v0/rate`
@@ -140,21 +154,16 @@ const useRate = ({
 				const data = await response.json();
 				throw new Error(data.messageTranslations.he); // TODO: add type for data
 			}
-
+		} catch (error) {
+			console.error(error);
+			// Revert optimistic update on failure
 			setMessages((prevMessages) =>
 				prevMessages.map((prevMessage) =>
 					prevMessage.id === message.id
-						? {
-							...prevMessage,
-							liked: prevMessage.liked === liked ? null : liked,
-						}
+						? { ...prevMessage, liked: previousLiked }
 						: prevMessage,
 				),
 			);
-			setValues(initialValues);
-			setErrors(initialErrors);
-		} catch (error) {
-			console.error(error);
 		}
 	};
 
@@ -165,7 +174,6 @@ const useRate = ({
 		handleChange,
 		handleSubmit,
 		rateIsOpen,
-		setRateIsOpen,
 		isFormValid,
 		handleRate
 	};

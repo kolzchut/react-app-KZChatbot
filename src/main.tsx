@@ -14,7 +14,7 @@ import { crossTabSyncService } from "./lib/crossTabSyncService.ts";
 loadOpenSansFont();
 
 // Initialise cross-tab sync listener — pushes remote localStorage changes into Redux
-crossTabSyncService.initializeService(store.dispatch);
+crossTabSyncService.initializeService(store.dispatch, store.getState);
 window.addEventListener('beforeunload', () => crossTabSyncService.destroyService());
 
 const mountComponent = (id: string, Component: JSX.Element) => {

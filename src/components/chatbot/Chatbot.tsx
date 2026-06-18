@@ -36,6 +36,24 @@ const Chatbot = () => {
   const hasAskedQuestion = activeMessages.some((item) => item.type === MessageType.User);
   const messagesBoxRef = useRef<HTMLDivElement>(null);
   const scrollBottomRef = useRef<HTMLDivElement>(null);
+  const isNearBottomRef = useRef(true);
+
+  // Track whether the user is near the bottom of the scroll container
+  // Prevents auto-scroll from fighting the user when they scroll up
+  useEffect(() => {
+    const container = messagesBoxRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const threshold = 100;
+      isNearBottomRef.current =
+        container.scrollHeight - container.scrollTop - container.clientHeight < threshold;
+    };
+
+    handleScroll();
+    container.addEventListener('scroll', handleScroll, { passive: true });
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [isChatOpen]);
 
   const setMessages: React.Dispatch<React.SetStateAction<Message[]>> = (updater) => {
     const next = typeof updater === 'function' ? updater(activeMessages) : updater;
@@ -79,8 +97,9 @@ const Chatbot = () => {
     return () => clearTimeout(timer);
   }, [isChatOpen]);
 
-  // Scroll to bottom when a new message arrives (user or bot)
+  // Scroll to bottom when a new message arrives (user or bot) — only if user is near the bottom
   useEffect(() => {
+    if (!isNearBottomRef.current) return;
     scrollBottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, [activeMessages.length, isLoading]);
 
