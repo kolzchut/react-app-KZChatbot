@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Message, MessageType } from '@/types';
 import { FORMATTED_SLUGS } from '@/i18n';
+import { StringKey } from '@/i18n/types';
 import { getConversationSessionConfig, getSessionExpirationTimestamp } from '@/lib/sessionStorage';
 
 export const createSessionInitPayload = (config: typeof window.KZChatbotConfig) => {
@@ -12,9 +13,9 @@ export const createSessionInitPayload = (config: typeof window.KZChatbotConfig) 
   };
 };
 
-export const createInitialMessage = (config: typeof window.KZChatbotConfig, t: (key: never) => string): Message => {
+export const createInitialMessage = (config: typeof window.KZChatbotConfig, t: (key: StringKey) => string): Message => {
   const hasQuota = config.questionsPermitted > 0;
-  const content = hasQuota ? t('welcome_message' as never) : t('questions_daily_limit' as never);
+  const content = hasQuota ? t('welcome_message') : t('questions_daily_limit');
   return {
     id: uuidv4(),
     type: MessageType.StartBot,

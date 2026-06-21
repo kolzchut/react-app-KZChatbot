@@ -8,13 +8,14 @@ import { ConversationItem, ConversationState } from '@/store/slices/conversation
 import { createConversationItem } from '@/store/slices/conversationUtils';
 import { createConversationPayload } from '../chatbotAnalytics';
 import { createConversationId, createInitialMessage, createSessionInitPayload } from '../chatbotSession';
+import { StringKey } from '@/i18n/types';
 
 interface UseConversationSessionProps {
   config: typeof window.KZChatbotConfig | null;
   state: ConversationState;
   activeConversation?: ConversationItem;
   isLoading: boolean;
-  t: (key: never) => string;
+  t: (key: StringKey) => string;
   dispatch: (action: unknown) => void;
 }
 

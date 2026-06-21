@@ -1,6 +1,7 @@
 // Type definition for all translatable strings in the chatbot
 export interface ChatbotStrings {
   chat_description: string;
+  chat_description_when_active_conversation: string;
   chat_icon: string;
   chat_tip_link: string;
   open_chat_icon: string;

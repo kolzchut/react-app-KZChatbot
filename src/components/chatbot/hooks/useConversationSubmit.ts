@@ -7,6 +7,7 @@ import { setLoading } from '@/store/slices/chatSlice';
 import { createConversationPayload } from '../chatbotAnalytics';
 import { MessageType } from '@/types';
 import { getConversationSessionConfig } from '@/lib/sessionStorage';
+import { StringKey } from '@/i18n/types';
 
 interface UseConversationSubmitProps {
   config: typeof window.KZChatbotConfig | null;
@@ -18,7 +19,7 @@ interface UseConversationSubmitProps {
   quotaReached: boolean;
   dispatch: (action: unknown) => void;
   resetQuestion: () => void;
-  t: (key: never) => string;
+  t: (key: StringKey) => string;
 }
 
 export const useConversationSubmit = ({ config, question, source, conversationState, activeThreadId, activeQuestionCount, quotaReached, dispatch, resetQuestion, t }: UseConversationSubmitProps) => {
@@ -27,7 +28,7 @@ export const useConversationSubmit = ({ config, question, source, conversationSt
 
   const appendQuotaMessage = useCallback(() => {
     dispatch(markQuotaReached());
-    dispatch(appendSystemMessage({ id: uuidv4(), type: MessageType.System, content: t('quota_reached_message' as never), systemAction: 'quota_reached' }));
+    dispatch(appendSystemMessage({ id: uuidv4(), type: MessageType.System, content: t('quota_reached_message'), systemAction: 'quota_reached' }));
   }, [dispatch, t]);
 
   const submitQuestion = useCallback(async () => {
@@ -89,7 +90,7 @@ export const useConversationSubmit = ({ config, question, source, conversationSt
       pushAnalyticsEvent('answer_received', null, conversationPayload(activeQuestionCount + 1));
       if (activeQuestionCount + 1 >= maxQuestionsPerConversation) appendQuotaMessage();
     } catch (error) {
-      dispatch(appendBotMessage({ id: uuidv4(), type: MessageType.Error, content: t('general_error' as never) }));
+      dispatch(appendBotMessage({ id: uuidv4(), type: MessageType.Error, content: t('general_error') }));
       const errorLabel = error instanceof Error ? error.message.replace(':', ': ') : 'submit_failed';
       pushAnalyticsEvent('error_received', errorLabel);
     } finally {
