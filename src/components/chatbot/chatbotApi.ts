@@ -1,4 +1,5 @@
 import { Answer } from '@/types';
+import { HttpError } from '@/lib/HttpError';
 
 const getQuestionEndpoint = (config: typeof window.KZChatbotConfig | null): string => {
   if (import.meta.env.MODE === 'production') return `${config?.restPath}/kzchatbot/v0/question`;
@@ -71,7 +72,7 @@ export const askQuestion = async (
   const data = await response.json();
   if (!response.ok) {
     const message = isRecord(data) ? data.message || data.error : null;
-    throw new Error(`${response.status}:${message || response.statusText}`);
+    throw new HttpError(String(message || response.statusText), response.status);
   }
 
   return normalizeAnswer(data, String(payload.conversationId || payload.thread_id || ''));

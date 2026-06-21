@@ -108,7 +108,10 @@ export default defineConfig(async ({ mode, command }: ConfigEnv): Promise<UserCo
 			'import.meta.env.VITE_LOCALE': JSON.stringify(env.VITE_LOCALE || 'he'),
 		},
 		build: {
-			assetsInlineLimit: 8096,
+			// Inline all assets as data URIs. The bundle is loaded by MediaWiki from
+			// the extension path, but emitted asset files would resolve against the
+			// site root (/assets/...) and 404, so keep this above the largest asset.
+			assetsInlineLimit: 16384,
 			rollupOptions: {
 				output: {
 					format: "iife",

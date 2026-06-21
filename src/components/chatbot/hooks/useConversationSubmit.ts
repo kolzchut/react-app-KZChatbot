@@ -8,6 +8,7 @@ import { createConversationPayload } from '../chatbotAnalytics';
 import { MessageType } from '@/types';
 import { getConversationSessionConfig } from '@/lib/sessionStorage';
 import { StringKey } from '@/i18n/types';
+import { HttpError } from '@/lib/HttpError';
 
 interface UseConversationSubmitProps {
   config: typeof window.KZChatbotConfig | null;
@@ -90,8 +91,19 @@ export const useConversationSubmit = ({ config, question, source, conversationSt
       pushAnalyticsEvent('answer_received', null, conversationPayload(activeQuestionCount + 1));
       if (activeQuestionCount + 1 >= maxQuestionsPerConversation) appendQuotaMessage();
     } catch (error) {
-      dispatch(appendBotMessage({ id: uuidv4(), type: MessageType.Error, content: t('general_error') }));
-      const errorLabel = error instanceof Error ? error.message.replace(':', ': ') : 'submit_failed';
+      // Surface the backend's own message for client errors (banned words,
+      // character/daily limits, …); fall back to the generic error otherwise.
+      const serverMessage =
+        error instanceof HttpError && error.httpCode >= 400 && error.httpCode < 500
+          ? error.message
+          : '';
+      dispatch(appendBotMessage({ id: uuidv4(), type: MessageType.Error, content: serverMessage || t('general_error') }));
+      const errorLabel =
+        error instanceof HttpError
+          ? `${error.httpCode}: ${error.message}`
+          : error instanceof Error
+            ? error.message.replace(':', ': ')
+            : 'submit_failed';
       pushAnalyticsEvent('error_received', errorLabel);
     } finally {
       inFlightRef.current = false;
