@@ -111,7 +111,7 @@
 /* Container for the buttons */
 .conversation-actions {
   display: flex;
-  gap: 16px;
+  gap: 20px;
   /* Assuming the parent container handles the RTL direction (dir="rtl") */
 }
 
@@ -123,11 +123,11 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 6px;
+  padding: 6px 12px;
   border-radius: 999px; /* Creates the perfect pill shape */
-  font-size: 12px;
+  font-size: 14px;
   font-family: inherit;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -176,6 +176,7 @@
   justify-content: space-between;
   align-items: center;
   direction: rtl;
+  padding: 0 16px;
 }
 
 /* Responsive adjustments */
