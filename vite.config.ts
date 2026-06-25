@@ -2,40 +2,58 @@ import path from "path";
 import { defineConfig, loadEnv, Plugin, ConfigEnv, UserConfig, PluginOption } from "vite";
 import react from "@vitejs/plugin-react";
 import { startMockupServer } from "./mockup-server";
+import { startShimServer } from "./shim-server";
 
+// VITE_MODE selects the local dev backend:
+//   "mockup" → in-process canned-response server (no real backend needed)
+//   "shim"   → in-process middleware shim that forwards to a real RAG backend
+//              (configured via RAG_API_URL; see README for the tunnel)
+//   (unset)  → proxy to VITE_API_URL (e.g. a real MediaWiki rest.php)
 // https://vitejs.dev/config/
 export default defineConfig(async ({ mode, command }: ConfigEnv): Promise<UserConfig> => {
 	const env = loadEnv(mode, process.cwd(), "");
 	const useMockup = env.VITE_MODE === "mockup";
+	const useShim = env.VITE_MODE === "shim";
 	const isBuild = command === 'build';
+	const useLocalBackend = (useMockup || useShim) && !isBuild;
 
-	// Start mockup server if VITE_MODE is set to mockup AND we're not in build mode
-	let mockupServer = null;
+	// Start the chosen in-process backend (dev/preview only — never at build).
+	let localServer: { url: string; close: () => Promise<void> } | null = null;
 	if (useMockup && !isBuild) {
-		mockupServer = await startMockupServer();
-		console.log(`🔶 Using mockup server at ${mockupServer.url}`);
+		localServer = await startMockupServer();
+		console.log(`🔶 Using mockup server at ${localServer.url}`);
+	} else if (useShim && !isBuild) {
+		const ragUrl = env.RAG_API_URL || "http://localhost:5000";
+		localServer = await startShimServer({
+			ragUrl,
+			sendPageId: env.SHIM_SEND_PAGE_ID !== "false",
+			limits: {
+				maxQuestions: Number(env.SHIM_MAX_QUESTIONS) || 0,
+				questionChars: Number(env.SHIM_QUESTION_CHARS) || 0,
+				feedbackChars: Number(env.SHIM_FEEDBACK_CHARS) || 0,
+			},
+		});
+		console.log(`🟢 Using middleware shim at ${localServer.url} → RAG ${ragUrl}`);
 	}
 
-	// API target - use mockup server or the configured API URL
-	const apiTarget = (useMockup && !isBuild)
-		? mockupServer?.url
-		: env.VITE_API_URL;
+	// API target - the local backend, or the configured remote API URL.
+	const apiTarget = useLocalBackend ? localServer?.url : env.VITE_API_URL;
 
-	// Create plugins array
 	const plugins: PluginOption[] = [react()];
 
-	// Add mockup plugin only if mockup mode is enabled and we're not building
-	if (useMockup && !isBuild) {
-		const mockupPlugin: Plugin = {
-			name: 'mockup-mode-plugin',
+	// When a local backend is running, tear it down with Vite and show a banner.
+	if (useLocalBackend) {
+		const label = useShim ? "SHIM MODE ACTIVE" : "MOCKUP MODE ACTIVE";
+		const bg = useShim ? "#22C55E" : "#FFC107";
+		const localBackendPlugin: Plugin = {
+			name: 'local-backend-plugin',
 			configureServer(server) {
 				server.middlewares.use((req, res, next) => {
-					// Add an indicator in dev tools that we're in mockup mode
 					if (req.url?.endsWith('.html')) {
 						server.transformIndexHtml(req.url, `
-              <!-- Running in mockup mode -->
+              <!-- Running with a local dev backend -->
               <script>
-                console.log('%c🔶 MOCKUP MODE ACTIVE', 'background: #FFC107; color: #000; padding: 4px 8px; border-radius: 4px;');
+                console.log('%c🔶 ${label}', 'background: ${bg}; color: #000; padding: 4px 8px; border-radius: 4px;');
               </script>
             `).then(html => {
 							res.setHeader('Content-Type', 'text/html');
@@ -46,24 +64,23 @@ export default defineConfig(async ({ mode, command }: ConfigEnv): Promise<UserCo
 					next();
 				});
 			},
-			// This will be called when Vite is closing
 			closeBundle() {
-				if (mockupServer) {
-					mockupServer.close().catch(err => {
-						console.error('Error closing mockup server:', err);
+				if (localServer) {
+					localServer.close().catch(err => {
+						console.error('Error closing local backend:', err);
 					});
-					console.log('🔶 Mockup server closed');
+					console.log('🔶 Local backend closed');
 				}
 			}
 		};
 
-		plugins.push(mockupPlugin);
+		plugins.push(localBackendPlugin);
 	}
 
-	// Configure proxy differently based on whether we're in mockup mode
-	const proxyConfig = (useMockup && !isBuild)
+	// Proxy: when a local backend is running, route both /rest.php and /api to it
+	// (the client uses /api/... in dev). Otherwise proxy /api to the remote URL.
+	const proxyConfig = useLocalBackend
 		? {
-			// In mockup mode, proxy everything to the mockup server
 			"/rest.php": {
 				target: apiTarget,
 				changeOrigin: true,
@@ -77,7 +94,6 @@ export default defineConfig(async ({ mode, command }: ConfigEnv): Promise<UserCo
 			}
 		}
 		: {
-			// Normal proxy configuration
 			"/api": {
 				target: apiTarget,
 				changeOrigin: true,
@@ -92,7 +108,10 @@ export default defineConfig(async ({ mode, command }: ConfigEnv): Promise<UserCo
 			'import.meta.env.VITE_LOCALE': JSON.stringify(env.VITE_LOCALE || 'he'),
 		},
 		build: {
-			assetsInlineLimit: 8096,
+			// Inline all assets as data URIs. The bundle is loaded by MediaWiki from
+			// the extension path, but emitted asset files would resolve against the
+			// site root (/assets/...) and 404, so keep this above the largest asset.
+			assetsInlineLimit: 16384,
 			rollupOptions: {
 				output: {
 					format: "iife",

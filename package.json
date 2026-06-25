@@ -6,6 +6,8 @@
 	"scripts": {
 		"dev": "vite",
 		"dev:mock": "cross-env VITE_MODE=mockup vite",
+		"dev:shim": "cross-env VITE_MODE=shim vite",
+		"shim": "tsx shim-standalone.ts",
 		"build": "tsc -b && vite build",
 		"build:he": "cross-env VITE_LOCALE=he tsc -b && vite build",
 		"build:en": "cross-env VITE_LOCALE=en tsc -b && vite build",
@@ -58,6 +60,7 @@
 		"jsdom": "^26.1.0",
 		"postcss": "^8.4.39",
 		"tailwindcss": "^3.4.10",
+		"tsx": "^4.22.4",
 		"typescript": "^5.2.2",
 		"vite": "^6.3.6",
 		"vitest": "^3.2.4"

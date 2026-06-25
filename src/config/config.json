@@ -1,0 +1,11 @@
+{
+  "defaultLocale": "he",
+  "storageKeys": {
+    "conversationState": "kzchatbot-conversation-state"
+  },
+  "defaults": {
+    "conversationSessionTtlHours": 8,
+    "maxQuestionsPerConversation": 8,
+    "enableCrossTabSync": true
+  }
+}

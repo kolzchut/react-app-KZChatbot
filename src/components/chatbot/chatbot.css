@@ -50,4 +50,5 @@
     flex-direction: column;
     background-color: #f2f6fa;
     overflow: hidden;
+    min-height: 0;
 }

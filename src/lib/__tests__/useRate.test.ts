@@ -238,6 +238,8 @@ describe('useRate Hook', () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          thread_id: '',
+          conversation_id: 'test-message-id',
           answerId: 'test-message-id',
           like: null,
           text: 'Test feedback'
@@ -257,6 +259,8 @@ describe('useRate Hook', () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          thread_id: '',
+          conversation_id: 'test-message-id',
           answerId: 'test-message-id',
           like: null,
           text: ''
@@ -308,8 +312,10 @@ describe('useRate Hook', () => {
       })
 
       expect(result.current.values.description).toBe('')
-      expect(result.current.isFeedbackSubmitted).toBe(true)
-      expect(result.current.rateIsOpen).toBe(false)
+      // isFeedbackSubmitted/rateIsOpen are derived from the message prop now;
+      // a successful submit marks the message via setMessages, not internal state.
+      const submitUpdater = vi.mocked(props.setMessages).mock.calls[0][0] as (m: Message[]) => Message[]
+      expect(submitUpdater([createMessage()])[0].feedbackSubmitted).toBe(true)
       expect(setErrors).toHaveBeenCalledWith({ description: '' })
     })
 
@@ -388,8 +394,10 @@ describe('useRate Hook', () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          like: true,
-          answerId: 'test-message-id'
+          thread_id: '',
+          conversation_id: 'test-message-id',
+          answerId: 'test-message-id',
+          like: true
         })
       })
     })
@@ -492,19 +500,23 @@ describe('useRate Hook', () => {
     })
   })
 
-  describe('rateIsOpen state management', () => {
-    it('allows setting rateIsOpen', () => {
-      const { result } = renderHook(() => useRate(defaultProps))
-
-      act(() => {
-        result.current.setRateIsOpen(true)
-      })
+  describe('rateIsOpen (derived from message)', () => {
+    it('is open when the message has a rating but no feedback yet', () => {
+      const { result } = renderHook(() =>
+        useRate({ ...defaultProps, message: createMessage({ liked: true }) }))
 
       expect(result.current.rateIsOpen).toBe(true)
+    })
 
-      act(() => {
-        result.current.setRateIsOpen(false)
-      })
+    it('is closed once feedback has been submitted', () => {
+      const { result } = renderHook(() =>
+        useRate({ ...defaultProps, message: createMessage({ liked: true, feedbackSubmitted: true }) }))
+
+      expect(result.current.rateIsOpen).toBe(false)
+    })
+
+    it('is closed when the message has no rating', () => {
+      const { result } = renderHook(() => useRate(defaultProps))
 
       expect(result.current.rateIsOpen).toBe(false)
     })

@@ -1,6 +1,7 @@
 // Type definition for all translatable strings in the chatbot
 export interface ChatbotStrings {
   chat_description: string;
+  chat_description_when_active_conversation: string;
   chat_icon: string;
   chat_tip_link: string;
   open_chat_icon: string;
@@ -13,6 +14,18 @@ export interface ChatbotStrings {
   new_question_button: string;
   new_question_filed: string;
   new_question_hint: string;
+  new_conversation_button: string;
+  previous_conversations_button: string;
+  continue_conversation_placeholder: string;
+  continue_conversation_mode_title: string;
+  continue_conversation_mode_hint: string;
+  return_to_conversation_button: string;
+  delete_history_button: string;
+  delete_history_modal_title: string;
+  delete_history_modal_body: string;
+  delete_history_confirm: string;
+  delete_history_cancel: string;
+  quota_reached_message: string;
   question_disclaimer: string;
   question_field: string;
   ranking_request: string;

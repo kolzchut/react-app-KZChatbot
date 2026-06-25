@@ -99,7 +99,7 @@
 }
 
 .chat-description {
-  background: linear-gradient(135deg, #3284FF, #D65CFF);
+  background: linear-gradient(135deg, #2B16F5, #FF43E0);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -108,11 +108,91 @@
   transition: color 0.3s ease, -webkit-text-fill-color 0.3s ease;
 }
 
+/* Container for the buttons */
+.conversation-actions {
+  display: flex;
+  gap: 20px;
+  /* Assuming the parent container handles the RTL direction (dir="rtl") */
+}
 
+/* Base styles shared by both buttons */
+.btn-return-conversation,
+.btn-new-conversation {
+  direction: rtl;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px; /* Creates the perfect pill shape */
+  font-size: 14px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Ensure the icons fit properly inside the buttons */
+.btn-return-conversation img,
+.btn-new-conversation img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+}
+
+/* Filled Blue Button (Return to Conversation) */
+.btn-return-conversation {
+  background-color: #305C85;
+  color: #FFFFFF;
+  border: 2px solid #305C85;
+}
+
+.btn-return-conversation:hover {
+  background-color: #264a6b;
+  border-color: #264a6b;
+}
+
+/* Outlined White Button (New Conversation) */
+.btn-new-conversation {
+  background-color: #FFFFFF;
+  color: #305C85;
+  border: 2px solid #305C85;
+}
+
+.btn-new-conversation:hover {
+  background-color: #f0f4f8;
+}
+
+.btn-new-conversation:disabled {
+  opacity: 0.5;
+  filter: blur(0.5px);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.chat-area-top{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  direction: rtl;
+  padding: 0 16px;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .chat-area-content {
     max-width: 100%;
     padding: 20px 0;
+  }
+  .chat-area-top{
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start
+  }
+  .conversation-actions
+  {
+    padding: 16px 16px 16px 0px;
   }
 }
 
