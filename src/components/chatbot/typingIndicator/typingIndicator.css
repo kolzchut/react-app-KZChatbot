@@ -40,3 +40,10 @@
     0%, 100% { opacity: 0.2; }
     50% { opacity: 1; }
 }
+
+@media (prefers-reduced-motion: reduce) {
+    .bubble span {
+        animation: none;
+        opacity: 1;
+    }
+}

@@ -38,11 +38,10 @@ const ChatInput = ({ handleSubmit, errors, question, handleOnMessageChange, onDe
                     placeholder={hasConversation
                         ? t('continue_conversation_placeholder')
                         : t('question_field')}
-                    title={t('send_button')}
+                    submitLabel={t('send_button')}
                     submitElement={
                         <div className="chat-input-texts-section">
-                            <span className="sr-only">{t('send_button')}</span>
-                            <img src={question ? SendEnabled : SendDisabled} className="chat-input-icon" alt="send"  />
+                            <img src={question ? SendEnabled : SendDisabled} className="chat-input-icon" alt="" aria-hidden="true" />
                         </div>
                     }
                     maxLength={globalConfigObject?.questionCharacterLimit || 150}

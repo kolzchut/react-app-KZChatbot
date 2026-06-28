@@ -1,7 +1,23 @@
+/* The modal is a native <dialog>. It spans the viewport as a transparent layer
+   so the positioned .popover-content panel sits inside it and clicks on the empty
+   area (outside the panel) can dismiss it; ::backdrop provides the dim overlay. */
 .popover-overlay {
 	position: fixed;
 	inset: 0;
+	width: 100%;
+	height: 100%;
+	max-width: none;
+	max-height: none;
+	margin: 0;
+	padding: 0;
+	border: none;
+	background: transparent;
+	overflow: visible;
 	z-index: 40;
+}
+
+.popover-overlay::backdrop {
+	background: rgba(0, 0, 0, 0.4);
 }
 
 .popover-content {
@@ -17,9 +33,13 @@
 	justify-content: space-between;
 	background-color: white;
 	color: #111827;
-	outline: none;
 	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 	transition: all 0.2s ease-in-out;
 	opacity: 1;
 	transform: scale(1);
+}
+
+.popover-content:focus-visible {
+	outline: 2px solid #2D5B85;
+	outline-offset: 2px;
 }

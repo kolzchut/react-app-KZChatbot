@@ -26,6 +26,8 @@
   "question_disclaimer": "Do not share identifying details or sensitive information",
   "question_field": "What would you like to know?",
   "ranking_request": "Was this answer helpful?",
+  "rate_helpful": "Helpful",
+  "rate_not_helpful": "Not helpful",
   "returning_links_title": "The answer is AI-generated. Please verify the complete information on the following pages:",
   "returning_links_no_links": "The answer is AI-generated. Please verify the complete information on the website.",
   "returning_links_empty": "No answer found. You can search the website or ask a new question.",

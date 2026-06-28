@@ -82,11 +82,11 @@ export const MessageBlock = ({ message, isReadonly, onStartNewConversation, setM
             {message.type !== MessageType.User && (
                 <div className="message-bot-container">
                     <div className="bot-avatar">
-                        <img src={Stars} alt="Bot Avatar" />
+                        <img src={Stars} alt="" aria-hidden="true" />
                     </div>
-                    <div className={`${getMessageClass(message.type)}${isQuotaMessage ? ' quota-message-block' : ''}`}>
+                    <div className={`${getMessageClass(message.type)}${isQuotaMessage ? ' quota-message-block' : ''}`} aria-live="polite">
                         {renderMessageContent()}
-                        {message.type === MessageType.Error && <img src={AlertIcon} alt="Alert Icon" className="message-error-icon" />}
+                        {message.type === MessageType.Error && <img src={AlertIcon} alt="" aria-hidden="true" className="message-error-icon" />}
                     </div>
                 </div>
             )}
@@ -100,7 +100,7 @@ export const MessageBlock = ({ message, isReadonly, onStartNewConversation, setM
                             {message.links.map((link, index) => (
                                 <a key={index} href={link.url} target="_blank" rel="noreferrer" className="link-card" onClick={() => pushAnalyticsEvent('link_clicked', link.title)}>
                                     <span className="link-card-text">{link.title}</span>
-                                    <img src={LinkIcon} alt="Link Icon" className="link-icon" />
+                                    <img src={LinkIcon} alt="" aria-hidden="true" className="link-icon" />
                                 </a>
                             ))}
                         </div>
@@ -111,8 +111,8 @@ export const MessageBlock = ({ message, isReadonly, onStartNewConversation, setM
                         </div>
                     )}
                     {isReadonly && (
-                        <div style={{ pointerEvents: 'none', opacity: 0.6 }}>
-                            <Rate message={message} setMessages={setMessages} globalConfigObject={globalConfigObject} errors={errors} setErrors={setErrors} initialErrors={initialErrors} />
+                        <div style={{ opacity: 0.6 }}>
+                            <Rate message={message} setMessages={setMessages} globalConfigObject={globalConfigObject} errors={errors} setErrors={setErrors} initialErrors={initialErrors} isReadonly />
                         </div>
                     )}
                 </>

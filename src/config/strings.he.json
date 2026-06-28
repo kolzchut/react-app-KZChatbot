@@ -26,6 +26,8 @@
   "question_disclaimer": "אין לשתף פרטים מזהים או מידע רגיש",
   "question_field": "מה רצית לדעת?",
   "ranking_request": "האם התשובה עזרה לך?",
+  "rate_helpful": "התשובה עזרה",
+  "rate_not_helpful": "התשובה לא עזרה",
   "returning_links_title": "התשובה מבוססת AI. יש לבדוק את המידע המלא בדפים הבאים:",
   "returning_links_no_links": "התשובה מבוססת AI. יש לבדוק את המידע המלא באתר.",
   "returning_links_empty": "לא נמצאה תשובה לשאלה. אפשר לחפש את המידע באתר או לשאול שאלה חדשה.",

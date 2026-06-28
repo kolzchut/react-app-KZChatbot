@@ -6,11 +6,12 @@ import "./input.css"
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   submitElement?: React.ReactNode;
+  submitLabel?: string;
   errors?: Errors;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, submitElement, errors, ...props }, ref) => {
+  ({ className, type, submitElement, submitLabel, errors, ...props }, ref) => {
     return (
       <div className="chat-input-wrapper">
         <div className="chat-input-field-container">
@@ -29,6 +30,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               type="submit"
               className="chat-input-submit-button"
               disabled={props.disabled}
+              aria-label={submitLabel}
             >
               {submitElement}
             </button>

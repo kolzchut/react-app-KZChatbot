@@ -76,10 +76,24 @@
     color: black;
     background-color: transparent;
     border-bottom-width: 1px;
-    outline: none;
     border-style: solid;
     padding: 0.6rem 0.7rem !important;
     resize: none;
+}
+
+.rate-textarea:focus-visible {
+    outline: 2px solid #2D5B85;
+    outline-offset: 2px;
+}
+
+.rating-icon:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.rating-icon:focus-visible {
+    outline: 2px solid #2D5B85;
+    outline-offset: 2px;
 }
 
 .rate-textarea::placeholder {

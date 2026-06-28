@@ -51,6 +51,12 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .gradient-border-wrapper {
+    animation: none;
+  }
+}
+
 .chat-area-container {
   display: flex;
   flex-direction: column;

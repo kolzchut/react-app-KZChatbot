@@ -19,9 +19,9 @@ const ClosePopover = ({ handleChatSetIsOpen, onStartNewConversation, disableNewC
     <div className="chat-header">
       <div className="header-title-section">
         <div className="ai-icon-container">
-          <img src={Stars} alt="AI Bot" className="ai-icon" />
+          <img src={Stars} alt="" aria-hidden="true" className="ai-icon" />
         </div>
-        <h1 className="header-title">
+        <h1 id="kzcb-dialog-title" className="header-title">
           {t('chat_description')}
         </h1>
       </div>
@@ -37,7 +37,7 @@ const ClosePopover = ({ handleChatSetIsOpen, onStartNewConversation, disableNewC
         title={t('close_chat_icon')}
         className="close-button"
       >
-        <img src={CloseHeaderIcon} alt={t('close_chat_icon')} className="close-icon" />
+        <img src={CloseHeaderIcon} alt="" aria-hidden="true" className="close-icon" />
       </button>
     </div>
   );
