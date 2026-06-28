@@ -23,12 +23,15 @@ const createCrossTabSyncService = () => {
     return convsA.some((conv, i) => {
       const convB = convsB[i];
       if (!convB) return true;
+      if (conv.threadId !== convB.threadId) return true;
+      if (conv.quotaReached !== convB.quotaReached) return true;
       if (conv.messages.length !== convB.messages.length) return true;
       return conv.messages.some((msg, j) => {
         const msgB = convB.messages[j];
         if (!msgB) return true;
         return msg.liked !== msgB.liked
           || msg.feedbackSubmitted !== msgB.feedbackSubmitted
+          || msg.threadId !== msgB.threadId
           || msg.content !== msgB.content;
       });
     });

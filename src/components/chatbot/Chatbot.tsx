@@ -104,8 +104,7 @@ const Chatbot = () => {
   }, [activeMessages.length, isLoading]);
 
   return (
-    <Popover isChatOpen={isChatOpen}>
-      <div className="chatbot-overlay" />
+    <Popover isChatOpen={isChatOpen} onClose={handleCloseChat} labelledById="kzcb-dialog-title">
       <PopoverContent className={`chatbot-popover-content ${isMobile ? 'mobile' : 'desktop'}`}>
         <DeleteHistoryModal isOpen={showDeleteModal} onCancel={() => setShowDeleteModal(false)} onConfirm={() => { setShowDeleteModal(false); handleClearAllHistory(); }} isLoading={isLoading} />
         <ClosePopover handleChatSetIsOpen={handleCloseChat} onStartNewConversation={() => handleStartNewConversation('header-button')} disableNewConversation={!hasAskedQuestion} isLoading={isLoading} />

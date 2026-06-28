@@ -13,6 +13,7 @@ interface RateProps {
 	errors: Errors;
 	setErrors: React.Dispatch<React.SetStateAction<Errors>>;
 	initialErrors: Errors;
+	isReadonly?: boolean;
 }
 
 const Rate = ({
@@ -22,6 +23,7 @@ const Rate = ({
 	errors,
 	setErrors,
 	initialErrors,
+	isReadonly = false,
 }: RateProps) => {
 	const { t } = useTranslation();
 	const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -58,21 +60,23 @@ const Rate = ({
 				</div>
 
 				<button
-					disabled={isFeedbackSubmitted}
+					disabled={isFeedbackSubmitted || isReadonly}
 					aria-pressed={message.liked === true}
+					aria-label={t('rate_helpful')}
 					className="rating-icon"
 					onClick={() => handleRate(message.liked === true ? null : true)}
 				>
-					<img src={message.liked ? PressedLikeIcon : LikeIcon} alt="like" />
+					<img src={message.liked ? PressedLikeIcon : LikeIcon} alt="" aria-hidden="true" />
 				</button>
 
 				<button
-					disabled={isFeedbackSubmitted}
+					disabled={isFeedbackSubmitted || isReadonly}
 					aria-pressed={message.liked === false}
+					aria-label={t('rate_not_helpful')}
 					className="rating-icon rating-icon-rotated"
 					onClick={() => handleRate(message.liked === false ? null : false)}
 				>
-					<img src={message.liked === false ? PressedLikeIcon : LikeIcon} alt="dislike" />
+					<img src={message.liked === false ? PressedLikeIcon : LikeIcon} alt="" aria-hidden="true" />
 				</button>
 			</div>
 

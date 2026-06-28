@@ -16,11 +16,12 @@ const NewConversationButton = ({ onClick, disabled = false }: NewConversationBut
       onClick={onClick}
       className="header-new-conversation-button"
       disabled={disabled}
+      aria-label={t('new_conversation_button')}
     >
       <span className="btn-text">{t('new_conversation_button')}</span>
       <div className="icon-container">
-        <img src={NewConversationIconGradient} className="icon-grad" alt="" />
-        <img src={NewConversationIconWhite} className="icon-white" alt="" />
+        <img src={NewConversationIconGradient} className="icon-grad" alt="" aria-hidden="true" />
+        <img src={NewConversationIconWhite} className="icon-white" alt="" aria-hidden="true" />
       </div>
     </button>
   );

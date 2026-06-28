@@ -55,16 +55,16 @@ const ChatArea: React.FC<ChatAreaProps> = ({isHomePage}) => {
                         className={`chat-area-content${isChatOpen ? ' disabled' : ''}${isHomePage ? ' homepage' : ''}`}>
                         <div className={`chat-area-top`}>
                             <div className="chat-area-header">
-                                <img src={Stars} alt="AI Bot" className="ai-icon"/>
+                                <img src={Stars} alt="" aria-hidden="true" className="ai-icon"/>
                                 <span className='chat-description'>{chatDescription}</span>
                             </div>
                         {hasConversation && <div className="conversation-actions">
                             <button className="btn-return-conversation" onClick={() => dispatch(openChat())}>
-                                <img src={returnIcon} alt="Return Icon"/>
+                                <img src={returnIcon} alt="" aria-hidden="true"/>
                                 <span>{t('return_to_conversation_button')}</span>
                             </button>
                             <button className="btn-new-conversation" onClick={() => handleNewConversation()} disabled={isLoading}>
-                                <img src={staticChatIcon} alt="Static Chat Icon"/>
+                                <img src={staticChatIcon} alt="" aria-hidden="true"/>
                                 <span>{t('new_conversation_button')}</span>
                             </button>
                         </div>}

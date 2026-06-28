@@ -29,6 +29,8 @@ export interface ChatbotStrings {
   question_disclaimer: string;
   question_field: string;
   ranking_request: string;
+  rate_helpful: string;
+  rate_not_helpful: string;
   returning_links_title: string;
   returning_links_no_links: string;
   returning_links_empty: string;

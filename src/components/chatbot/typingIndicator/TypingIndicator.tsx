@@ -9,11 +9,12 @@ const TypingIndicator: FC = () => {
   const typingText = t('getting_answer');
 
   return (
-    <div className="message-bot-container">
+    <div className="message-bot-container" role="status" aria-live="polite">
       <div className="bot-avatar">
-        <img src={Stars} alt="Bot Avatar" />
+        <img src={Stars} alt="" aria-hidden="true" />
       </div>
-      <div className="bubble">
+      <span className="sr-only">{typingText}</span>
+      <div className="bubble" aria-hidden="true">
         {typingText.split('').map((char, index) => (
           <span key={index}>
             {char === ' ' ? <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }}></span> : char}

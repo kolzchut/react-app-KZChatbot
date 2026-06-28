@@ -144,9 +144,10 @@ describe('Messages Component', () => {
       
       renderWithProviders(<Messages {...defaultProps} messages={[message]} />)
       
-      // Check bot avatar
-      expect(screen.getByAltText('Bot Avatar')).toBeInTheDocument()
-      expect(screen.getByAltText('Bot Avatar')).toHaveAttribute('src', 'stars-icon.svg')
+      // Check bot avatar (decorative — alt="" / aria-hidden, queried by container)
+      const avatar = document.querySelector('.bot-avatar img')
+      expect(avatar).toBeInTheDocument()
+      expect(avatar).toHaveAttribute('src', 'stars-icon.svg')
       
       // Check markdown content
       expect(screen.getByTestId('markdown-content')).toHaveTextContent('**Bold** response with markdown')
@@ -195,7 +196,7 @@ describe('Messages Component', () => {
       renderWithProviders(<Messages {...defaultProps} messages={[message]} />)
       
       // Should have bot avatar and styling
-      expect(screen.getByAltText('Bot Avatar')).toBeInTheDocument()
+      expect(document.querySelector('.bot-avatar img')).toBeInTheDocument()
       // For non-Bot messages, content is rendered as plain text, not markdown
       const messageContent = screen.getByText('Welcome message')
       expect(messageContent).toHaveClass('message-bot-block')
@@ -216,7 +217,7 @@ describe('Messages Component', () => {
       renderWithProviders(<Messages {...defaultProps} messages={[message]} />)
       
       // Should have bot avatar and styling
-      expect(screen.getByAltText('Bot Avatar')).toBeInTheDocument()
+      expect(document.querySelector('.bot-avatar img')).toBeInTheDocument()
       const messageContent = screen.getByText('Warning message')
       expect(messageContent).toHaveClass('message-bot-block')
       
@@ -239,10 +240,10 @@ describe('Messages Component', () => {
       const messageContent = screen.getByText('Something went wrong')
       expect(messageContent).toHaveClass('message-error')
       
-      // Check alert icon
-      expect(screen.getByAltText('Alert Icon')).toBeInTheDocument()
-      expect(screen.getByAltText('Alert Icon')).toHaveAttribute('src', 'alert-icon.svg')
-      expect(screen.getByAltText('Alert Icon')).toHaveClass('message-error-icon')
+      // Check alert icon (decorative — alt="" / aria-hidden, queried by class)
+      const alertIcon = document.querySelector('.message-error-icon')
+      expect(alertIcon).toBeInTheDocument()
+      expect(alertIcon).toHaveAttribute('src', 'alert-icon.svg')
       
       // Should NOT have disclaimer or rate
       expect(screen.queryByText(/התשובה מבוססת AI/)).not.toBeInTheDocument()
@@ -272,12 +273,11 @@ describe('Messages Component', () => {
       expect(firstLink).toHaveAttribute('target', '_blank')
       expect(firstLink).toHaveClass('link-card')
       
-      // Check link icons
-      const linkIcons = screen.getAllByAltText('Link Icon')
+      // Check link icons (decorative — alt="" / aria-hidden, queried by class)
+      const linkIcons = document.querySelectorAll('.link-icon')
       expect(linkIcons).toHaveLength(2)
       linkIcons.forEach(icon => {
         expect(icon).toHaveAttribute('src', 'link-icon.svg')
-        expect(icon).toHaveClass('link-icon')
       })
     })
 
@@ -363,8 +363,8 @@ describe('Messages Component', () => {
       // Check specific styling and components
       expect(screen.getByText('User question')).toHaveClass('message-user-block')
       expect(screen.getByText('Error message')).toHaveClass('message-error')
-      expect(screen.getAllByAltText('Bot Avatar')).toHaveLength(4) // StartBot, Bot, Warning, Error
-      expect(screen.getByAltText('Alert Icon')).toBeInTheDocument() // Error only
+      expect(document.querySelectorAll('.bot-avatar img')).toHaveLength(4) // StartBot, Bot, Warning, Error
+      expect(document.querySelector('.message-error-icon')).toBeInTheDocument() // Error only
       expect(screen.getByTestId('rate-3')).toBeInTheDocument() // Only Bot message gets rate
     })
   })
