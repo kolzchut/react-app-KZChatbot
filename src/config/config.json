@@ -4,7 +4,7 @@
     "conversationState": "kzchatbot-conversation-state"
   },
   "defaults": {
-    "conversationSessionTtlHours": 8,
+    "conversationSessionTtlHours": 24,
     "maxQuestionsPerConversation": 8,
     "enableCrossTabSync": true
   }
