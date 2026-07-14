@@ -1,6 +1,7 @@
 /* The modal is a native <dialog>. It spans the viewport as a transparent layer
-   so the positioned .popover-content panel sits inside it and clicks on the empty
-   area (outside the panel) can dismiss it; ::backdrop provides the dim overlay. */
+   so the positioned .popover-content panel sits inside it; ::backdrop provides the
+   dim overlay. Background clicks intentionally do NOT dismiss the chat (see #69);
+   only Escape and the close button close it. */
 .popover-overlay {
 	position: fixed;
 	inset: 0;

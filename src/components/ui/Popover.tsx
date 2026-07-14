@@ -27,11 +27,6 @@ const Popover: React.FC<PopoverProps> = ({ isChatOpen, onClose, labelledById, ch
   // Keep Redux in sync when the dialog closes itself (Escape fires `cancel`).
   const handleCancel = () => onClose();
 
-  // Close on backdrop click — clicks on the ::backdrop report the dialog as target.
-  const handleClick = (e: React.MouseEvent<HTMLDialogElement>) => {
-    if (e.target === dialogRef.current) onClose();
-  };
-
   return (
     <dialog
       ref={dialogRef}
@@ -39,7 +34,6 @@ const Popover: React.FC<PopoverProps> = ({ isChatOpen, onClose, labelledById, ch
       aria-modal="true"
       aria-labelledby={labelledById}
       onCancel={handleCancel}
-      onClick={handleClick}
     >
       {isChatOpen && children}
     </dialog>
