@@ -47,3 +47,13 @@ export interface Answer {
 export type Errors = {
   [key: string]: string;
 };
+
+// MOCK PATCH START — demo-only follow-up + static links (see src/mockFollowUp)
+export interface MockFollowUpScenario {
+  id: string;
+  promptMatch: string;
+  question: string;
+  linksIntro: string;
+  links: { title: string; url: string }[];
+}
+// MOCK PATCH END

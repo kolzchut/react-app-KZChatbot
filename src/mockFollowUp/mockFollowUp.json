@@ -1,0 +1,29 @@
+{
+  "affirmativeToken": "כן",
+  "scenarios": [
+    {
+      "id": "rehabilitationBasket",
+      "promptMatch": "סל שיקום",
+      "question": "האם תרצי שאציע לך שירותים שיוכלו לסייע לבת שלך ולמשפחה בתהליך?",
+      "linksIntro": "הנה כמה שירותים שיכולים לסייע לבת שלך ולמשפחה בתהליך:",
+      "links": [
+        { "title": "מרכזי ייעוץ והדרכה למשפחות", "url": "https://www.kolsherut.org.il/p/card/c/483bfd03" },
+        { "title": "בית של תקוה - בית מאזן", "url": "https://www.kolsherut.org.il/p/card/c/786ad1cb" },
+        { "title": "מועדון תעסוקתי לנכי נפש בקהילה", "url": "https://www.kolsherut.org.il/p/card/c/aefd8e5e" },
+        { "title": "שירותי שיקום בדיור (דיור מוגן) לנכי נפש בקהילה", "url": "https://www.kolsherut.org.il/p/card/c/eb46eaa0" }
+      ]
+    },
+    {
+      "id": "disabilityClaim",
+      "promptMatch": "נכות של 42%",
+      "question": "האם תרצי שאציע לך גורמים שיוכלו לסייע לך למלא ולהגיש את הבקשה?",
+      "linksIntro": "הנה כמה גורמים שיכולים לסייע לך למלא ולהגיש את הבקשה:",
+      "links": [
+        { "title": "זכות בקלות- מעניק סיוע ויעוץ אישי בליווי טלפוני אקטיבי ואישי", "url": "https://www.kolsherut.org.il/p/card/c/8f7db67e" },
+        { "title": "סיוע לאנשים עם מוגבלות מטעם המחלקה לשירותים חברתיים", "url": "https://www.kolsherut.org.il/p/card/c/0d22d215" },
+        { "title": "ייצוג וייעוץ משפטי לאנשים שהופלו או נפגעו מחמת מוגבלותם", "url": "https://www.kolsherut.org.il/p/card/c/f36c026a" },
+        { "title": "שירות ייעוץ לאזרח", "url": "https://www.kolsherut.org.il/p/card/c/4dd2f49d" }
+      ]
+    }
+  ]
+}

@@ -9,6 +9,9 @@ import { MessageType } from '@/types';
 import { getConversationSessionConfig } from '@/lib/sessionStorage';
 import { StringKey } from '@/i18n/types';
 import { HttpError } from '@/lib/HttpError';
+// MOCK PATCH START — demo-only follow-up question (see src/mockFollowUp)
+import { getFollowUpQuestionForPrompt } from '@/mockFollowUp/mockFollowUp';
+// MOCK PATCH END
 
 interface UseConversationSubmitProps {
   config: typeof window.KZChatbotConfig | null;
@@ -90,6 +93,10 @@ export const useConversationSubmit = ({ config, question, source, conversationSt
       dispatch(appendBotMessage({ id: answer.conversationId || uuidv4(), type: MessageType.Bot, content: answer.llmResult, links: answer.docs, threadId: turnThreadId }));
       pushAnalyticsEvent('answer_received', null, conversationPayload(activeQuestionCount + 1));
       if (activeQuestionCount + 1 >= maxQuestionsPerConversation) appendQuotaMessage();
+      // MOCK PATCH START — offer the follow-up question when the prompt matches a demo scenario
+      const followUpQuestionMessage = getFollowUpQuestionForPrompt(nextQuestion);
+      if (followUpQuestionMessage) dispatch(appendSystemMessage(followUpQuestionMessage));
+      // MOCK PATCH END
     } catch (error) {
       // Surface the backend's own message for client errors (banned words,
       // character/daily limits, …); fall back to the generic error otherwise.
