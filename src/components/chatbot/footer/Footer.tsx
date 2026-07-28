@@ -6,9 +6,9 @@ import { pushAnalyticsEvent } from "@/lib/analytics.ts";
 import { useAppDispatch, useAppSelector } from '@/store/hooks.ts';
 import { setQuestion, selectQuestion } from '@/store/slices/questionSlice.ts';
 import { openChat } from '@/store/slices/chatSlice.ts';
-// MOCK PATCH START — demo-only affirmative → static links (see src/mockFollowUp)
+// MOCK PATCH START — demo-only follow-up turns → region question, then static links (see src/mockFollowUp)
 import { appendBotMessage, appendUserMessage } from '@/store/slices/conversationSlice.ts';
-import { getAffirmativeLinksMessages } from '@/mockFollowUp/mockFollowUp.ts';
+import { getMockFollowUpTurn } from '@/mockFollowUp/mockFollowUp.ts';
 // MOCK PATCH END
 import ChatInput from "../chatInput/ChatInput.tsx";
 import NewQuestion from "../newQuestion/NewQuestion.tsx";
@@ -90,11 +90,11 @@ const Footer = ({
     e.preventDefault();
     const text = localQuestion.trim();
     if (!text) return;
-    // MOCK PATCH START — affirmative reply to a follow-up question shows static links, skips the backend
-    const affirmative = getAffirmativeLinksMessages(text, messages);
-    if (affirmative) {
-      dispatch(appendUserMessage(affirmative.userMessage));
-      dispatch(appendBotMessage(affirmative.linksMessage));
+    // MOCK PATCH START — replies inside the demo follow-up (acceptance, then region) skip the backend
+    const mockTurn = getMockFollowUpTurn(text, messages);
+    if (mockTurn) {
+      dispatch(appendUserMessage(mockTurn.userMessage));
+      dispatch(appendBotMessage(mockTurn.botMessage));
       setLocalQuestion('');
       return;
     }

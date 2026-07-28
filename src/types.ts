@@ -56,4 +56,10 @@ export interface MockFollowUpScenario {
   linksIntro: string;
   links: { title: string; url: string }[];
 }
+
+// One mock turn: the user's echoed reply plus the bubble the demo answers with.
+export interface MockFollowUpTurn {
+  userMessage: Message;
+  botMessage: Message;
+}
 // MOCK PATCH END

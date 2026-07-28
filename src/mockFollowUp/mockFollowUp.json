@@ -1,5 +1,6 @@
 {
   "affirmativeToken": "כן",
+  "regionQuestion": "בשמחה, באיזה אזור בארץ?",
   "scenarios": [
     {
       "id": "rehabilitationBasket",

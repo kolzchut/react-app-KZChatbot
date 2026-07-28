@@ -4,6 +4,7 @@ import mockFollowUpData from './mockFollowUp.json';
 
 const scenarios = mockFollowUpData.scenarios as MockFollowUpScenario[];
 const affirmativeToken = mockFollowUpData.affirmativeToken;
+const regionQuestion = mockFollowUpData.regionQuestion;
 
 // Which scenario (if any) a user prompt triggers — matched by "contain".
 export const detectScenarioFromPrompt = (promptText: string): MockFollowUpScenario | null =>
@@ -16,3 +17,6 @@ export const isAffirmativeReply = (replyText: string): boolean =>
 // Which scenario a bot bubble corresponds to, iff its text is one of our follow-up questions.
 export const matchScenarioToFollowUpQuestion = (botText: string): MockFollowUpScenario | null =>
   scenarios.find((scenario) => scenario.question === botText) || null;
+
+// Whether a bot bubble is our region question — the marker that the links stage is next.
+export const isRegionQuestionText = (botText: string): boolean => botText === regionQuestion;

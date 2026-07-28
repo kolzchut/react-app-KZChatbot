@@ -1,6 +1,7 @@
 // MOCK PATCH — demo-only follow-up + static links. Delete the src/mockFollowUp folder to remove.
 import { v4 as uuidv4 } from 'uuid';
 import { Message, MessageType, MockFollowUpScenario } from '@/types';
+import mockFollowUpData from './mockFollowUp.json';
 
 // Bot-styled bubble carrying the follow-up question (plain text, no rating/links UI).
 export const buildFollowUpQuestionMessage = (scenario: MockFollowUpScenario): Message => ({
@@ -9,8 +10,15 @@ export const buildFollowUpQuestionMessage = (scenario: MockFollowUpScenario): Me
   content: scenario.question,
 });
 
-// Echoes the user's affirmative reply as a normal user bubble.
-export const buildUserAffirmativeMessage = (replyText: string): Message => ({
+// Bot-styled bubble asking which region — asked once the user accepted the offer.
+export const buildRegionQuestionMessage = (): Message => ({
+  id: uuidv4(),
+  type: MessageType.System,
+  content: mockFollowUpData.regionQuestion,
+});
+
+// Echoes the user's reply (the acceptance or the region answer) as a normal user bubble.
+export const buildUserReplyMessage = (replyText: string): Message => ({
   id: uuidv4(),
   type: MessageType.User,
   content: replyText,
