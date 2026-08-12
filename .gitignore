@@ -26,3 +26,12 @@ dist-ssr
 
 # Coverage reports
 coverage/
+
+# `tsc -b` emits beside the root-level config files it compiles, so a plain
+# `npm run build` leaves these behind. Untracked build output sitting next to
+# source is how it gets committed by a careless `git add -A`.
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+mockup-server.js
+mockup-server.d.ts

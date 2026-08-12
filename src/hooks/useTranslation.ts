@@ -1,5 +1,4 @@
 import { useTranslationContext } from '@/contexts/TranslationContext';
-import { ChatbotStrings } from '@/i18n/types';
 
 /**
  * Custom hook for accessing translatable strings
