@@ -233,4 +233,71 @@ describe('Chatbot Analytics - Simple Tests', () => {
     const state = store.getState()
     expect(state.chat.isChatOpen).toBe(false)
   })
+
+  // --- Error-message trust gate (kolzchut/kz-mediawiki-main#98) --------------
+  // A 4xx message is ours: the endpoint throws HttpException carrying an
+  // operator-authored slug, written to be read by the person in the chat
+  // window. A 5xx message is not ours — MediaWiki's REST layer produces
+  // `Error: exception of type <Class>`, and rendering that verbatim is how a
+  // PHP bug reached readers as an English class name for 13 hours on
+  // 2026-08-10.
+
+  // Set explicitly rather than asserting against the compiled-in i18n default:
+  // t() resolves general_error from KZChatbotConfig.slugs, the operator-editable
+  // source, so the default is not what renders.
+  const GENERAL_ERROR = 'general-error-slug-under-test'
+
+  const submitWith = (response: Partial<Response>) => {
+    window.KZChatbotConfig.slugs = {
+      ...window.KZChatbotConfig.slugs,
+      general_error: GENERAL_ERROR
+    }
+    const store = createTestStore({
+      chat: { isChatOpen: true },
+      question: { question: 'Test question', source: undefined }
+    })
+    mockFetch.mockResolvedValue(response as Response)
+    renderWithProviders(<Chatbot />, store)
+    fireEvent.submit(screen.getByTestId('chat-form'))
+  }
+
+  it('does not render a 5xx server message, showing the general error instead', async () => {
+    submitWith({
+      ok: false,
+      status: 500,
+      json: () => Promise.resolve({ message: 'Error: exception of type ArgumentCountError' })
+    })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('messages')).toHaveTextContent(GENERAL_ERROR)
+    })
+    expect(screen.getByTestId('messages')).not.toHaveTextContent('ArgumentCountError')
+  })
+
+  it('still renders a 4xx server message, which is an operator-authored slug', async () => {
+    const bannedWordReply = 'על השאלה לכלול שלוש מילים לכל הפחות'
+    submitWith({
+      ok: false,
+      status: 403,
+      json: () => Promise.resolve({ message: bannedWordReply })
+    })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('messages')).toHaveTextContent(bannedWordReply)
+    })
+  })
+
+  it('falls back to the general error when the body is not JSON', async () => {
+    // e.g. an HTML 502 from the edge, which never reaches the PHP handler.
+    submitWith({
+      ok: false,
+      status: 502,
+      json: () => Promise.reject(new SyntaxError('Unexpected token <'))
+    })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('messages')).toHaveTextContent(GENERAL_ERROR)
+    })
+    expect(mockPushAnalyticsEvent).toHaveBeenCalledWith('error_received', '502: (no message)')
+  })
 })

@@ -88,13 +88,34 @@ const Chatbot = () => {
     });
 
 
-    const data = await response.json();
+    // A non-JSON body is itself a failure mode: a 502 from the edge, or an
+    // HTML error page, would otherwise throw here and be reported as a network
+    // error rather than the HTTP status it actually was.
+    const data = await response.json().catch(() => null);
     if (!response.ok) {
+      const serverMessage =
+        typeof data?.message === "string" ? data.message : "";
+
+      // Only 4xx messages are ours. The endpoint throws HttpException with an
+      // operator-authored slug for every deliberate rejection (403 banned word,
+      // 413 character limit, 429 daily limit, 404 unknown user), and those are
+      // written to be read by the person in the chat window.
+      //
+      // A 5xx message is not ours. MediaWiki's REST layer turns an uncaught
+      // Throwable into `Error: exception of type <Class>` (its wording when
+      // $wgShowExceptionDetails is off), and rendering that verbatim is how a
+      // PHP bug reached readers as an English class name for 13 hours on
+      // 2026-08-10. The server now guards its own handler, but faults thrown
+      // outside it — the 415 from getBodyValidator(), a body the Router
+      // rejects, anything the edge generates — never pass through that guard.
+      // So the client refuses 5xx text on its own account.
+      const trusted = response.status < 500 && serverMessage !== "";
+
       pushAnalyticsEvent(
         "error_received",
-        response.status + ": " + data.message,
+        response.status + ": " + (serverMessage || "(no message)"),
       );
-      throw new HttpError(data.message, response.status);
+      throw new HttpError(trusted ? serverMessage : "", response.status);
     }
     return data;
   }, [globalConfigObject]);
@@ -158,7 +179,9 @@ const Chatbot = () => {
       let content: string;
       let type: MessageType;
       if (error instanceof HttpError) {
-        content = error.message;
+        // Empty means getAnswer judged the server's text untrusted (5xx, or no
+        // usable message). Never render a bare bubble — fall back to the slug.
+        content = error.message || t('general_error');
         type = error.httpCode === 403 ? MessageType.Warning : MessageType.Error;
       } else {
         content = t('general_error');
