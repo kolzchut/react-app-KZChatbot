@@ -18,7 +18,6 @@ declare global {
       maxQuestionsPerConversation?: number;
       conversationSessionTtlHours?: number;
       enableCrossTabSync?: boolean;
-      historyStorageMode?: 'local' | 'redis' | 'hybrid';
     };
   }
 }
