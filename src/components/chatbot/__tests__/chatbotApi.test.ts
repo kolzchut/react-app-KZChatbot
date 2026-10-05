@@ -23,7 +23,8 @@ describe('askQuestion', () => {
 
     expect(error).toBeInstanceOf(HttpError)
     expect(error.httpCode).toBe(502)
-    expect(error.message).toBe('Bad Gateway')
+    // statusText is the proxy's wording, not ours, so it is not the message.
+    expect(error.message).toBe('')
   })
 
   it('still uses the server message from a JSON error body', async () => {

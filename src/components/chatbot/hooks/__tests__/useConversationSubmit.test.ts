@@ -88,6 +88,14 @@ describe('useConversationSubmit error handling', () => {
     )
 
     expect(content).toBe(GENERAL_ERROR)
-    expect(pushAnalyticsEvent).toHaveBeenCalledWith('error_received', '502: Bad Gateway')
+    expect(pushAnalyticsEvent).toHaveBeenCalledWith('error_received', '502: (no message)')
+  })
+
+  it('does not render the proxy status text of a non-JSON 4xx, such as a WAF block page', async () => {
+    const content = await submitAndGetErrorMessage(
+      new Response('<html>Access denied</html>', { status: 403, statusText: 'Forbidden' })
+    )
+
+    expect(content).toBe(GENERAL_ERROR)
   })
 })

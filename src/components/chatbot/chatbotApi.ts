@@ -74,8 +74,11 @@ export const askQuestion = async (
   // rather than the HTTP status it actually was.
   const data = await response.json().catch(() => null);
   if (!response.ok) {
+    // Only text the server wrote goes in the message: the caller shows a 4xx
+    // message to the reader, and statusText is the proxy's English ("Forbidden"
+    // on a WAF block page), not an operator-authored slug.
     const message = isRecord(data) ? data.message || data.error : null;
-    throw new HttpError(String(message || response.statusText), response.status);
+    throw new HttpError(message ? String(message) : '', response.status);
   }
   // A success status with an unreadable body is still a failure; letting it
   // through would render an empty answer.
