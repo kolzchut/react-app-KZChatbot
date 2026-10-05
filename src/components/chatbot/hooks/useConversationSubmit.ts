@@ -100,7 +100,7 @@ export const useConversationSubmit = ({ config, question, source, conversationSt
       dispatch(appendBotMessage({ id: uuidv4(), type: MessageType.Error, content: serverMessage || t('general_error') }));
       const errorLabel =
         error instanceof HttpError
-          ? `${error.httpCode}: ${error.message}`
+          ? `${error.httpCode}: ${error.message || '(no message)'}`
           : error instanceof Error
             ? error.message.replace(':', ': ')
             : 'submit_failed';
