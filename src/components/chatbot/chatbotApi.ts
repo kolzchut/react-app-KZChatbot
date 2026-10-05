@@ -69,11 +69,17 @@ export const askQuestion = async (
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
-  const data = await response.json();
+  // A non-JSON body is itself a failure mode: a 502 from the edge, or an HTML
+  // error page, would otherwise throw here and be reported as a parse error
+  // rather than the HTTP status it actually was.
+  const data = await response.json().catch(() => null);
   if (!response.ok) {
     const message = isRecord(data) ? data.message || data.error : null;
     throw new HttpError(String(message || response.statusText), response.status);
   }
+  // A success status with an unreadable body is still a failure; letting it
+  // through would render an empty answer.
+  if (data === null) throw new Error('invalid_response_body');
 
   return normalizeAnswer(data, String(payload.conversationId || payload.thread_id || ''));
 };
