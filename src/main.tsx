@@ -7,10 +7,11 @@ import "./index.css";
 import ChatButton from "./components/chatButton/ChatButton.tsx";
 import ChatArea from "./components/chatArea/ChatArea.tsx";
 import { TranslationProvider } from "./contexts/TranslationContext.tsx";
-import { loadOpenSansFont } from "./utils/loadFont.ts";
 
-// Load Open Sans font only if not already available
-loadOpenSansFont();
+// Open Sans comes from the page, never from here: the Cassandra skin serves it
+// from the wiki's own origin (skins.cassandra.openSans), and the wiki's CSP
+// denies fonts.googleapis.com / fonts.gstatic.com by decision. On a page
+// without that face the CSS stacks fall back to sans-serif.
 
 const mountComponent = (id: string, Component: JSX.Element) => {
 	let el = document.getElementById(id);
