@@ -7,11 +7,13 @@ import "./index.css";
 import ChatButton from "./components/chatButton/ChatButton.tsx";
 import ChatArea from "./components/chatArea/ChatArea.tsx";
 import { TranslationProvider } from "./contexts/TranslationContext.tsx";
-import { loadOpenSansFont } from "./utils/loadFont.ts";
 import { crossTabSyncService } from "./lib/crossTabSyncService.ts";
 
-// Load Open Sans font only if not already available
-loadOpenSansFont();
+// Open Sans comes from the page, never from here: the Cassandra skin serves it
+// from the wiki's own origin (skins.cassandra.openSans), and the wiki's CSP
+// denies fonts.googleapis.com / fonts.gstatic.com by decision. On a page
+// without that face the CSS stacks fall back to sans-serif. The standalone dev
+// page (index.html) links its own self-hosted copy from public/fonts/.
 
 // Initialise cross-tab sync listener — pushes remote localStorage changes into Redux
 crossTabSyncService.initializeService(store.dispatch, store.getState);
