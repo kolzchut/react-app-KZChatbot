@@ -268,6 +268,30 @@ describe('useRate Hook', () => {
       })
     })
 
+    it.each([true, false])(
+      'sends the persisted rating (liked=%s) with the text when the hook never saw a click (e.g. after a refresh)',
+      async (liked) => {
+        // The rating was persisted on the message (another tab, or before a
+        // page refresh), so this hook instance never ran handleRate.
+        const message = createMessage({ liked })
+        const { result } = renderHook(() => useRate({ ...defaultProps, message }))
+
+        act(() => {
+          result.current.handleChange({
+            target: { name: 'description', value: 'Test feedback' }
+          } as React.ChangeEvent<HTMLTextAreaElement>)
+        })
+
+        await act(async () => {
+          await result.current.handleSubmit(mockEvent)
+        })
+
+        const body = JSON.parse(mockFetch.mock.calls[0][1]!.body as string)
+        expect(body.like).toBe(liked)
+        expect(body.text).toBe('Test feedback')
+      }
+    )
+
     it('tracks analytics for free text feedback', async () => {
       const { result } = renderHook(() => useRate(defaultProps))
 
