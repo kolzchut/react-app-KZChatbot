@@ -29,7 +29,6 @@ const useRate = ({
 		description: "",
 	};
 	const [values, setValues] = useState<FormValues>(initialValues);
-	const [like, setLike] = useState<boolean | null>(null);
 	const isFormValid = errors.description === "" && values.description.length > 0;
 	/** Derived from message so it stays in sync across tabs and survives refresh. */
 	const rateIsOpen = message.liked !== null && message.liked !== undefined && !message.feedbackSubmitted;
@@ -88,7 +87,9 @@ const useRate = ({
 					thread_id: threadId,
 					conversation_id: message.id,
 					answerId: message.id,
-					like: like,
+					// The persisted rating, not hook-local state: after a refresh or in
+					// another tab the form is open but this hook never saw the click.
+					like: message.liked ?? null,
 					text: description,
 				}),
 			});
@@ -113,7 +114,6 @@ const useRate = ({
 	};
 
 	const handleRate = async (liked: boolean | null) => {
-		setLike(liked); // Set the like value in state
 		pushAnalyticsEvent(liked ? "positive_feedback" : "negative_feedback");
 
 		// Optimistic Redux update — UI responds instantly
