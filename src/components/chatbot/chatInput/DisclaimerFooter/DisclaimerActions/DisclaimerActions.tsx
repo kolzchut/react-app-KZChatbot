@@ -1,5 +1,6 @@
 import { pushAnalyticsEvent } from "@/lib/analytics";
 import { useTranslation } from "@/hooks/useTranslation";
+import { safeHttpUrl } from "@/lib/safeUrl";
 import "./disclaimerActions.css";
 
 interface DisclaimerActionsProps {
@@ -9,12 +10,13 @@ interface DisclaimerActionsProps {
 
 const DisclaimerActions = ({ termsofServiceUrl, onDeleteHistoryClick }: DisclaimerActionsProps) => {
     const { t } = useTranslation();
+    const termsUrl = safeHttpUrl(termsofServiceUrl);
 
     return (
         <span className="chat-input-disclaimer-actions">
-            {termsofServiceUrl && (
+            {termsUrl && (
                 <a
-                    href={termsofServiceUrl}
+                    href={termsUrl}
                     className="chat-input-disclaimer-link"
                     onClick={() => pushAnalyticsEvent("tos_clicked")}
                 >

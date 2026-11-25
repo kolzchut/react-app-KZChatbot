@@ -2,6 +2,7 @@ import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Errors, Message, MessageType } from '@/types';
 import { formatAdminString } from '@/lib/utils';
+import { safeHttpUrl } from '@/lib/safeUrl';
 import { pushAnalyticsEvent } from '@/lib/analytics';
 import { useTranslation } from '@/hooks/useTranslation';
 import Rate from '@/components/chatbot/Rate';
@@ -32,6 +33,11 @@ export const MessageBlock = ({ message, isReadonly, onStartNewConversation, setM
     const isBotAnswer = message.type === MessageType.Bot;
     const isQuotaMessage = message.type === MessageType.System && message.systemAction === 'quota_reached';
     const newConversationText = t('new_conversation_button');
+    // Only web links become link cards; any other scheme is left out.
+    const links = (message.links ?? []).flatMap((link) => {
+        const url = safeHttpUrl(link.url);
+        return url ? [{ ...link, url }] : [];
+    });
 
     const renderQuotaMessage = () => {
         const linkIndex = message.content.lastIndexOf(newConversationText);
@@ -93,11 +99,11 @@ export const MessageBlock = ({ message, isReadonly, onStartNewConversation, setM
 
             {isBotAnswer && (
                 <>
-                    {message.links && message.links.length > 0 && <div className="ai-disclaimer">{t('returning_links_title')}</div>}
-                    {(!message.links || message.links.length === 0) && <div className="ai-disclaimer">{t('returning_links_no_links')}</div>}
-                    {message.links && message.links.length > 0 && (
+                    {links.length > 0 && <div className="ai-disclaimer">{t('returning_links_title')}</div>}
+                    {links.length === 0 && <div className="ai-disclaimer">{t('returning_links_no_links')}</div>}
+                    {links.length > 0 && (
                         <div className="links-container">
-                            {message.links.map((link, index) => (
+                            {links.map((link, index) => (
                                 <a key={index} href={link.url} target="_blank" rel="noreferrer" className="link-card" onClick={() => pushAnalyticsEvent('link_clicked', link.title)}>
                                     <span className="link-card-text">{link.title}</span>
                                     <img src={LinkIcon} alt="" aria-hidden="true" className="link-icon" />

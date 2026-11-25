@@ -281,6 +281,38 @@ describe('Messages Component', () => {
       })
     })
 
+    it('renders only the http(s) links and drops every other scheme', () => {
+      const message = createMessage({
+        type: MessageType.Bot,
+        links: [
+          { url: 'javascript:alert(1)', title: 'Script Link' },
+          { url: 'https://example.com/ok', title: 'Web Link' },
+          { url: 'data:text/html,x', title: 'Data Link' },
+          { url: '', title: 'Empty Link' }
+        ]
+      })
+
+      renderWithProviders(<Messages {...defaultProps} messages={[message]} />)
+
+      expect(screen.getByText('Web Link').closest('a')).toHaveAttribute('href', 'https://example.com/ok')
+      expect(screen.queryByText('Script Link')).not.toBeInTheDocument()
+      expect(screen.queryByText('Data Link')).not.toBeInTheDocument()
+      expect(screen.queryByText('Empty Link')).not.toBeInTheDocument()
+      expect(document.querySelectorAll('.link-card')).toHaveLength(1)
+    })
+
+    it('shows the no-links disclaimer when every link has an unsafe scheme', () => {
+      const message = createMessage({
+        type: MessageType.Bot,
+        links: [{ url: 'javascript:alert(1)', title: 'Script Link' }]
+      })
+
+      renderWithProviders(<Messages {...defaultProps} messages={[message]} />)
+
+      expect(screen.getByText('התשובה מבוססת AI. יש לבדוק את המידע המלא באתר.')).toBeInTheDocument()
+      expect(document.querySelector('.links-container')).not.toBeInTheDocument()
+    })
+
     it('tracks analytics when link is clicked', () => {
       const message = createMessage({
         type: MessageType.Bot,
